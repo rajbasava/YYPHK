@@ -1,0 +1,103 @@
+/*
+    Copyright (c) 2012-2015 Yoga Vidya Pranic Healing Foundation of Karnataka.
+    All rights reserved. Patents pending.
+ 
+    Responsible: byummadisingh
+*/
+package com.yvphk.web.controller;
+
+import com.yvphk.common.Util;
+import com.yvphk.common.VolunteerPermission;
+import com.yvphk.model.form.Login;
+import com.yvphk.model.form.Volunteer;
+import com.yvphk.service.VolunteerService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.Date;
+import java.util.Map;
+
+@Controller
+public class VolunteerController
+{
+    @Autowired
+    private VolunteerService volunteerService;
+
+    @RequestMapping("/volunteer")
+    public String listVolunteer (Map<String, Object> map)
+    {
+        map.put("volunteer", new Volunteer());
+        map.put("volunteerList", volunteerService.listVolunteer());
+        map.put("allVolunteerPermissions", VolunteerPermission.allVolunteerPermissions());
+        return "volunteer";
+    }
+
+    @RequestMapping(value = "/addVolunteer", method = RequestMethod.POST)
+    public String newVolunteer (@ModelAttribute("volunteer") Volunteer volunteer,
+                                HttpServletRequest request)
+    {
+        Login login = (Login) request.getSession().getAttribute(Login.ClassName);
+        volunteer.setPreparedBy(login.getEmail());
+        volunteerService.addVolunteer(volunteer);
+        return "redirect:/volunteer.htm";
+    }
+
+    @RequestMapping("/delete")
+    public String removeVolunteer (HttpServletRequest request)
+    {
+        String strVolunteerId = request.getParameter("volunteerId");
+        if (!Util.nullOrEmptyOrBlank(strVolunteerId)) {
+            Integer volunteerId = Integer.parseInt(strVolunteerId);
+            volunteerService.removeVolunteer(volunteerId);
+        }
+        return "redirect:/volunteer.htm";
+    }
+
+    @RequestMapping("/index")
+    public String login (Map<String, Object> map)
+    {
+        map.put("login", new Login());
+        return "login";
+    }
+
+    @RequestMapping("/login")
+    public String processlogin (@ModelAttribute("login") Login login,
+                                HttpSession session)
+    {
+        boolean isValid = volunteerService.processLogin(login);
+        if (isValid) {
+            login.setLastAccessed(new Date().getTime());
+            session.setAttribute(Login.ClassName, login);
+            return "redirect:/welcome.htm";
+        }
+        else {
+            return "redirect:/index.htm";
+        }
+    }
+
+    @RequestMapping("/logout")
+    public String processlogout (HttpSession session)
+    {
+        Login login = (Login) session.getAttribute(Login.ClassName);
+        volunteerService.processLogout(login);
+        session.invalidate();
+        return "redirect:/index.htm";
+    }
+
+    @RequestMapping("/welcome")
+    public String welcome ()
+    {
+        return "welcome";
+    }
+
+    @RequestMapping(value = "/")
+    public String index ()
+    {
+        return "redirect:/index.htm";
+    }
+}
