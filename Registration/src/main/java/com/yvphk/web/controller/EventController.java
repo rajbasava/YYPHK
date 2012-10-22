@@ -28,7 +28,7 @@ import java.util.Date;
 import java.util.Map;
 
 @Controller
-public class EventController
+public class EventController extends CommonController
 {
     @Autowired
     private EventService eventService;
@@ -105,11 +105,4 @@ public class EventController
         return "forward:/eventFee.htm";
     }
 
-    @InitBinder
-    public void initBinder (WebDataBinder binder)
-    {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        CustomDateEditor editor = new CustomDateEditor(dateFormat, true);
-        binder.registerCustomEditor(Date.class, editor);
-    }
 }

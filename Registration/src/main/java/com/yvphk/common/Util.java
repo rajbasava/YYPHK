@@ -1,11 +1,12 @@
 /*
     Copyright (c) 2012-2015 Yoga Vidya Pranic Healing Foundation of Karnataka.
     All rights reserved. Patents pending.
- 
-    Responsible: byummadisingh
 */
 package com.yvphk.common;
 
+import com.yvphk.model.form.BaseForm;
+import ognl.Ognl;
+import ognl.OgnlException;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
@@ -80,6 +81,21 @@ public class Util
         catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static boolean evaluate (String expression, BaseForm form)
+    {
+        boolean result = false;
+        try {
+            Object obj = Ognl.getValue(expression, form);
+            if (obj instanceof Boolean) {
+                result = ((Boolean)obj).booleanValue();
+            }
+        }
+        catch (OgnlException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        return result;
     }
 
 }

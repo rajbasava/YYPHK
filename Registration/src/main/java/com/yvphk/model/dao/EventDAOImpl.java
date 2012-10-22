@@ -59,6 +59,7 @@ public class EventDAOImpl implements EventDAO
     {
         Session session = sessionFactory.openSession();
         Criteria criteria = session.createCriteria(Event.class);
+        criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
         criteria.addOrder(Order.asc("timeCreated"));
         List<Event> events = criteria.list();
         session.close();

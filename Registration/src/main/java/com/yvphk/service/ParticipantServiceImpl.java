@@ -10,6 +10,7 @@ import com.yvphk.model.dao.ParticipantDAO;
 import com.yvphk.model.form.EventRegistration;
 import com.yvphk.model.form.Participant;
 import com.yvphk.model.form.ParticipantCriteria;
+import com.yvphk.model.form.ReferenceGroup;
 import com.yvphk.model.form.RegisteredParticipant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -57,6 +58,24 @@ public class ParticipantServiceImpl implements ParticipantService
     public void processBatchEntry (List<RegisteredParticipant> participants)
     {
         participantDAO.processBatchEntry(participants);
+    }
+
+    @Transactional
+    public void addReferenceGroup (ReferenceGroup referenceGroup)
+    {
+        participantDAO.addReferenceGroup(referenceGroup);
+    }
+
+    @Transactional
+    public ReferenceGroup getReferenceGroup (String name)
+    {
+        return participantDAO.getReferenceGroup(name);
+    }
+
+    @Transactional
+    public List<ReferenceGroup> listReferenceGroups ()
+    {
+        return participantDAO.listReferenceGroups();
     }
 
 }

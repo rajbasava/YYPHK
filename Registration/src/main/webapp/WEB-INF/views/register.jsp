@@ -45,6 +45,18 @@
                 );
             }
         }
+        $(function() {
+            $("#registeredParticipant select[name='participant.foundation']").change(function() {
+                if ($(this).val() == "Others") {
+                    $("#registeredParticipant input[name='otherFoundation']").val("");
+                    $("div#othersTextBox").show();
+                    $("div#othersTextBox").focus().select();
+                }
+                else {
+                    $("div#othersTextBox").hide();
+                }
+            });
+        });
 
         $(document).ready(function() {
             $("select#eventId").change(function()
@@ -56,7 +68,18 @@
             {
                 populateEventFee();
             });
-            $("#registeredParticipant input[name='currentPayment.receiptDate']").datepicker({ showOn: 'button', dateFormat: 'dd/mm/yy', buttonImageOnly: true, buttonImage: '<c:url value="/resources/img/calendar.gif"/>' });
+
+            $("#registeredParticipant input[name='currentPayment.receiptDate']").datepicker({
+                showOn: 'button',
+                dateFormat: 'dd/mm/yy',
+                buttonImageOnly: true,
+                buttonImage: '<c:url value="/resources/img/calendar.gif"/>'
+            });
+
+            if ($("#registeredParticipant select[name='participant.foundation']").val() == "Others") {
+                $("div#othersTextBox").show();
+                $("div#othersTextBox").focus().select();
+            }
         });
     </script>
 </head>
@@ -84,8 +107,16 @@
 	</tr>
 	<tr>
 		<td><form:label path="participant.foundation"><spring:message code="label.foundation"/></form:label></td>
-		<td><form:input path="participant.foundation" size="50"/></td>
-	</tr>
+        <td>
+            <form:select path="participant.foundation">
+                <form:option value="" label="--- Select ---"/>
+                <form:options items="${allFoundations}" />
+            </form:select>
+            <div id="othersTextBox" style="display:none;">
+                    <form:input path="otherFoundation" size="60"/>
+            </div>
+        </td>
+    </tr>
 	<tr>
 		<td><form:label path="participant.vip"><spring:message code="label.vip"/></form:label></td>
 		<td><form:checkbox path="participant.vip"/></td>
@@ -129,11 +160,18 @@
         <td><form:label path="currentPayment.receiptInfo"><spring:message code="label.receiptInfo"/></form:label></td>
         <td><form:input path="currentPayment.receiptInfo"/></td>
         <td><form:label path="currentPayment.mode"><spring:message code="label.mode"/></form:label></td>
-        <td><form:input path="currentPayment.mode"/></td>
+		<td>
+            <form:select path="currentPayment.mode">
+                <form:option value="NONE" label="--- Select ---"/>
+                <form:options items="${allPaymentModes}" />
+            </form:select>
+        </td>
     </tr>
     <tr>
         <td><form:label path="currentPayment.receiptDate"><spring:message code="label.receiptDate"/></form:label></td>
         <td><form:input path="currentPayment.receiptDate"/></td>
+        <td><form:label path="currentPayment.remarks"><spring:message code="label.remarks"/></form:label></td>
+        <td><form:textarea path="currentPayment.remarks" rows="3" cols="30"/></td>
     </tr>
     <tr>
         <td><form:label path="registration.foodCoupon"><spring:message code="label.foodCoupon"/></form:label></td>
@@ -151,7 +189,7 @@
         <td><form:label path="currentSeat.seat"><spring:message code="label.seat"/></form:label></td>
         <td><form:input path="currentSeat.seat"/></td>
         <td><form:label path="currentHistoryRecord.comment"><spring:message code="label.comments"/></form:label></td>
-        <td><form:textarea path="currentHistoryRecord.comment" rows="5" cols="30"/></td>
+        <td><form:textarea path="currentHistoryRecord.comment" rows="3" cols="30"/></td>
     </tr>
     <tr><td>&nbsp;<BR></td></tr>
 	<tr colspan="4" align="center">

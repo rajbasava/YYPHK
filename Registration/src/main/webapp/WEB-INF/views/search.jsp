@@ -5,7 +5,7 @@
 
 <html>
 <head>
-	<title>Arhatic Yoga Retreat - Search</title>
+    <title>Arhatic Yoga Retreat - Search</title>
     <script type="text/javascript" src="<c:url value="/resources/script/jquery-1.7.2.min.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/resources/script/jquery-ui-1.8.23.custom.min.js"/>"></script>
     <script type="text/javascript">
@@ -46,7 +46,23 @@
                 $("div#"+divId).hide();
             });
 
+            $("select#foundation").change(function() {
+                if ($(this).val() == "Others") {
+                    $("#participantCriteria input[name='otherFoundation']").val("");
+                    $("div#othersTextBox").show();
+                    $("div#othersTextBox").focus().select();
+                }
+                else {
+                    $("div#othersTextBox").hide();
+                }
+            });
 
+            $(document).ready(function() {
+                if ($("select#foundation").val() == "Others") {
+                    $("div#othersTextBox").show();
+                    $("div#othersTextBox").focus().select();
+                }
+            });
         });
     </script>
 </head>
@@ -60,39 +76,63 @@
 
 <table align="center" cellspacing="2">
     <tr>
-		<td><form:label path="name"><spring:message code="label.name"/></form:label></td>
-		<td><form:input path="name" /></td>
+        <td><form:label path="name"><spring:message code="label.name"/></form:label></td>
+        <td><form:input path="name" /></td>
         <td><form:label path="foundation"><spring:message code="label.foundation"/></form:label></td>
-        <td><form:input path="foundation" size="50"/></td>
-	</tr>
-	<tr>
-		<td><form:label path="email"><spring:message code="label.email"/></form:label></td>
-		<td><form:input path="email" /></td>
-		<td><form:label path="level"><spring:message code="label.level"/></form:label></td>
-		<td>
+        <td>
+            <form:select path="foundation">
+                <form:option value="" label="--- Select ---"/>
+                <form:options items="${allFoundations}" />
+            </form:select>
+            <div id="othersTextBox" style="display:none;">
+                    <form:input path="otherFoundation" size="60"/>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td><form:label path="email"><spring:message code="label.email"/></form:label></td>
+        <td><form:input path="email" /></td>
+        <td><form:label path="level"><spring:message code="label.level"/></form:label></td>
+        <td>
             <form:select path="level">
                 <form:option value="" label="--- Select ---"/>
                 <form:options items="${allParticipantLevels}" />
             </form:select>
-		</td>
-	</tr>
-	<tr>
-		<td><form:label path="mobile"><spring:message code="label.mobile"/></form:label></td>
-		<td><form:input path="mobile" /></td>
-		<td><form:label path="seat"><spring:message code="label.seat"/></form:label></td>
-		<td><form:input path="seat" /></td>
-	</tr>
-	<tr>
+        </td>
+    </tr>
+    <tr>
+        <td><form:label path="mobile"><spring:message code="label.mobile"/></form:label></td>
+        <td><form:input path="mobile" /></td>
+        <td><form:label path="seat"><spring:message code="label.seat"/></form:label></td>
+        <td><form:input path="seat" /></td>
+    </tr>
+    <tr>
+        <td><form:label path="amountPaidCategory"><spring:message code="label.amountPaidCategory"/></form:label></td>
+        <td>
+            <form:select path="amountPaidCategory">
+                <form:option value="" label="--- Select ---"/>
+                <form:options items="${allAmountPaidCategories}" />
+            </form:select>
+        </td>
+        <td><form:label path="reference"><spring:message code="label.reference"/></form:label></td>
+        <td>
+            <form:select path="reference">
+                <form:option value="" label="--- Select ---"/>
+                <form:options items="${allReferenceGroups}" />
+            </form:select>
+        </td>
+    </tr>
+    <tr>
         &nbsp;
-	</tr>
-	<tr>
-		<td colspan="4" align="center">
+    </tr>
+    <tr>
+        <td colspan="4" align="center">
             <div id="button">
                 <a id="submit" href="#"><spring:message code="label.search"/></a>
                 <a id="excel" href="#">Export Excel</a>
             </div>
-		</td>
-	</tr>
+        </td>
+    </tr>
 </table>
 </form:form>
 
@@ -100,34 +140,36 @@
 <h3>Participants</h3>
 <table class="data" border="1" cellpadding="1" cellspacing="1" width="100%">
 <tr>
-	<th><spring:message code="label.name"/></th>
-	<th><spring:message code="label.email"/></th>
-	<th><spring:message code="label.mobile"/></th>
-	<th><spring:message code="label.foundation"/></th>
-	<th><spring:message code="label.event"/></th>
-	<th><spring:message code="label.level"/></th>
+    <th><spring:message code="label.erid"/></th>
+    <th><spring:message code="label.name"/></th>
+    <th><spring:message code="label.email"/></th>
+    <th><spring:message code="label.mobile"/></th>
+    <th><spring:message code="label.foundation"/></th>
+    <th><spring:message code="label.event"/></th>
+    <th><spring:message code="label.level"/></th>
     <th><spring:message code="label.seat"/></th>
     <th><spring:message code="label.totalAmountPaid"/></th>
     <th><spring:message code="label.amountDue"/></th>
-	<th><spring:message code="label.foodCoupon"/></th>
-	<th><spring:message code="label.eventKit"/></th>
-	<th><spring:message code="label.comments"/></th>
+    <th><spring:message code="label.foodCoupon"/></th>
+    <th><spring:message code="label.eventKit"/></th>
+    <th><spring:message code="label.comments"/></th>
 </tr>
 <c:forEach items="${registrationList}" var="registration">
-	<tr>
-		<td>
+    <tr>
+        <td><c:out value="${registration.id}"/></td>
+        <td>
             <form id="updatePart<c:out value="${registration.id}"/>" method="post" action="updateRegistration.htm">
                 <input type="hidden" name="registrationId" value="<c:out value="${registration.id}"/>" />
                 <a href="#" onclick="document.getElementById('updatePart<c:out value="${registration.id}"/>').submit();">
                     <c:out value="${registration.participant.name}"/>
                 </a>
             </form>
-		</td>
-		<td><c:out value="${registration.participant.email}"/></td>
-		<td><c:out value="${registration.participant.mobile}"/></td>
-		<td><c:out value="${registration.participant.foundation}"/></td>
-		<td><c:out value="${registration.event.name}"/></td>
-		<td><c:out value="${registration.levelName}"/></td>
+        </td>
+        <td><c:out value="${registration.participant.email}"/></td>
+        <td><c:out value="${registration.participant.mobile}"/></td>
+        <td><c:out value="${registration.participant.foundation}"/></td>
+        <td><c:out value="${registration.event.name}"/></td>
+        <td><c:out value="${registration.levelName}"/></td>
         <div style="display:none;" id="seatsDisplay<c:out value="${registration.id}"/>">
             <c:if  test="${!empty registration.seats}">
                 <c:forEach items="${registration.seats}" var="seat">
@@ -140,20 +182,20 @@
             </c:if>
             <p align="center"></p><a class="popupBoxClose" href="#" id="seatsDisplay<c:out value="${registration.id}"/>">Close</a></p>
         </div>
-		<td>
+        <td>
             <a class="popup" href="#" id="seatsDisplay<c:out value="${registration.id}"/>">
                 <spring:message code="label.seat"/>
             </a>
         </td>
         <td><c:out value="${registration.totalAmountPaid}"/></td>
         <td><c:out value="${registration.amountDue}"/></td>
-		<td><c:out value="${registration.foodCoupon}"/></td>
-		<c:if  test="${registration.eventKit}">
+        <td><c:out value="${registration.foodCoupon}"/></td>
+        <c:if  test="${registration.eventKit}">
             <td style="font-weight:bold; color:green; font-size:20px;">
                 <c:out value="${registration.eventKit}"/>
             </td>
         </c:if>
-		<c:if  test="${!registration.eventKit}">
+        <c:if  test="${!registration.eventKit}">
             <td>
                 <c:out value="${registration.eventKit}"/>
             </td>
@@ -171,12 +213,12 @@
             </c:if>
             <a class="popupBoxClose" href="#" id="commentsDisplay<c:out value="${registration.id}"/>">Close</a>
         </div>
-		<td>
+        <td>
             <a class="popup" href="#" id="commentsDisplay<c:out value="${registration.id}"/>">
                 <spring:message code="label.comments"/>
             </a>
         </td>
-	</tr>
+    </tr>
 </c:forEach>
 </table>
 </c:if>

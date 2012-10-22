@@ -7,6 +7,7 @@ DROP TABLE phk_eventregstrn;
 DROP TABLE phk_eventfee;
 DROP TABLE phk_event;
 DROP TABLE phk_participant;
+DROP TABLE phk_reference;
 
 CREATE TABLE phk_event (
 	id INT PRIMARY KEY auto_increment,
@@ -14,7 +15,7 @@ CREATE TABLE phk_event (
 	venue VARCHAR(100),
 	city VARCHAR(50),
 	state VARCHAR(50),
-	eligibilitylevel VARCHAR(5),
+	eligibilitylevel VARCHAR(10),
 	startdate TIMESTAMP null,
 	enddate TIMESTAMP null,
 	isseatperlvl VARCHAR(1),
@@ -31,7 +32,7 @@ CREATE TABLE phk_eventfee (
 	amount int,
 	cutoffdate date null,
 	review VARCHAR(1),
-	level VARCHAR(5),
+	level VARCHAR(10),
 	preparedby VARCHAR(50),
 	timecreated TIMESTAMP,
 	timeupdated TIMESTAMP,
@@ -60,6 +61,19 @@ CREATE TABLE phk_participant (
 	active VARCHAR(1)
 );
 
+CREATE TABLE phk_reference (
+	id INT PRIMARY KEY auto_increment,
+	uniquename VARCHAR(100) not null,
+	email VARCHAR(50),
+	mobile VARCHAR(15),
+	remarks VARCHAR(300),
+	preparedby VARCHAR(50),
+	timecreated TIMESTAMP,
+	timeupdated TIMESTAMP,
+	active VARCHAR(1),
+	CONSTRAINT uniquename UNIQUE (uniquename)
+);
+
 CREATE TABLE phk_eventregstrn (
 	id INT PRIMARY KEY auto_increment,
 	eventid int,
@@ -73,7 +87,7 @@ CREATE TABLE phk_eventregstrn (
 	eventkit varchar(1),
 	application varchar(1),
 	certificates varchar(1),
-	level varchar(5),
+	level varchar(10),
 	preparedby VARCHAR(50),
 	timecreated TIMESTAMP,
 	timeupdated TIMESTAMP,
@@ -91,6 +105,9 @@ CREATE TABLE phk_eventpmt (
 	pmtmode varchar(15),
 	receiptinfo varchar(100),
 	receiptdate TIMESTAMP null,
+	remarks VARCHAR(300),
+	postdtchq VARCHAR(25),
+	postdtchqdate TIMESTAMP null,
 	preparedby VARCHAR(50),
 	timecreated TIMESTAMP,
 	timeupdated TIMESTAMP,
@@ -129,7 +146,7 @@ CREATE TABLE phk_seat
     id INT PRIMARY KEY auto_increment,
 	eventregstrnid int,
 	eventid int,
-	level varchar(5),
+	level varchar(10),
 	seat int,
 	FOREIGN KEY (eventid) REFERENCES phk_event(id)
                               ON DELETE CASCADE,

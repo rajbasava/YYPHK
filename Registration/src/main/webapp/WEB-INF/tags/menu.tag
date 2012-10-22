@@ -1,5 +1,8 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
+<script type="text/javascript" src="<c:url value="/resources/script/jquery-1.7.2.min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/resources/script/jquery-ui-1.8.23.custom.min.js"/>"></script>
+
 <table align="center">
     <tr>
         <td>
@@ -19,6 +22,7 @@
                     <td width="125px"><a href="register.htm">Spot Registration</a></td>
                     <td width="125px"><a href="volunteer.htm">Manage Volunteers</a></td>
                     <td width="125px"><a href="event.htm">Manage Events</a></td>
+                    <td width="125px"><a href="referenceGroup.htm">Manage Reference Groups</a></td>
                     <td width="125px"><a href="import.htm">Import Participants</a></td>
                     <td width="80px"><a href="logout.htm">Sign Out</a></td>
                 </tr>

@@ -6,7 +6,10 @@
 */
 package com.yvphk.web.controller;
 
+import com.yvphk.common.AmountPaidCategory;
+import com.yvphk.common.Foundation;
 import com.yvphk.common.ParticipantLevel;
+import com.yvphk.common.PaymentMode;
 import com.yvphk.common.Util;
 import com.yvphk.model.form.Event;
 import com.yvphk.model.form.EventFee;
@@ -17,6 +20,7 @@ import com.yvphk.model.form.Option;
 import com.yvphk.model.form.Participant;
 import com.yvphk.model.form.ParticipantCriteria;
 import com.yvphk.model.form.ParticipantSeat;
+import com.yvphk.model.form.ReferenceGroup;
 import com.yvphk.model.form.RegisteredParticipant;
 import com.yvphk.service.EventService;
 import com.yvphk.service.ParticipantService;
@@ -44,7 +48,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-public class ParticipantController
+public class ParticipantController extends CommonController
 {
     @Autowired
     private ParticipantService participantService;
@@ -59,6 +63,8 @@ public class ParticipantController
         registeredParticipant.setAction(RegisteredParticipant.ActionRegister);
         map.put("registeredParticipant", registeredParticipant);
         map.put("allParticipantLevels", ParticipantLevel.allParticipantLevels());
+        map.put("allPaymentModes", PaymentMode.allPaymentModes());
+        map.put("allFoundations", Foundation.allFoundations());
         map.put("allEvents", getAllEvents());
         return "register";
     }
@@ -68,6 +74,9 @@ public class ParticipantController
     {
         map.put("participantCriteria", new ParticipantCriteria());
         map.put("allParticipantLevels", ParticipantLevel.allParticipantLevels());
+        map.put("allFoundations", Foundation.allFoundations());
+        map.put("allReferenceGroups", getAllReferenceGroups());
+        map.put("allAmountPaidCategories", AmountPaidCategory.allAmountPaidCategories());
         return "search";
     }
 
@@ -79,6 +88,9 @@ public class ParticipantController
         if (participantCriteria != null) {
             map.put("registrationList", participantService.listRegistrations(participantCriteria));
             map.put("allParticipantLevels", ParticipantLevel.allParticipantLevels());
+            map.put("allFoundations", Foundation.allFoundations());
+            map.put("allAmountPaidCategories", AmountPaidCategory.allAmountPaidCategories());
+            map.put("allReferenceGroups", getAllReferenceGroups());
         }
         return "search";
     }
@@ -121,6 +133,8 @@ public class ParticipantController
         if (registeredParticipant != null) {
             map.put("registeredParticipant", registeredParticipant);
             map.put("allParticipantLevels", ParticipantLevel.allParticipantLevels());
+            map.put("allPaymentModes", PaymentMode.allPaymentModes());
+            map.put("allFoundations", Foundation.allFoundations());
             map.put("allEvents", getAllEvents());
             map.put("allEventFees", getAllEventFees(registeredParticipant.getEventId()));
             return "registerTab";
@@ -301,6 +315,40 @@ public class ParticipantController
     {
         return "registerTab";
     }
+
+    @RequestMapping(value = "/referenceGroup", method = RequestMethod.GET)
+    public String referenceGroup (Map<String, Object> map)
+    {
+        map.put("referenceGroup", new ReferenceGroup());
+        map.put("referenceGroupList", participantService.listReferenceGroups());
+        return "referenceGroup";
+    }
+
+    @RequestMapping(value = "/addReferenceGroup", method = RequestMethod.POST)
+    public String addReferenceGroup (ReferenceGroup referenceGroup,
+                                     Map<String, Object> map,
+                                     HttpServletRequest request)
+    {
+        Login login = (Login) request.getSession().getAttribute(Login.ClassName);
+        referenceGroup.initialize(login.getEmail());
+
+        participantService.addReferenceGroup(referenceGroup);
+        map.put("referenceGroup", new ReferenceGroup());
+        map.put("referenceGroupList", participantService.listReferenceGroups());
+        return "referenceGroup";
+    }
+
+    private Map<String, String> getAllReferenceGroups ()
+    {
+        Map<String, String> map = new LinkedHashMap<String, String>();
+        List<ReferenceGroup> groups = participantService.listReferenceGroups();
+        for (ReferenceGroup referenceGroup: groups) {
+            String name = referenceGroup.getName();
+            map.put(name, name);
+        }
+        return map;
+    }
+
 
 
 }

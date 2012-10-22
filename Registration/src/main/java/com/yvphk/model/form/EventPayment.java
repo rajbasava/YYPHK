@@ -44,6 +44,15 @@ public class EventPayment extends BaseForm
     @Column(name = "RECEIPTDATE")
     private Date receiptDate;
 
+    @Column(name = "REMARKS")
+    private String remarks;
+
+    @Column(name = "POSTDTCHQ")
+    private String pdc;
+
+    @Column(name = "POSTDTCHQDATE")
+    private Date pdcDate;
+
     @Column(name = "PREPAREDBY")
     private String preparedBy;
 
@@ -114,6 +123,36 @@ public class EventPayment extends BaseForm
     public void setReceiptDate (Date receiptDate)
     {
         this.receiptDate = receiptDate;
+    }
+
+    public String getRemarks ()
+    {
+        return remarks;
+    }
+
+    public void setRemarks (String remarks)
+    {
+        this.remarks = remarks;
+    }
+
+    public String getPdc ()
+    {
+        return pdc;
+    }
+
+    public void setPdc (String pdc)
+    {
+        this.pdc = pdc;
+    }
+
+    public Date getPdcDate ()
+    {
+        return pdcDate;
+    }
+
+    public void setPdcDate (Date pdcDate)
+    {
+        this.pdcDate = pdcDate;
     }
 
     public String getPreparedBy ()

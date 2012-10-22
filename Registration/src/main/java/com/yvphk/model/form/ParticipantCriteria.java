@@ -16,6 +16,9 @@ public class ParticipantCriteria implements Serializable
     private String level;
     private String foundation;
     private Integer seat;
+    private String otherFoundation;
+    private String amountPaidCategory;
+    private String reference;
 
     public String getName ()
     {
@@ -75,5 +78,35 @@ public class ParticipantCriteria implements Serializable
     public void setSeat (Integer seat)
     {
         this.seat = seat;
+    }
+
+    public String getOtherFoundation ()
+    {
+        return otherFoundation;
+    }
+
+    public void setOtherFoundation (String otherFoundation)
+    {
+        this.otherFoundation = otherFoundation;
+    }
+
+    public String getAmountPaidCategory ()
+    {
+        return amountPaidCategory;
+    }
+
+    public void setAmountPaidCategory (String amountPaidCategory)
+    {
+        this.amountPaidCategory = amountPaidCategory;
+    }
+
+    public String getReference ()
+    {
+        return reference;
+    }
+
+    public void setReference (String reference)
+    {
+        this.reference = reference;
     }
 }

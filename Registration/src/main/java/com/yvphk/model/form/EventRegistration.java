@@ -7,6 +7,7 @@
 
 package com.yvphk.model.form;
 
+import com.yvphk.common.AmountPaidCategory;
 import com.yvphk.common.ParticipantLevel;
 import com.yvphk.common.Util;
 
@@ -21,8 +22,12 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import java.text.MessageFormat;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @Entity
@@ -35,7 +40,7 @@ public class EventRegistration extends BaseForm
             new String[] {"AmountPayable","Review","Level","Reference","Application","Certificates","Comments"};
 
     public static final String[] ReportFields =
-            new String[] {"Event","AmountPayable","TotalAmountPaid","AmountDue","Review","Level","Reference","Application","Certificates","FoodCoupon","EventKit"};
+            new String[] {"Event","AmountPayable","TotalAmountPaid","AmountDue","Review","Level","Reference","Application","Certificates","FoodCoupon","EventKit", "Category"};
 
     @Id
     @Column(name = "ID")
@@ -314,5 +319,24 @@ public class EventRegistration extends BaseForm
     public void setReference (String reference)
     {
         this.reference = reference;
+    }
+
+    public String getCategory ()
+    {
+        String[] args = {"totalAmountPaid", "amountPayable"};
+        Map amountPaidCategories = AmountPaidCategory.allAmountPaidCategories();
+        Set keys = amountPaidCategories.keySet();
+        Iterator<String> iterator = keys.iterator();
+        while (iterator.hasNext()) {
+            String key = iterator.next();
+            String template = AmountPaidCategory.getConditionTemplate(key, false);
+            MessageFormat format = new MessageFormat(template);
+            String expression = format.format(args);
+            if (Util.evaluate(expression, this)) {
+                return AmountPaidCategory.getName(key);
+            }
+        }
+
+        return null;
     }
 }

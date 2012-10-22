@@ -9,6 +9,7 @@ package com.yvphk.service;
 import com.yvphk.model.form.EventRegistration;
 import com.yvphk.model.form.Participant;
 import com.yvphk.model.form.ParticipantCriteria;
+import com.yvphk.model.form.ReferenceGroup;
 import com.yvphk.model.form.RegisteredParticipant;
 
 import java.util.List;
@@ -26,4 +27,11 @@ public interface ParticipantService
     public List<EventRegistration> listRegistrations (ParticipantCriteria participantCriteria);
 
     public void processBatchEntry (List<RegisteredParticipant> participants);
+
+    public void addReferenceGroup (ReferenceGroup referenceGroup);
+
+    public ReferenceGroup getReferenceGroup (String name);
+
+    public List<ReferenceGroup> listReferenceGroups ();
+
 }

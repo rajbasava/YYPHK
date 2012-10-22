@@ -2,4 +2,6 @@
 
 <link rel="stylesheet" href="<c:url value="/resources/css/style.css"/>" type="text/css"/>
 <link rel="stylesheet" href="<c:url value="/resources/css/jquery-ui-1.8.23.custom.css"/>" type="text/css"/>
+<link rel="stylesheet" href="<c:url value="/resources/css/jquery.ui.menubar.css"/>" type="text/css"/>
+<link rel="stylesheet" href="<c:url value="/resources/css/jquery.ui.menu.css"/>" type="text/css"/>
 <style type="text/css"> .ui-datepicker{ font-size:11px; } </style>

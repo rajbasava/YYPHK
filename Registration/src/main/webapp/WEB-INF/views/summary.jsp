@@ -15,6 +15,10 @@
 
 <table align="center" cellspacing="2" cellpadding="2" width="50%">
     <tr>
+		<td><spring:message code="label.erid"/></td>
+		<td><b><c:out value="${registeredParticipant.registration.id}"/></b></td>
+	</tr>
+    <tr>
 		<td><spring:message code="label.name"/></td>
 		<td><c:out value="${registeredParticipant.registration.participant.name}"/></td>
 		<td><spring:message code="label.mobile"/></td>

@@ -18,7 +18,7 @@
 </head>
 <body>
 <mytags:menu/>
-<h2 align="center">Discounts for <c:out value="${event.name}"/></h2>
+<h2 align="center">Event Fees for <c:out value="${event.name}"/></h2>
 
 <form:form method="post" action="addEventFee.htm" commandName="eventFee">
 

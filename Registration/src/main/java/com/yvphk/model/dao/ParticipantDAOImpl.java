@@ -6,6 +6,8 @@
 */
 package com.yvphk.model.dao;
 
+import com.yvphk.common.AmountPaidCategory;
+import com.yvphk.common.Foundation;
 import com.yvphk.common.Util;
 import com.yvphk.model.form.BaseForm;
 import com.yvphk.model.form.Event;
@@ -15,6 +17,7 @@ import com.yvphk.model.form.EventRegistration;
 import com.yvphk.model.form.Participant;
 import com.yvphk.model.form.ParticipantCriteria;
 import com.yvphk.model.form.ParticipantSeat;
+import com.yvphk.model.form.ReferenceGroup;
 import com.yvphk.model.form.RegisteredParticipant;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
@@ -22,11 +25,13 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.text.MessageFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -44,6 +49,10 @@ public class ParticipantDAOImpl implements ParticipantDAO
     public EventRegistration registerParticipant (RegisteredParticipant registeredParticipant)
     {
         Participant participant = registeredParticipant.getParticipant();
+        if (Foundation.Others.getName().equals(participant.getFoundation())) {
+            participant.setFoundation(registeredParticipant.getOtherFoundation());
+        }
+
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
         EventRegistration registration = registeredParticipant.getRegistration();
@@ -225,7 +234,13 @@ public class ParticipantDAOImpl implements ParticipantDAO
         }
 
         if (!Util.nullOrEmptyOrBlank(participantCriteria.getFoundation())) {
-            criteria.add(Restrictions.ilike("participant.foundation", participantCriteria.getFoundation(), MatchMode.ANYWHERE));
+            String foundation = participantCriteria.getFoundation();
+            if (Foundation.Others.getName().equalsIgnoreCase(foundation)) {
+                if (!Util.nullOrEmptyOrBlank(participantCriteria.getOtherFoundation())) {
+                    foundation = participantCriteria.getOtherFoundation();
+                }
+            }
+            criteria.add(Restrictions.ilike("participant.foundation", foundation, MatchMode.ANYWHERE));
         }
 
         if (!Util.nullOrEmptyOrBlank(participantCriteria.getMobile())) {
@@ -234,6 +249,19 @@ public class ParticipantDAOImpl implements ParticipantDAO
 
         if (!Util.nullOrEmptyOrBlank(participantCriteria.getLevel())) {
             criteria.add(Restrictions.eq("level", participantCriteria.getLevel()));
+        }
+
+        if (!Util.nullOrEmptyOrBlank(participantCriteria.getReference())) {
+            criteria.add(Restrictions.eq("reference", participantCriteria.getReference()));
+        }
+
+        if (!Util.nullOrEmptyOrBlank(participantCriteria.getAmountPaidCategory())) {
+            String[] args = {"totalAmountPaid", "amountPayable"};
+            String conditionTemplate =
+                    AmountPaidCategory.getConditionTemplate(participantCriteria.getAmountPaidCategory(), true);
+            MessageFormat format = new MessageFormat(conditionTemplate);
+            String sql = format.format(args);
+            criteria.add(Restrictions.sqlRestriction(sql));
         }
         List<EventRegistration> results = criteria.list();
 
@@ -284,4 +312,39 @@ public class ParticipantDAOImpl implements ParticipantDAO
         for (RegisteredParticipant participant : participants)
             addParticipant(participant);
     }
+
+    public void addReferenceGroup (ReferenceGroup referenceGroup)
+    {
+        sessionFactory.getCurrentSession().save(referenceGroup);
+    }
+
+    public ReferenceGroup getReferenceGroup (String name)
+    {
+        Session session = sessionFactory.openSession();
+        Criteria criteria = session.createCriteria(ReferenceGroup.class);
+
+        criteria.add(Restrictions.eq("uniquename", name));
+        List<ReferenceGroup> referenceGroups = criteria.list();
+
+        session.close();
+        if (referenceGroups == null ||
+                referenceGroups.isEmpty()) {
+            return null;
+        }
+
+        return referenceGroups.get(0);
+
+    }
+
+    public List<ReferenceGroup> listReferenceGroups ()
+    {
+        Session session = sessionFactory.openSession();
+        Criteria criteria = session.createCriteria(ReferenceGroup.class);
+        criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+        criteria.addOrder(Order.asc("timeCreated"));
+        List<ReferenceGroup> referenceGroups = criteria.list();
+        session.close();
+        return referenceGroups;
+    }
+
 }

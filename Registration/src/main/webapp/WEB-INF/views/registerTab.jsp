@@ -22,6 +22,17 @@
                 $( "input:submit" ).click(function() {
                      $("#registeredParticipant").submit();
                 });
+
+                $("#registeredParticipant select[name='participant.foundation']").change(function() {
+                    if ($(this).val() == "Others") {
+                        $("#registeredParticipant input[name='otherFoundation']").val("");
+                        $("div#othersTextBox").show();
+                        $("div#othersTextBox").focus().select();
+                    }
+                    else {
+                        $("div#othersTextBox").hide();
+                    }
+                });
             });
 
             function getEventFees(){
@@ -71,9 +82,25 @@
                 {
                     populateEventFee();
                 });
-                $("#registeredParticipant input[name='currentPayment.receiptDate']").datepicker({ showOn: 'button', dateFormat: 'dd/mm/yy', buttonImageOnly: true, buttonImage: '<c:url value="/resources/img/calendar.gif"/>' });
-            });
+                $("#registeredParticipant input[name='currentPayment.receiptDate']").datepicker({
+                    showOn: 'button',
+                    dateFormat: 'dd/mm/yy',
+                    buttonImageOnly: true,
+                    buttonImage: '<c:url value="/resources/img/calendar.gif"/>'
+                });
 
+                $("#registeredParticipant input[name='currentPayment.pdcDate']").datepicker({
+                    showOn: 'button',
+                    dateFormat: 'dd/mm/yy',
+                    buttonImageOnly: true,
+                    buttonImage: '<c:url value="/resources/img/calendar.gif"/>'
+                });
+
+                if ($("#registeredParticipant select[name='participant.foundation']").val() == "Others") {
+                    $("div#othersTextBox").show();
+                    $("div#othersTextBox").focus().select();
+                }
+            });
 	    });
     </script>
 </head>
@@ -111,7 +138,15 @@
                 </tr>
                 <tr>
                     <td><form:label path="participant.foundation"><spring:message code="label.foundation"/></form:label></td>
-                    <td><form:input path="participant.foundation" size="50"/></td>
+                    <td>
+                        <form:select path="participant.foundation">
+                            <form:option value="" label="--- Select ---"/>
+                            <form:options items="${allFoundations}" />
+                        </form:select>
+                        <div id="othersTextBox" style="display:none;">
+                                <form:input path="otherFoundation" size="60"/>
+                        </div>
+                    </td>
                 </tr>
                 <tr>
                     <td><form:label path="participant.vip"><spring:message code="label.vip"/></form:label></td>
@@ -210,7 +245,25 @@
                 </tr>
                 <tr>
                     <td><form:label path="currentPayment.mode"><spring:message code="label.mode"/></form:label></td>
-                    <td><form:input path="currentPayment.mode"/></td>
+                    <td>
+                        <form:select path="currentPayment.mode">
+                            <form:option value="NONE" label="--- Select ---"/>
+                            <form:options items="${allPaymentModes}" />
+                        </form:select>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td><form:label path="currentPayment.pdc"><spring:message code="label.pdc"/></form:label></td>
+                    <td><form:input path="currentPayment.pdc"/></td>
+                </tr>
+                <tr>
+                    <td><form:label path="currentPayment.pdcDate"><spring:message code="label.pdcDate"/></form:label></td>
+                    <td><form:input path="currentPayment.pdcDate"/></td>
+                </tr>
+                <tr>
+                    <td><form:label path="currentPayment.remarks"><spring:message code="label.remarks"/></form:label></td>
+                    <td><form:textarea path="currentPayment.remarks" rows="5" cols="30"/></td>
                 </tr>
             </table>
             <br>
@@ -222,10 +275,13 @@
                     <tr>
                         <td>Prepared By</td>
                         <td>Time Created</td>
-                        <td>Amount Paid</td>
-                        <td>Receipt Info</td>
-                        <td>Receipt Date</td>
-                        <td>Mode of Payment</td>
+                        <td><spring:message code="label.amountPaid"/></td>
+                        <td><spring:message code="label.receiptInfo"/></td>
+                        <td><spring:message code="label.receiptDate"/></td>
+                        <td><spring:message code="label.mode"/></td>
+                        <td><spring:message code="label.pdc"/></td>
+                        <td><spring:message code="label.pdcDate"/></td>
+                        <td><spring:message code="label.remarks"/></td>
                     </tr>
                     <c:forEach items="${registeredParticipant.registration.payments}" var="payment">
                         <tr>
@@ -235,6 +291,9 @@
                             <td><c:out value="${payment.receiptInfo}"/></td>
                             <td><c:out value="${payment.receiptDate}"/></td>
                             <td><c:out value="${payment.mode}"/></td>
+                            <td><c:out value="${payment.pdc}"/></td>
+                            <td><c:out value="${payment.pdcDate}"/></td>
+                            <td><c:out value="${payment.remarks}"/></td>
                         </tr>
                     </c:forEach>
                     </table>

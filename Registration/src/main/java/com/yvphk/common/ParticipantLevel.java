@@ -17,7 +17,9 @@ public enum ParticipantLevel
     AYL2("AYL2", "Arahtic Yoga Level 2"),
     AYL3_1("AYL3.1", "Arahtic Yoga Level 3.1"),
     AYL3_2("AYL3.2", "Arahtic Yoga Level 3.2"),
-    AYL4("AYL4", "Arahtic Yoga Level 4 And Above");
+    AYL4_1("AYL4.1", "Arahtic Yoga Level 4.1"),
+    AYL4_2("AYL4.2", "Arahtic Yoga Level 4.2"),
+    AYL5("AYL5", "Arahtic Yoga Level 5 And Above");
 
     private String key;
     private String name;
@@ -53,7 +55,9 @@ public enum ParticipantLevel
             allParticipantLevels.put(ParticipantLevel.AYL2.getKey(), ParticipantLevel.AYL2.getName());
             allParticipantLevels.put(ParticipantLevel.AYL3_1.getKey(), ParticipantLevel.AYL3_1.getName());
             allParticipantLevels.put(ParticipantLevel.AYL3_2.getKey(), ParticipantLevel.AYL3_2.getName());
-            allParticipantLevels.put(ParticipantLevel.AYL4.getKey(), ParticipantLevel.AYL4.getName());
+            allParticipantLevels.put(ParticipantLevel.AYL4_1.getKey(), ParticipantLevel.AYL4_1.getName());
+            allParticipantLevels.put(ParticipantLevel.AYL4_2.getKey(), ParticipantLevel.AYL4_2.getName());
+            allParticipantLevels.put(ParticipantLevel.AYL5.getKey(), ParticipantLevel.AYL5.getName());
         }
 
         return allParticipantLevels;
