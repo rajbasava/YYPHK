@@ -1,8 +1,6 @@
 /*
     Copyright (c) 2012-2015 Yoga Vidya Pranic Healing Foundation of Karnataka.
     All rights reserved. Patents pending.
-
-    Responsible: byummadisingh
 */
 
 package com.yvphk.model.form;
@@ -56,6 +54,9 @@ public class EventRegistration extends BaseForm
     @Column(name = "AMOUNTDUE")
     private Long amountDue;
 
+    @Column(name = "PENDINGPDC")
+    private int pendingPdc;
+
     @Column(name = "REVIEW")
     private boolean review;
 
@@ -76,6 +77,9 @@ public class EventRegistration extends BaseForm
 
     @Column(name = "REFERENCE")
     private String reference;
+
+    @Column(name = "STATUS")
+    private String status;
 
     @Column(name = "PREPAREDBY")
     private String preparedBy;
@@ -152,6 +156,16 @@ public class EventRegistration extends BaseForm
         this.amountDue = amountDue;
     }
 
+    public int getPendingPdc ()
+    {
+        return pendingPdc;
+    }
+
+    public void setPendingPdc (int pendingPdc)
+    {
+        this.pendingPdc = pendingPdc;
+    }
+
     public boolean isReview ()
     {
         return review;
@@ -219,6 +233,16 @@ public class EventRegistration extends BaseForm
         }
 
         return ParticipantLevel.getName(getLevel());
+    }
+
+    public String getStatus ()
+    {
+        return status;
+    }
+
+    public void setStatus (String status)
+    {
+        this.status = status;
     }
 
     public String getPreparedBy ()

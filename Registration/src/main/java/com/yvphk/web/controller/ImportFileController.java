@@ -1,8 +1,6 @@
 /*
     Copyright (c) 2012-2015 Yoga Vidya Pranic Healing Foundation of Karnataka.
     All rights reserved. Patents pending.
-
-    Responsible: byummadisingh
 */
 
 package com.yvphk.web.controller;
@@ -23,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-public class ImportFileController
+public class ImportFileController extends CommonController
 {
     @Autowired
     private ImportService importService;
@@ -49,21 +47,8 @@ public class ImportFileController
     @RequestMapping(value = "/import")
     public String importFile (Map<String, Object> map, HttpServletRequest request)
     {
-        map.put("allEvents", getAllEvents());
+        map.put("allEvents", getAllEventMap(eventService.allEvents()));
         map.put("importFile", new ImportFile());
         return "import";
     }
-
-    //todo common method - move to a common place
-    private Map<String, String> getAllEvents ()
-    {
-        List<Event> events = eventService.allEvents();
-        LinkedHashMap eventMap = new LinkedHashMap<String, String>();
-        for (Event event : events) {
-            eventMap.put(event.getId(), event.getName());
-        }
-        return eventMap;
-    }
-
-
 }

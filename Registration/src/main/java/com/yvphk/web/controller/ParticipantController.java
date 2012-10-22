@@ -1,8 +1,6 @@
 /*
     Copyright (c) 2012-2015 Yoga Vidya Pranic Healing Foundation of Karnataka.
     All rights reserved. Patents pending.
- 
-    Responsible: byummadisingh
 */
 package com.yvphk.web.controller;
 
@@ -65,7 +63,7 @@ public class ParticipantController extends CommonController
         map.put("allParticipantLevels", ParticipantLevel.allParticipantLevels());
         map.put("allPaymentModes", PaymentMode.allPaymentModes());
         map.put("allFoundations", Foundation.allFoundations());
-        map.put("allEvents", getAllEvents());
+        map.put("allEvents", getAllEventMap(eventService.allEvents()));
         return "register";
     }
 
@@ -135,7 +133,7 @@ public class ParticipantController extends CommonController
             map.put("allParticipantLevels", ParticipantLevel.allParticipantLevels());
             map.put("allPaymentModes", PaymentMode.allPaymentModes());
             map.put("allFoundations", Foundation.allFoundations());
-            map.put("allEvents", getAllEvents());
+            map.put("allEvents", getAllEventMap(eventService.allEvents()));
             map.put("allEventFees", getAllEventFees(registeredParticipant.getEventId()));
             return "registerTab";
         }
@@ -275,16 +273,6 @@ public class ParticipantController extends CommonController
         participantService.processBatchEntry(participantList);
         map.put("batchResults", "Batch upload successful. Imported " + participantList.size() + " records.");
         return "batchResults";
-    }
-
-    private Map<String, String> getAllEvents ()
-    {
-        List<Event> events = eventService.allEvents();
-        LinkedHashMap eventMap = new LinkedHashMap<String, String>();
-        for (Event event : events) {
-            eventMap.put(event.getId(), event.getName());
-        }
-        return eventMap;
     }
 
     private List<com.yvphk.model.form.Option> getAllEventFees (Integer eventId)

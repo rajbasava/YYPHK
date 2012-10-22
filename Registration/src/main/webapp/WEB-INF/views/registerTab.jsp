@@ -254,6 +254,10 @@
 
                 </tr>
                 <tr>
+                    <td><form:label path="currentPayment.pdcNotClear"><spring:message code="label.pdcNotClear"/></form:label></td>
+                    <td><form:input path="currentPayment.pdcNotClear"/></td>
+                </tr>
+                <tr>
                     <td><form:label path="currentPayment.pdc"><spring:message code="label.pdc"/></form:label></td>
                     <td><form:input path="currentPayment.pdc"/></td>
                 </tr>

@@ -1,8 +1,6 @@
 /*
     Copyright (c) 2012-2015 Yoga Vidya Pranic Healing Foundation of Karnataka.
     All rights reserved. Patents pending.
-
-    Responsible: byummadisingh
 */
 
 package com.yvphk.model.form;
@@ -46,6 +44,9 @@ public class EventPayment extends BaseForm
 
     @Column(name = "REMARKS")
     private String remarks;
+
+    @Column(name = "PDCNOTCLEAR")
+    private boolean pdcNotClear;
 
     @Column(name = "POSTDTCHQ")
     private String pdc;
@@ -133,6 +134,16 @@ public class EventPayment extends BaseForm
     public void setRemarks (String remarks)
     {
         this.remarks = remarks;
+    }
+
+    public boolean isPdcNotClear ()
+    {
+        return pdcNotClear;
+    }
+
+    public void setPdcNotClear (boolean pdcNotClear)
+    {
+        this.pdcNotClear = pdcNotClear;
     }
 
     public String getPdc ()
