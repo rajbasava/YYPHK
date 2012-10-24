@@ -107,29 +107,20 @@
         <td><form:input path="seat" /></td>
     </tr>
     <tr>
-        <td><form:label path="amountPaidCategory"><spring:message code="label.amountPaidCategory"/></form:label></td>
+        <td><form:label path="eventId"><spring:message code="label.eventId"/></form:label></td>
         <td>
-            <form:select path="amountPaidCategory">
+            <form:select path="eventId">
                 <form:option value="" label="--- Select ---"/>
-                <form:options items="${allAmountPaidCategories}" />
+                <form:options items="${allEvents}" />
             </form:select>
         </td>
-        <td><form:label path="reference"><spring:message code="label.reference"/></form:label></td>
-        <td>
-            <form:select path="reference">
-                <form:option value="" label="--- Select ---"/>
-                <form:options items="${allReferenceGroups}" />
-            </form:select>
-        </td>
-    </tr>
-    <tr>
-        &nbsp;
+        <td><form:label path="vip"><spring:message code="label.vip"/></form:label></td>
+        <td><form:checkbox path="vip"/></td>
     </tr>
     <tr>
         <td colspan="4" align="center">
             <div id="button">
                 <a id="submit" href="#"><spring:message code="label.search"/></a>
-                <a id="excel" href="#">Export Excel</a>
             </div>
         </td>
     </tr>

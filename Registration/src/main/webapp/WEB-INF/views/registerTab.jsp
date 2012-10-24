@@ -255,7 +255,7 @@
                 </tr>
                 <tr>
                     <td><form:label path="currentPayment.pdcNotClear"><spring:message code="label.pdcNotClear"/></form:label></td>
-                    <td><form:input path="currentPayment.pdcNotClear"/></td>
+                    <td><form:checkbox path="currentPayment.pdcNotClear"/></td>
                 </tr>
                 <tr>
                     <td><form:label path="currentPayment.pdc"><spring:message code="label.pdc"/></form:label></td>
@@ -283,6 +283,7 @@
                         <td><spring:message code="label.receiptInfo"/></td>
                         <td><spring:message code="label.receiptDate"/></td>
                         <td><spring:message code="label.mode"/></td>
+                        <td><spring:message code="label.pdcNotClear"/></td>
                         <td><spring:message code="label.pdc"/></td>
                         <td><spring:message code="label.pdcDate"/></td>
                         <td><spring:message code="label.remarks"/></td>
@@ -295,6 +296,7 @@
                             <td><c:out value="${payment.receiptInfo}"/></td>
                             <td><c:out value="${payment.receiptDate}"/></td>
                             <td><c:out value="${payment.mode}"/></td>
+                            <td><c:out value="${payment.pdcNotClear}"/></td>
                             <td><c:out value="${payment.pdc}"/></td>
                             <td><c:out value="${payment.pdcDate}"/></td>
                             <td><c:out value="${payment.remarks}"/></td>

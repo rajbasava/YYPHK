@@ -24,6 +24,8 @@
                     <td width="125px"><a href="event.htm">Manage Events</a></td>
                     <td width="125px"><a href="referenceGroup.htm">Manage Reference Groups</a></td>
                     <td width="125px"><a href="import.htm">Import Participants</a></td>
+                    <td width="125px"><a href="rptRegistrations.htm">Export Registrations</a></td>
+                    <td width="125px"><a href="rptPayments.htm">Export Payments</a></td>
                     <td width="80px"><a href="logout.htm">Sign Out</a></td>
                 </tr>
             </table>

@@ -4,9 +4,11 @@
 */
 package com.yvphk.service;
 
+import com.yvphk.model.form.EventPayment;
 import com.yvphk.model.form.EventRegistration;
 import com.yvphk.model.form.Participant;
 import com.yvphk.model.form.ParticipantCriteria;
+import com.yvphk.model.form.PaymentCriteria;
 import com.yvphk.model.form.ReferenceGroup;
 import com.yvphk.model.form.RegisteredParticipant;
 
@@ -31,5 +33,7 @@ public interface ParticipantService
     public ReferenceGroup getReferenceGroup (String name);
 
     public List<ReferenceGroup> listReferenceGroups ();
+
+    public List<EventPayment> listPayments (PaymentCriteria paymentCriteria);
 
 }

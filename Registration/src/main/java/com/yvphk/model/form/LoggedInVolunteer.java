@@ -17,6 +17,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "PHK_VOLLOGIN")
+@org.hibernate.annotations.Entity(dynamicUpdate = true)
 public class LoggedInVolunteer extends BaseForm
 {
     public static final String ClassName = "com.yvphk.model.form.LoggedInVolunteer";

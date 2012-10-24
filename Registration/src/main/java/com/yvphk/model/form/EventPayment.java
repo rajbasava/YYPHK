@@ -18,6 +18,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "PHK_EVENTPMT")
+@org.hibernate.annotations.Entity(dynamicUpdate = true)
 public class EventPayment extends BaseForm
 {
     public static final String ClassName = "com.yvphk.model.form.EventPayment";
@@ -54,10 +55,10 @@ public class EventPayment extends BaseForm
     @Column(name = "POSTDTCHQDATE")
     private Date pdcDate;
 
-    @Column(name = "PREPAREDBY")
+    @Column(name = "PREPAREDBY", updatable=false)
     private String preparedBy;
 
-    @Column(name = "TIMECREATED")
+    @Column(name = "TIMECREATED", updatable=false)
     private Date timeCreated;
 
     @Column(name = "TIMEUPDATED")

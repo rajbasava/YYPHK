@@ -17,6 +17,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "PHK_PARTICIPANT")
+@org.hibernate.annotations.Entity(dynamicUpdate = true)
 public class Participant extends BaseForm
 {
     public static final String ClassName = "com.yvphk.model.form.Participant";
@@ -47,20 +48,20 @@ public class Participant extends BaseForm
     @Column(name = "FOUNDATION")
     private String foundation;
 
-    @Column(name = "VIP")
-    private boolean vip;
+    @Column(name = "VIP", columnDefinition = "default false")
+    private boolean vip = false;
 
     @Column(name = "VIPDESC")
     private String vipDesc;
 
-    @Column(name = "PREPAREDBY")
+    @Column(name = "PREPAREDBY", updatable=false)
     private String preparedBy;
 
-    @Column(name = "TIMECREATED")
-    private Date timecreated;
+    @Column(name = "TIMECREATED", updatable=false)
+    private Date timeCreated;
 
     @Column(name = "TIMEUPDATED")
-    private Date timeupdated;
+    private Date timeUpdated;
 
     @Column(name = "ACTIVE")
     private boolean active;
@@ -162,24 +163,24 @@ public class Participant extends BaseForm
         this.preparedBy = preparedBy;
     }
 
-    public Date getTimecreated ()
+    public Date getTimeCreated ()
     {
-        return timecreated;
+        return timeCreated;
     }
 
-    public void setTimecreated (Date timecreated)
+    public void setTimeCreated (Date timeCreated)
     {
-        this.timecreated = timecreated;
+        this.timeCreated = timeCreated;
     }
 
-    public Date getTimeupdated ()
+    public Date getTimeUpdated ()
     {
-        return timeupdated;
+        return timeUpdated;
     }
 
-    public void setTimeupdated (Date timeupdated)
+    public void setTimeUpdated (Date timeUpdated)
     {
-        this.timeupdated = timeupdated;
+        this.timeUpdated = timeUpdated;
     }
 
     public boolean isActive ()

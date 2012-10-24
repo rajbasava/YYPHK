@@ -93,9 +93,45 @@ public class Util
             }
         }
         catch (OgnlException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
         }
         return result;
+    }
+
+    public static Object getDottedFieldValue (String dottedFieldPath, Object obj)
+    {
+        Object result = null;
+        try {
+            result = Ognl.getValue(dottedFieldPath, obj);
+        }
+        catch (OgnlException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public static String getCapitalizedFieldName (String dottedFieldPath)
+    {
+        if (Util.nullOrEmptyOrBlank(dottedFieldPath)) {
+            return null;
+        }
+
+        String lastField = dottedFieldPath.substring(dottedFieldPath.lastIndexOf(".")+1);
+        lastField = lastField.substring(0,1).toUpperCase() + lastField.substring(1).toLowerCase();
+        return lastField;
+    }
+
+    public static Class loadClass (String classType)
+    {
+        Class clazz = null;
+        try {
+            clazz = Class.forName(classType);
+        }
+        catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+         return clazz;
+
     }
 
 }

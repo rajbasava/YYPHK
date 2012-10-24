@@ -15,6 +15,7 @@ import com.yvphk.model.form.EventRegistration;
 import com.yvphk.model.form.Participant;
 import com.yvphk.model.form.ParticipantCriteria;
 import com.yvphk.model.form.ParticipantSeat;
+import com.yvphk.model.form.PaymentCriteria;
 import com.yvphk.model.form.ReferenceGroup;
 import com.yvphk.model.form.RegisteredParticipant;
 import org.hibernate.Criteria;
@@ -30,8 +31,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.text.MessageFormat;
-import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public class ParticipantDAOImpl implements ParticipantDAO
@@ -85,7 +87,6 @@ public class ParticipantDAOImpl implements ParticipantDAO
             session.save(participantSeat);
         }
         else if (RegisteredParticipant.ActionUpdate.equals(registeredParticipant.getAction())) {
-            registration.setTimeUpdated(new Date());
             //  todo update changes properties of registration objects to comments
             session.update(participant);
             registration.setParticipant(participant);
@@ -107,7 +108,35 @@ public class ParticipantDAOImpl implements ParticipantDAO
             addPayment(payment, registration.getId());
         }
 
+        updatePDCCount(registration);
+
         return registration;
+    }
+
+    private void updatePDCCount (EventRegistration registration)
+    {
+        int pendingPdcCount = 0;
+        Session session = sessionFactory.openSession();
+        session.refresh(registration);
+
+        Set<EventPayment> paymentsSet = registration.getPayments();
+        if (paymentsSet == null) {
+            return;
+        }
+        Iterator<EventPayment> itr = paymentsSet.iterator();
+        while (itr.hasNext()) {
+            EventPayment payment = itr.next();
+            if (payment.isPdcNotClear()) {
+                pendingPdcCount++;
+            }
+        }
+
+        registration.setPendingPdc(pendingPdcCount);
+
+        session.update(registration);
+
+        session.flush();
+        session.close();
     }
 
     public void addHistoryRecord (HistoryRecord historyRecord,
@@ -227,6 +256,10 @@ public class ParticipantDAOImpl implements ParticipantDAO
             criteria.add(Restrictions.ilike("participant.name", participantCriteria.getName(), MatchMode.ANYWHERE));
         }
 
+        if (participantCriteria.getEventId() != null) {
+            criteria.add(Restrictions.eq("event.id", participantCriteria.getEventId()));
+        }
+
         if (!Util.nullOrEmptyOrBlank(participantCriteria.getEmail())) {
             criteria.add(Restrictions.ilike("participant.email", participantCriteria.getEmail(), MatchMode.ANYWHERE));
         }
@@ -343,6 +376,63 @@ public class ParticipantDAOImpl implements ParticipantDAO
         List<ReferenceGroup> referenceGroups = criteria.list();
         session.close();
         return referenceGroups;
+    }
+
+    public List<EventPayment> listPayments (PaymentCriteria paymentCriteria)
+    {
+        Session session = sessionFactory.openSession();
+        Criteria criteria = session.createCriteria(EventPayment.class);
+        criteria.createAlias("registration", "registration");
+        criteria.createAlias("registration.participant", "participant");
+        criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+
+        if (paymentCriteria.getEventId() != null) {
+            criteria.add(Restrictions.eq("registration.event.id", paymentCriteria.getEventId()));
+        }
+
+        if (!Util.nullOrEmptyOrBlank(paymentCriteria.getFoundation())) {
+            String foundation = paymentCriteria.getFoundation();
+            if (Foundation.Others.getName().equalsIgnoreCase(foundation)) {
+                if (!Util.nullOrEmptyOrBlank(paymentCriteria.getOtherFoundation())) {
+                    foundation = paymentCriteria.getOtherFoundation();
+                }
+            }
+            criteria.add(Restrictions.ilike("participant.foundation", foundation, MatchMode.ANYWHERE));
+        }
+
+        if (!Util.nullOrEmptyOrBlank(paymentCriteria.getLevel())) {
+            criteria.add(Restrictions.eq("registration.level", paymentCriteria.getLevel()));
+        }
+
+        if (!Util.nullOrEmptyOrBlank(paymentCriteria.getReference())) {
+            criteria.add(Restrictions.eq("registration.reference", paymentCriteria.getReference()));
+        }
+        if (!Util.nullOrEmptyOrBlank(paymentCriteria.getMode())) {
+            criteria.add(Restrictions.eq("mode", paymentCriteria.getMode()));
+        }
+
+        criteria.add(Restrictions.eq("pdcNotClear", paymentCriteria.isPdcNotClear()));
+
+        if (paymentCriteria.getFromReceiptDate() != null) {
+            criteria.add(Restrictions.ge("receiptDate", paymentCriteria.getFromReceiptDate()));
+        }
+
+        if (paymentCriteria.getToReceiptDate() != null) {
+            criteria.add(Restrictions.le("receiptDate", paymentCriteria.getToReceiptDate()));
+        }
+
+        if (paymentCriteria.getFromPdcDate() != null) {
+            criteria.add(Restrictions.ge("pdcDate", paymentCriteria.getFromPdcDate()));
+        }
+
+        if (paymentCriteria.getToPdcDate() != null) {
+            criteria.add(Restrictions.le("pdcDate", paymentCriteria.getToPdcDate()));
+        }
+
+        List<EventPayment> results = criteria.list();
+
+        session.close();
+        return results;
     }
 
 }

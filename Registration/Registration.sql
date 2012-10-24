@@ -20,8 +20,8 @@ CREATE TABLE phk_event (
 	enddate TIMESTAMP null,
 	isseatperlvl VARCHAR(1),
 	preparedby VARCHAR(50),
-	timecreated TIMESTAMP,
-	timeupdated TIMESTAMP,
+	timecreated TIMESTAMP null,
+	timeupdated TIMESTAMP null,
 	active VARCHAR(1)
 );
 
@@ -34,8 +34,8 @@ CREATE TABLE phk_eventfee (
 	review VARCHAR(1),
 	level VARCHAR(10),
 	preparedby VARCHAR(50),
-	timecreated TIMESTAMP,
-	timeupdated TIMESTAMP,
+	timecreated TIMESTAMP null,
+	timeupdated TIMESTAMP null,
 	active VARCHAR(1),
 	FOREIGN KEY (eventid) REFERENCES phk_event(id)
                           ON DELETE CASCADE
@@ -56,8 +56,8 @@ CREATE TABLE phk_participant (
 	country VARCHAR(50),
 	zipcode VARCHAR(15),
 	preparedby VARCHAR(50),
-	timecreated TIMESTAMP,
-	timeupdated TIMESTAMP,
+	timecreated TIMESTAMP null,
+	timeupdated TIMESTAMP null,
 	active VARCHAR(1)
 );
 
@@ -68,8 +68,8 @@ CREATE TABLE phk_reference (
 	mobile VARCHAR(15),
 	remarks VARCHAR(300),
 	preparedby VARCHAR(50),
-	timecreated TIMESTAMP,
-	timeupdated TIMESTAMP,
+	timecreated TIMESTAMP null,
+	timeupdated TIMESTAMP null,
 	active VARCHAR(1),
 	CONSTRAINT uniquename UNIQUE (uniquename)
 );
@@ -91,8 +91,8 @@ CREATE TABLE phk_eventregstrn (
 	status varchar(25),
 	level varchar(10),
 	preparedby VARCHAR(50),
-	timecreated TIMESTAMP,
-	timeupdated TIMESTAMP,
+	timecreated TIMESTAMP null,
+	timeupdated TIMESTAMP null,
 	active VARCHAR(1),
     FOREIGN KEY (eventid) REFERENCES phk_event(id)
                                   ON DELETE CASCADE,
@@ -112,8 +112,8 @@ CREATE TABLE phk_eventpmt (
 	postdtchqdate TIMESTAMP null,
 	pdcnotclear VARCHAR(1),
 	preparedby VARCHAR(50),
-	timecreated TIMESTAMP,
-	timeupdated TIMESTAMP,
+	timecreated TIMESTAMP null,
+	timeupdated TIMESTAMP null,
 	active VARCHAR(1),
 	FOREIGN KEY (eventregstrnid) REFERENCES phk_eventregstrn(id)
                               ON DELETE CASCADE
@@ -128,8 +128,8 @@ CREATE TABLE phk_volunteer (
 	activity VARCHAR(50),
 	permission varchar(30),
 	preparedby VARCHAR(50),
-	timecreated TIMESTAMP,
-	timeupdated TIMESTAMP,
+	timecreated TIMESTAMP null,
+	timeupdated TIMESTAMP null,
 	CONSTRAINT email UNIQUE (email)
 );
 
@@ -141,7 +141,7 @@ CREATE TABLE phk_history
 	objecttype varchar(75),
 	comment varchar(500),
 	preparedby VARCHAR(50),
-	timecreated TIMESTAMP
+	timecreated TIMESTAMP null
 );
 
 CREATE TABLE phk_seat

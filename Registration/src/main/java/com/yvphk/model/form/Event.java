@@ -17,6 +17,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "PHK_EVENT")
+@org.hibernate.annotations.Entity(dynamicUpdate = true)
 public class Event extends BaseForm
 {
     public static final String ClassName = "com.yvphk.model.form.Event";
@@ -50,10 +51,10 @@ public class Event extends BaseForm
     @Column(name = "isseatperlvl")
     private boolean seatPerLevel;
 
-    @Column(name = "PREPAREDBY")
+    @Column(name = "PREPAREDBY", updatable=false)
     private String preparedBy;
 
-    @Column(name = "TIMECREATED")
+    @Column(name = "TIMECREATED", updatable=false)
     private Date timeCreated;
 
     @Column(name = "TIMEUPDATED")

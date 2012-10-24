@@ -17,6 +17,9 @@ public class ParticipantCriteria implements Serializable
     private String otherFoundation;
     private String amountPaidCategory;
     private String reference;
+    private Integer eventId;
+    private boolean consolidated;
+    private boolean vip;
 
     public String getName ()
     {
@@ -106,5 +109,35 @@ public class ParticipantCriteria implements Serializable
     public void setReference (String reference)
     {
         this.reference = reference;
+    }
+
+    public Integer getEventId ()
+    {
+        return eventId;
+    }
+
+    public void setEventId (Integer eventId)
+    {
+        this.eventId = eventId;
+    }
+
+    public boolean isConsolidated ()
+    {
+        return consolidated;
+    }
+
+    public void setConsolidated (boolean consolidated)
+    {
+        this.consolidated = consolidated;
+    }
+
+    public boolean isVip ()
+    {
+        return vip;
+    }
+
+    public void setVip (boolean vip)
+    {
+        this.vip = vip;
     }
 }

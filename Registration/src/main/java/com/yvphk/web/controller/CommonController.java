@@ -6,6 +6,7 @@
 package com.yvphk.web.controller;
 
 import com.yvphk.model.form.Event;
+import com.yvphk.model.form.ReferenceGroup;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -35,4 +36,13 @@ public class CommonController
         return eventMap;
     }
 
+    public Map<String, String> getAllReferenceGroups (List<ReferenceGroup> groups)
+    {
+        Map<String, String> map = new LinkedHashMap<String, String>();
+        for (ReferenceGroup referenceGroup: groups) {
+            String name = referenceGroup.getName();
+            map.put(name, name);
+        }
+        return map;
+    }
 }

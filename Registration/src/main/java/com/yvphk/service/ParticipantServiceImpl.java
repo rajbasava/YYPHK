@@ -5,9 +5,11 @@
 package com.yvphk.service;
 
 import com.yvphk.model.dao.ParticipantDAO;
+import com.yvphk.model.form.EventPayment;
 import com.yvphk.model.form.EventRegistration;
 import com.yvphk.model.form.Participant;
 import com.yvphk.model.form.ParticipantCriteria;
+import com.yvphk.model.form.PaymentCriteria;
 import com.yvphk.model.form.ReferenceGroup;
 import com.yvphk.model.form.RegisteredParticipant;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,6 +76,12 @@ public class ParticipantServiceImpl implements ParticipantService
     public List<ReferenceGroup> listReferenceGroups ()
     {
         return participantDAO.listReferenceGroups();
+    }
+
+    @Transactional
+    public List<EventPayment> listPayments (PaymentCriteria paymentCriteria)
+    {
+        return participantDAO.listPayments(paymentCriteria);
     }
 
 }

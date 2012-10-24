@@ -30,6 +30,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "PHK_EVENTREGSTRN")
+@org.hibernate.annotations.Entity(dynamicUpdate = true)
 public class EventRegistration extends BaseForm
 {
     public static final String ClassName = "com.yvphk.model.form.EventRegistration";
@@ -57,20 +58,20 @@ public class EventRegistration extends BaseForm
     @Column(name = "PENDINGPDC")
     private int pendingPdc;
 
-    @Column(name = "REVIEW")
-    private boolean review;
+    @Column(name = "REVIEW", columnDefinition = "default false")
+    private boolean review = false;
 
-    @Column(name = "FOODCOUPON")
-    private boolean foodCoupon;
+    @Column(name = "FOODCOUPON", columnDefinition = "default false")
+    private boolean foodCoupon = false;
 
-    @Column(name = "EVENTKIT")
-    private boolean eventKit;
+    @Column(name = "EVENTKIT", columnDefinition = "default false")
+    private boolean eventKit = false;
 
-    @Column(name = "APPLICATION")
-    private boolean application;
+    @Column(name = "APPLICATION", columnDefinition = "default false")
+    private boolean application = false;
 
-    @Column(name = "CERTIFICATES")
-    private boolean certificates;
+    @Column(name = "CERTIFICATES", columnDefinition = "default false")
+    private boolean certificates = false;
 
     @Column(name = "LEVEL")
     private String level;
@@ -81,10 +82,10 @@ public class EventRegistration extends BaseForm
     @Column(name = "STATUS")
     private String status;
 
-    @Column(name = "PREPAREDBY")
+    @Column(name = "PREPAREDBY", updatable=false)
     private String preparedBy;
 
-    @Column(name = "TIMECREATED")
+    @Column(name = "TIMECREATED", updatable=false)
     private Date timeCreated;
 
     @Column(name = "TIMEUPDATED")

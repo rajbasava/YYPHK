@@ -17,6 +17,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "PHK_REFERENCE")
+@org.hibernate.annotations.Entity(dynamicUpdate = true)
 public class ReferenceGroup extends BaseForm
 {
     public static final String ClassName = "com.yvphk.model.form.ReferenceGroup";
@@ -38,10 +39,10 @@ public class ReferenceGroup extends BaseForm
     @Column(name = "REMARKS")
     private String remarks;
 
-    @Column(name = "PREPAREDBY")
+    @Column(name = "PREPAREDBY", updatable=false)
     private String preparedBy;
 
-    @Column(name = "TIMECREATED")
+    @Column(name = "TIMECREATED", updatable=false)
     private Date timeCreated;
 
     @Column(name = "TIMEUPDATED")

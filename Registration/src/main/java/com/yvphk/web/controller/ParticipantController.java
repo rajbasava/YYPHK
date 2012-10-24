@@ -73,8 +73,7 @@ public class ParticipantController extends CommonController
         map.put("participantCriteria", new ParticipantCriteria());
         map.put("allParticipantLevels", ParticipantLevel.allParticipantLevels());
         map.put("allFoundations", Foundation.allFoundations());
-        map.put("allReferenceGroups", getAllReferenceGroups());
-        map.put("allAmountPaidCategories", AmountPaidCategory.allAmountPaidCategories());
+        map.put("allEvents", getAllEventMap(eventService.allEvents()));
         return "search";
     }
 
@@ -87,8 +86,7 @@ public class ParticipantController extends CommonController
             map.put("registrationList", participantService.listRegistrations(participantCriteria));
             map.put("allParticipantLevels", ParticipantLevel.allParticipantLevels());
             map.put("allFoundations", Foundation.allFoundations());
-            map.put("allAmountPaidCategories", AmountPaidCategory.allAmountPaidCategories());
-            map.put("allReferenceGroups", getAllReferenceGroups());
+            map.put("allEvents", getAllEventMap(eventService.allEvents()));
         }
         return "search";
     }
@@ -325,18 +323,5 @@ public class ParticipantController extends CommonController
         map.put("referenceGroupList", participantService.listReferenceGroups());
         return "referenceGroup";
     }
-
-    private Map<String, String> getAllReferenceGroups ()
-    {
-        Map<String, String> map = new LinkedHashMap<String, String>();
-        List<ReferenceGroup> groups = participantService.listReferenceGroups();
-        for (ReferenceGroup referenceGroup: groups) {
-            String name = referenceGroup.getName();
-            map.put(name, name);
-        }
-        return map;
-    }
-
-
 
 }

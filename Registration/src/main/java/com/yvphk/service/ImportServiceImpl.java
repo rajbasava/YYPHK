@@ -51,7 +51,7 @@ public class ImportServiceImpl implements ImportService
     private static final String[] RegistrationImportFields =
             new String[] {"AmountPayable","Review","Level","Reference","Application","Certificates","Comments"};
     private static final String[] PaymentImportFields =
-            new String[] {"AmountPaid","Mode","ReceiptInfo","ReceiptDate","Comments"};
+            new String[] {"AmountPaid","Mode","ReceiptInfo","ReceiptDate","PdcNotClear","Pdc","PdcDate","Remarks"};
 
     @Autowired
     private ParticipantDAO participantDAO;
@@ -176,7 +176,8 @@ public class ImportServiceImpl implements ImportService
                 else if (fieldName.equals("Review")||
                         fieldName.equals("Vip") ||
                         fieldName.equals("Application") ||
-                        fieldName.equals("Certificates")) {
+                        fieldName.equals("Certificates") ||
+                        fieldName.equals("PdcNotClear")) {
                     Method method = Util.getDeclaredSetter(clazz, fieldName, boolean.class);
                     cell.setCellType(Cell.CELL_TYPE_BOOLEAN);
                     method.invoke(obj, cell.getBooleanCellValue());

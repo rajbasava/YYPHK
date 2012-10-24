@@ -18,6 +18,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "PHK_VOLUNTEER")
+@org.hibernate.annotations.Entity(dynamicUpdate = true)
 public class Volunteer extends BaseForm
 {
     public static final String ClassName = "com.yvphk.model.form.Volunteer";
@@ -44,10 +45,10 @@ public class Volunteer extends BaseForm
     @Column(name = "ACTIVITY")
     private String activity;
 
-    @Column(name = "PREPAREDBY")
+    @Column(name = "PREPAREDBY", updatable=false)
     private String preparedBy;
 
-    @Column(name = "TIMECREATED")
+    @Column(name = "TIMECREATED", updatable=false)
     private Date timecreated;
 
     @Column(name = "TIMEUPDATED")

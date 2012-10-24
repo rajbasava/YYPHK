@@ -4,9 +4,6 @@
 */
 package com.yvphk.common;
 
-import com.yvphk.model.form.EventPayment;
-import com.yvphk.model.form.EventRegistration;
-import com.yvphk.model.form.Participant;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -22,156 +19,145 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 
-import java.text.DateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 public class ExcelReport
 {
 
-    private static final String Registrations = "Registrations";
-    private static final String Payments = "Payments";
-
-    public static Workbook generateReport (List<EventRegistration> registrations)
+    public static Workbook generateReport (List objects, Report report)
     {
-        List<String> registrationFieldNames = Arrays.asList(EventRegistration.ReportFields);
-        List<String> participantFieldNames = Arrays.asList(Participant.ReportFields);
-        List<String> paymentFieldNames = Arrays.asList(EventPayment.ReportFields);
-
-        List<String> regisSheetFieldNames = new ArrayList<String>(participantFieldNames);
-        regisSheetFieldNames.addAll(registrationFieldNames);
-        Workbook workbook = buildReport(regisSheetFieldNames, paymentFieldNames);
-        populateReport(workbook, registrations, participantFieldNames, registrationFieldNames, paymentFieldNames);
+        Workbook workbook = buildReport(report);
+        populateReport(workbook, objects, report);
         return workbook;
-
     }
 
     private static void populateReport (Workbook workbook,
-                                        List<EventRegistration> registrations,
-                                        List<String> participantFieldNames,
-                                        List<String> registrationFieldNames,
-                                        List<String> paymentFieldNames)
+                                        List objects,
+                                        Report report)
     {
-
-        Sheet registrationSheet = workbook.getSheet(Registrations);
-        CellStyle registrationBodyCellStyle = registrationSheet.getWorkbook().createCellStyle();
-        registrationBodyCellStyle.setAlignment(CellStyle.ALIGN_CENTER);
-        registrationBodyCellStyle.setWrapText(true);
-
-        Sheet paymentsSheet = workbook.getSheet(Payments);
-        CellStyle paymentsBodyCellStyle = paymentsSheet.getWorkbook().createCellStyle();
-        paymentsBodyCellStyle.setAlignment(CellStyle.ALIGN_CENTER);
-        paymentsBodyCellStyle.setWrapText(true);
-
         DataFormat df = workbook.createDataFormat();
-        CellStyle cs = workbook.createCellStyle();
-        cs.setDataFormat(df.getFormat("d-MMM-yy"));
+        CellStyle dateCellStyle = workbook.createCellStyle();
+        dateCellStyle.setDataFormat(df.getFormat("d-MMM-yy"));
 
-        int counter = 0;
-        int pmtCount = 3;
+        CellStyle bodyCellStyle = workbook.createCellStyle();
+        bodyCellStyle.setAlignment(CellStyle.ALIGN_CENTER);
+        bodyCellStyle.setWrapText(true);
+
+        List<Report.ReportSheet> sheetList = report.getSheets();
+
+        int[] sheetCountList = new int[report.getSheets().size()];
+        for (int m=0; m<sheetCountList.length; m++) {
+            sheetCountList[m] = 3;
+        }
         // Create body
-        for (int i = 0; i < registrations.size(); i++) {
-            counter = i + 3;
-            EventRegistration registration = registrations.get(i);
-            Row regRow = registrationSheet.createRow((short) counter);
 
-            Cell regRowCell = regRow.createCell(0);
-            regRowCell.setCellValue(registration.getId());
-            regRowCell.setCellStyle(registrationBodyCellStyle);
+        String classType = report.getClassType();
+        Class reportBaseClass = Util.loadClass(classType);
+        if (reportBaseClass == null) {
+            return;
+        }
+        for (int i = 0; i < objects.size(); i++) {
+            Object form = objects.get(i);
 
-            int colIndex = 1;
-            for (String fieldName : participantFieldNames) {
-                Cell cell1 = regRow.createCell(colIndex);
-                cell1.setCellValue(String.valueOf(Util.getFieldValue(registration.getParticipant(), fieldName)));
-                cell1.setCellStyle(registrationBodyCellStyle);
-                if (fieldName.equals("Vip")) {
-                    cell1.setCellType(Cell.CELL_TYPE_BOOLEAN);
-                }
-                ++colIndex;
+            if (!form.getClass().equals(reportBaseClass)) {
+                return;
             }
 
-            for (String fieldName : registrationFieldNames) {
-                Cell cell1 = regRow.createCell(colIndex);
-                if (fieldName.equalsIgnoreCase("Event")) {
-                    cell1.setCellValue(String.valueOf(registration.getEvent().getName()));
-                }
-                else if (fieldName.indexOf("Amount") >= 0) {
-                    cell1.setCellType(Cell.CELL_TYPE_NUMERIC);
-                    cell1.setCellValue(Double.valueOf(String.valueOf(Util.getFieldValue(registration, fieldName))));
-                }
-                else if (fieldName.equals("Review") ||
-                        fieldName.equals("EventKit") ||
-                        fieldName.equals("FoodCoupon") ||
-                        fieldName.equals("Application") ||
-                        fieldName.equals("Certificates")) {
-                    cell1.setCellValue(String.valueOf(Util.getFieldValue(registration, fieldName)));
-                    cell1.setCellType(Cell.CELL_TYPE_BOOLEAN);
-                }
-                else {
-                    cell1.setCellValue(String.valueOf(Util.getFieldValue(registration, fieldName)));
-                }
-                cell1.setCellStyle(registrationBodyCellStyle);
-                ++ colIndex;
-            }
-
-            Set<EventPayment> payments = registration.getPayments();
-
-            for (Iterator<EventPayment> iterator = payments.iterator(); iterator.hasNext(); ) {
-                EventPayment payment = iterator.next();
-
-                Row pmtRow = paymentsSheet.createRow((short) pmtCount);
-
-                Cell pmtRowCell = pmtRow.createCell(0);
-                pmtRowCell.setCellValue(registration.getId());
-                pmtRowCell.setCellStyle(registrationBodyCellStyle);
-
-                colIndex = 1;
-                for (String fieldName : paymentFieldNames) {
-                    Cell cell1 = pmtRow.createCell(colIndex);
-                    if (fieldName.indexOf("Amount") >= 0) {
-                        cell1.setCellType(Cell.CELL_TYPE_NUMERIC);
-                        cell1.setCellValue(Double.valueOf(String.valueOf(Util.getFieldValue(payment, fieldName))));
-                        cell1.setCellStyle(registrationBodyCellStyle);
-                    }
-                    else if ((fieldName.indexOf("Date") >= 0) ||
-                            (fieldName.indexOf("Time") >= 0)) {
-                        Date date = (Date)Util.getFieldValue(payment, fieldName);
-                        if (date != null) {
-                            cell1.setCellValue(date);
-                            cell1.setCellStyle(cs);
-                        }
-                        else {
-                            cell1.setCellValue("");
-                            cell1.setCellStyle(registrationBodyCellStyle);
+            for (int k=0; k<sheetList.size(); k++) {
+                int sheetCounter = sheetCountList[k];
+                Report.ReportSheet sheet = sheetList.get(k);
+                List<String> fieldPaths = sheet.getFieldPaths();
+                if (!Util.nullOrEmptyOrBlank(sheet.getBaseFieldPath())) {
+                    Object sheetForm = Util.getDottedFieldValue(sheet.getBaseFieldPath(), form);
+                    if (sheetForm instanceof Collection) {
+                        Collection collection= (Collection) sheetForm;
+                        Iterator itr = collection.iterator();
+                        while(itr.hasNext()) {
+                            Object sheetObj = itr.next();
+                            populateSheet(workbook, dateCellStyle, bodyCellStyle, sheetCounter, sheetObj, sheet, sheet.getFieldPaths());
+                            sheetCounter++;
                         }
                     }
                     else {
-                        cell1.setCellValue(String.valueOf(Util.getFieldValue(payment, fieldName)));
-                        cell1.setCellStyle(registrationBodyCellStyle);
+                        String sheetClassType = sheet.getClassType();
+                        if (!Util.nullOrEmptyOrBlank(sheetClassType) &&
+                                !form.getClass().getName().equals(sheetClassType)) {
+                            return;
+                        }
+                        populateSheet(workbook, dateCellStyle, bodyCellStyle, sheetCounter, sheetForm, sheet, sheet.getFieldPaths());
+                        sheetCounter++;
                     }
-
-                    ++ colIndex;
                 }
-                ++ pmtCount;
+                else {
+                    populateSheet(workbook, dateCellStyle, bodyCellStyle, sheetCounter, form, sheet, fieldPaths);
+                    sheetCounter++;
+
+                }
+                sheetCountList[k] = sheetCounter;
             }
+
         }
     }
 
-    private static HSSFWorkbook buildReport (List<String> regisSheetFieldNames,
-                                             List<String> paymentSheetFieldNames)
+    private static void populateSheet (Workbook workbook,
+                                       CellStyle dateCellStyle,
+                                       CellStyle bodyCellStyle,
+                                       int counter,
+                                       Object form,
+                                       Report.ReportSheet sheet,
+                                       List<String> fieldPaths)
+    {
+        Sheet workingSheet = workbook.getSheet(sheet.getSheetName());
+
+        if (workingSheet == null) {
+            return;
+        }
+
+        Row regRow = workingSheet.createRow((short) counter);
+        int colIndex = 0;
+        for (String dottedFieldPath : fieldPaths) {
+            Cell cell = regRow.createCell(colIndex);
+            Object obj = Util.getDottedFieldValue(dottedFieldPath, form);
+            if (obj instanceof Boolean){
+                cell.setCellValue(String.valueOf(obj));
+                cell.setCellType(Cell.CELL_TYPE_BOOLEAN);
+                cell.setCellStyle(bodyCellStyle);
+            }
+            else if (obj instanceof Long) {
+                cell.setCellType(Cell.CELL_TYPE_NUMERIC);
+                cell.setCellValue(Double.valueOf(String.valueOf(obj)));
+                cell.setCellStyle(bodyCellStyle);
+            }
+            else if (obj instanceof Date) {
+                cell.setCellValue((Date)obj);
+                cell.setCellStyle(dateCellStyle);
+            }
+            else {
+                if (obj != null) {
+                    cell.setCellValue(String.valueOf(obj));
+                    cell.setCellStyle(bodyCellStyle);
+                }
+                else {
+                    cell.setCellValue("");
+                    cell.setCellStyle(bodyCellStyle);
+                }
+            }
+            colIndex++;
+        }
+    }
+    private static HSSFWorkbook buildReport (Report report)
     {
         HSSFWorkbook workbook = new HSSFWorkbook();
 
-        HSSFSheet registrationsSheet = workbook.createSheet(Registrations);
-        HSSFSheet paymentsSheet = workbook.createSheet(Payments);
+        List<Report.ReportSheet> sheetList = report.getSheets();
 
-        // Build title, date, and column headers
-        buildReportSheet(registrationsSheet, 0, 0, regisSheetFieldNames);
-        buildReportSheet(paymentsSheet, 0, 0, paymentSheetFieldNames);
+        for (Report.ReportSheet sheet: sheetList) {
+            HSSFSheet sheet1 = workbook.createSheet(sheet.getSheetName());
+            buildReportSheet(sheet1, 0, 0, sheet.getFieldPaths(), sheet.getSheetName());
+        }
 
         return workbook;
     }
@@ -179,29 +165,25 @@ public class ExcelReport
     private static void buildReportSheet (HSSFSheet worksheet,
                                           int startRowIndex,
                                           int startColIndex,
-                                          List<String> fieldNames)
+                                          List<String> fieldNames,
+                                          String sheetName)
     {
         for (int i = 0; i < fieldNames.size(); i++) {
             worksheet.setColumnWidth(i, 5000);
         }
 
         // Build the title and date headers
-        buildTitle(worksheet, startRowIndex, startColIndex, fieldNames);
+        buildTitle(worksheet, startRowIndex, startColIndex, fieldNames, sheetName);
         // Build the column headers
-        buildHeaders(worksheet, startRowIndex, startColIndex, fieldNames);
+        buildHeaders(worksheet, startRowIndex, startColIndex, fieldNames, sheetName);
     }
 
-    /**
-     * Builds the report title and the date header
-     *
-     * @param worksheet
-     * @param startRowIndex starting row offset
-     * @param startColIndex starting column offset
-     */
+
     private static void buildTitle (HSSFSheet worksheet,
-                                    int startRowIndex,
-                                    int startColIndex,
-                                    List<String> fieldNames)
+                                     int startRowIndex,
+                                     int startColIndex,
+                                     List<String> fieldPaths,
+                                     String sheetName)
     {
         // Create font style for the report title
         Font fontTitle = worksheet.getWorkbook().createFont();
@@ -218,11 +200,11 @@ public class ExcelReport
         HSSFRow rowTitle = worksheet.createRow((short) startRowIndex);
         rowTitle.setHeight((short) 500);
         HSSFCell cellTitle = rowTitle.createCell(startColIndex);
-        cellTitle.setCellValue("Event Registration Report");
+        cellTitle.setCellValue(sheetName);
         cellTitle.setCellStyle(cellStyleTitle);
 
         // Create merged region for the report title
-        worksheet.addMergedRegion(new CellRangeAddress(0, 0, 0, fieldNames.size()));
+        worksheet.addMergedRegion(new CellRangeAddress(0, 0, 0, fieldPaths.size()));
 
         // Create date header
         HSSFRow dateTitle = worksheet.createRow((short) startRowIndex + 1);
@@ -230,17 +212,11 @@ public class ExcelReport
         cellDate.setCellValue("This report was generated at " + new Date());
     }
 
-    /**
-     * Builds the column headers
-     *
-     * @param worksheet
-     * @param startRowIndex starting row offset
-     * @param startColIndex starting column offset
-     */
     private static void buildHeaders (HSSFSheet worksheet,
-                                      int startRowIndex,
-                                      int startColIndex,
-                                      List<String> fieldNames)
+                                       int startRowIndex,
+                                       int startColIndex,
+                                       List<String> fieldPaths,
+                                       String sheetName)
     {
         // Create font style for the headers
         Font font = worksheet.getWorkbook().createFont();
@@ -259,16 +235,10 @@ public class ExcelReport
         Row rowHeader = worksheet.createRow((short) startRowIndex + 2);
         rowHeader.setHeight((short) 500);
 
-        Cell cell = rowHeader.createCell(startColIndex);
-        cell.setCellValue("Id");
-        cell.setCellStyle(headerCellStyle);
-
-
-        for (int i = 0; i < fieldNames.size(); i++) {
-            Cell cell1 = rowHeader.createCell(startColIndex + i + 1);
-            cell1.setCellValue(fieldNames.get(i));
+        for (int i = 0; i < fieldPaths.size(); i++) {
+            Cell cell1 = rowHeader.createCell(startColIndex + i);
+            cell1.setCellValue(Util.getCapitalizedFieldName(fieldPaths.get(i)));
             cell1.setCellStyle(headerCellStyle);
         }
     }
-
 }
