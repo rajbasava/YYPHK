@@ -5,13 +5,17 @@
 package com.yvphk.common;
 
 import com.yvphk.model.form.BaseForm;
+import com.yvphk.model.form.Login;
 import ognl.Ognl;
 import ognl.OgnlException;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -134,4 +138,11 @@ public class Util
 
     }
 
+    public static Login getCurrentUser ()
+    {
+        ServletRequestAttributes requestAttributes =
+                (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpSession session = requestAttributes.getRequest().getSession();
+        return (Login) session.getAttribute(Login.ClassName);
+    }
 }

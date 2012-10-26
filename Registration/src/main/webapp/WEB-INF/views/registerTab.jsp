@@ -82,19 +82,6 @@
                 {
                     populateEventFee();
                 });
-                $("#registeredParticipant input[name='currentPayment.receiptDate']").datepicker({
-                    showOn: 'button',
-                    dateFormat: 'dd/mm/yy',
-                    buttonImageOnly: true,
-                    buttonImage: '<c:url value="/resources/img/calendar.gif"/>'
-                });
-
-                $("#registeredParticipant input[name='currentPayment.pdcDate']").datepicker({
-                    showOn: 'button',
-                    dateFormat: 'dd/mm/yy',
-                    buttonImageOnly: true,
-                    buttonImage: '<c:url value="/resources/img/calendar.gif"/>'
-                });
 
                 if ($("#registeredParticipant select[name='participant.foundation']").val() == "Others") {
                     $("div#othersTextBox").show();
@@ -230,46 +217,6 @@
             </table>
         </div>
         <div id="tabs-3">
-            <table>
-                <tr>
-                    <td><form:label path="currentPayment.amountPaid"><spring:message code="label.amountPaid"/></form:label></td>
-                    <td><form:input path="currentPayment.amountPaid"/></td>
-                </tr>
-                <tr>
-                    <td><form:label path="currentPayment.receiptInfo"><spring:message code="label.receiptInfo"/></form:label></td>
-                    <td><form:input path="currentPayment.receiptInfo"/></td>
-                </tr>
-                <tr>
-                    <td><form:label path="currentPayment.receiptDate"><spring:message code="label.receiptDate"/></form:label></td>
-                    <td><form:input path="currentPayment.receiptDate"/></td>
-                </tr>
-                <tr>
-                    <td><form:label path="currentPayment.mode"><spring:message code="label.mode"/></form:label></td>
-                    <td>
-                        <form:select path="currentPayment.mode">
-                            <form:option value="NONE" label="--- Select ---"/>
-                            <form:options items="${allPaymentModes}" />
-                        </form:select>
-                    </td>
-
-                </tr>
-                <tr>
-                    <td><form:label path="currentPayment.pdcNotClear"><spring:message code="label.pdcNotClear"/></form:label></td>
-                    <td><form:checkbox path="currentPayment.pdcNotClear"/></td>
-                </tr>
-                <tr>
-                    <td><form:label path="currentPayment.pdc"><spring:message code="label.pdc"/></form:label></td>
-                    <td><form:input path="currentPayment.pdc"/></td>
-                </tr>
-                <tr>
-                    <td><form:label path="currentPayment.pdcDate"><spring:message code="label.pdcDate"/></form:label></td>
-                    <td><form:input path="currentPayment.pdcDate"/></td>
-                </tr>
-                <tr>
-                    <td><form:label path="currentPayment.remarks"><spring:message code="label.remarks"/></form:label></td>
-                    <td><form:textarea path="currentPayment.remarks" rows="5" cols="30"/></td>
-                </tr>
-            </table>
             <br>
             <c:if  test="${!empty registeredParticipant.registration.payments}">
                 <tr align="left">

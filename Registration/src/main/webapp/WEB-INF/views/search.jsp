@@ -13,18 +13,11 @@
             var moveLeft = 250;
             var moveDown = 200;
             $("a#submit").button();
-            $("a#excel").button();
             $("a#submit").css("font-size", "11px");
-            $("a#excel").css("font-size", "11px");
             $( "a#submit" ).click(function() {
                  $("#participantCriteria").get(0).setAttribute('action', 'list.htm');
                  $("#participantCriteria").submit();
             });
-            $( "a#excel" ).click(function() {
-                 $("#participantCriteria").get(0).setAttribute('action', 'xls.htm');
-                 $("#participantCriteria").submit();
-            });
-
 
             $(".popup").click(function(e) {
                 var divId = $(this).attr('id');
@@ -143,7 +136,6 @@
     <th><spring:message code="label.amountDue"/></th>
     <th><spring:message code="label.foodCoupon"/></th>
     <th><spring:message code="label.eventKit"/></th>
-    <th><spring:message code="label.comments"/></th>
 </tr>
 <c:forEach items="${registrationList}" var="registration">
     <tr>
@@ -178,7 +170,14 @@
                 <spring:message code="label.seat"/>
             </a>
         </td>
-        <td><c:out value="${registration.totalAmountPaid}"/></td>
+        <td>
+            <form id="showPayments<c:out value="${registration.id}"/>" method="post" action="showPayments.htm">
+                <input type="hidden" name="registrationId" value="<c:out value="${registration.id}"/>" />
+                <a href="#" onclick="document.getElementById('showPayments<c:out value="${registration.id}"/>').submit();">
+                    <c:out value="${registration.totalAmountPaid}"/>
+                </a>
+            </form>
+        </td>
         <td><c:out value="${registration.amountDue}"/></td>
         <td><c:out value="${registration.foodCoupon}"/></td>
         <c:if  test="${registration.eventKit}">
@@ -191,24 +190,6 @@
                 <c:out value="${registration.eventKit}"/>
             </td>
         </c:if>
-
-        <div style="display:none;" id="commentsDisplay<c:out value="${registration.id}"/>">
-            <c:if  test="${!empty registration.historyRecords}">
-                <c:forEach items="${registration.historyRecords}" var="historyRecord">
-                    <c:if  test="${historyRecord.comment != null}">
-                        <ul class="tooltipBullet">
-                        <li><c:out value="${historyRecord.comment}"/>&nbsp;[<c:out value="${historyRecord.preparedBy}"/>,<c:out value="${historyRecord.timeCreated}"/>]</li>
-                        </ul>
-                    </c:if>
-                </c:forEach>
-            </c:if>
-            <a class="popupBoxClose" href="#" id="commentsDisplay<c:out value="${registration.id}"/>">Close</a>
-        </div>
-        <td>
-            <a class="popup" href="#" id="commentsDisplay<c:out value="${registration.id}"/>">
-                <spring:message code="label.comments"/>
-            </a>
-        </td>
     </tr>
 </c:forEach>
 </table>

@@ -84,4 +84,10 @@ public class ParticipantServiceImpl implements ParticipantService
         return participantDAO.listPayments(paymentCriteria);
     }
 
+    @Transactional
+    public void processPayment (EventPayment payment, Integer registrationId, boolean isAdd)
+    {
+        participantDAO.processPayment(payment, registrationId, isAdd);
+    }
+
 }

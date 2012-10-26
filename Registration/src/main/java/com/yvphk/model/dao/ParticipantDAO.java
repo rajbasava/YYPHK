@@ -37,4 +37,7 @@ public interface ParticipantDAO
     public List<ReferenceGroup> listReferenceGroups ();
 
     public List<EventPayment> listPayments (PaymentCriteria paymentCriteria);
+
+    public void processPayment (EventPayment payment, Integer registrationId, boolean isAdd);
+
 }

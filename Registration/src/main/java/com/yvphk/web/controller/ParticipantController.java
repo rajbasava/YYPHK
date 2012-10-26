@@ -11,6 +11,7 @@ import com.yvphk.common.PaymentMode;
 import com.yvphk.common.Util;
 import com.yvphk.model.form.Event;
 import com.yvphk.model.form.EventFee;
+import com.yvphk.model.form.EventPayment;
 import com.yvphk.model.form.EventRegistration;
 import com.yvphk.model.form.HistoryRecord;
 import com.yvphk.model.form.Login;
@@ -20,8 +21,10 @@ import com.yvphk.model.form.ParticipantCriteria;
 import com.yvphk.model.form.ParticipantSeat;
 import com.yvphk.model.form.ReferenceGroup;
 import com.yvphk.model.form.RegisteredParticipant;
+import com.yvphk.model.form.RegistrationPayments;
 import com.yvphk.service.EventService;
 import com.yvphk.service.ParticipantService;
+import org.omg.PortableServer.RequestProcessingPolicy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -322,6 +325,74 @@ public class ParticipantController extends CommonController
         map.put("referenceGroup", new ReferenceGroup());
         map.put("referenceGroupList", participantService.listReferenceGroups());
         return "referenceGroup";
+    }
+
+    @RequestMapping("/showPayments")
+    public String showPayments (HttpServletRequest request, Map<String, Object> map)
+    {
+        String strRegistrationId = request.getParameter("registrationId");
+        String strPaymentId = request.getParameter("paymentId");
+        RegistrationPayments registrationPayments =
+                populateRegistrationPayments(strRegistrationId, strPaymentId);
+        map.put("registrationPayments", registrationPayments);
+        map.put("allPaymentModes", PaymentMode.allPaymentModes());
+        return "payments";
+    }
+
+    @RequestMapping("/processPayments")
+    public String processPayments (RegistrationPayments registrationPayments, HttpServletRequest request)
+    {
+        Login login = (Login) request.getSession().getAttribute(Login.ClassName);
+        EventPayment payment = registrationPayments.getCurrentPayment();
+        boolean isAdd = RegistrationPayments.Add.equals(registrationPayments.getAction());
+        if (isAdd) {
+            payment.initialize(login.getEmail());
+        }
+        else {
+            payment.initializeForUpdate(login.getEmail());
+        }
+        participantService.processPayment(payment, registrationPayments.getRegistrationId(), isAdd);
+
+        request.setAttribute("registrationId",registrationPayments.getRegistrationId());
+        return "forward:/showPayments.htm";
+    }
+
+    private RegistrationPayments populateRegistrationPayments (String strRegistrationId, String strPaymentId)
+    {
+        if (Util.nullOrEmptyOrBlank(strRegistrationId)) {
+            return null;
+        }
+
+        Integer registrationId = Integer.parseInt(strRegistrationId);
+
+        EventRegistration registration = participantService.getEventRegistration(registrationId);
+
+        RegistrationPayments registrationPayments = new RegistrationPayments();
+        registrationPayments.setRegistration(registration);
+        registrationPayments.setRegistrationId(registration.getId());
+
+        List<EventPayment> payments = new ArrayList<EventPayment>();
+        payments.addAll(registration.getPayments());
+        registrationPayments.setPayments(payments);
+
+        if (!Util.nullOrEmptyOrBlank(strPaymentId)) {
+            Integer paymentId = Integer.parseInt(strPaymentId);
+            for(EventPayment payment: payments){
+                if (payment.getId() == paymentId) {
+                    registrationPayments.setCurrentPayment(payment);
+                    registrationPayments.setAction(RegistrationPayments.Update);
+                }
+            }
+            if (registrationPayments.getCurrentPayment() == null) {
+                registrationPayments.setCurrentPayment(new EventPayment());
+                registrationPayments.setAction(RegistrationPayments.Add);
+            }
+        }
+        else {
+            registrationPayments.setCurrentPayment(new EventPayment());
+            registrationPayments.setAction(RegistrationPayments.Add);
+        }
+        return registrationPayments;
     }
 
 }

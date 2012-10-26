@@ -28,6 +28,7 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.stereotype.Repository;
 
 import java.text.MessageFormat;
@@ -40,6 +41,9 @@ public class ParticipantDAOImpl implements ParticipantDAO
 {
     @Autowired
     private SessionFactory sessionFactory;
+
+    @Autowired
+    private ReloadableResourceBundleMessageSource messageSource;
 
     public Participant addParticipant (RegisteredParticipant registeredParticipant)
     {
@@ -65,9 +69,25 @@ public class ParticipantDAOImpl implements ParticipantDAO
                 return null;
             }
             session.save(participant);
+            createAndAddHistoryRecord(
+                    messageSource.getMessage("key.participantAdded",
+                            new Object[] {participant.getId(),
+                                    participant.getName()},
+                            null),
+                    Util.getCurrentUser().getEmail(),
+                    registration,
+                    session);
             registration.setParticipant(participant);
             session.save(registration);
-
+            createAndAddHistoryRecord(
+                    messageSource.getMessage("key.registrationAdded",
+                            new Object[] {registration.getId(),
+                                    registration.getParticipant().getId(),
+                                    registration.getEvent().getName()},
+                            null),
+                    Util.getCurrentUser().getEmail(),
+                    registration,
+                    session);
 
             ParticipantSeat participantSeat = registeredParticipant.getCurrentSeat();
             if (participantSeat ==  null) {
@@ -90,6 +110,15 @@ public class ParticipantDAOImpl implements ParticipantDAO
             //  todo update changes properties of registration objects to comments
             session.update(participant);
             registration.setParticipant(participant);
+            createAndAddHistoryRecord(
+                    messageSource.getMessage("key.registrationUpdated",
+                            new Object[] {registration.getId(),
+                                    registration.getParticipant().getId(),
+                                    registration.getEvent().getName()},
+                            null),
+                    Util.getCurrentUser().getEmail(),
+                    registration,
+                    session);
             session.update(registration);
         }
 
@@ -105,10 +134,8 @@ public class ParticipantDAOImpl implements ParticipantDAO
 
         List<EventPayment> payments = registeredParticipant.getAllPayments();
         for(EventPayment payment : payments) {
-            addPayment(payment, registration.getId());
+            processPayment(payment, registration.getId(), true);
         }
-
-        updatePDCCount(registration);
 
         return registration;
     }
@@ -149,7 +176,21 @@ public class ParticipantDAOImpl implements ParticipantDAO
         }
     }
 
-    public void addPayment (EventPayment payment, Integer registrationId)
+    public void createAndAddHistoryRecord (String comment,
+                                           String preparedBy,
+                                           BaseForm object,
+                                           Session session)
+    {
+        HistoryRecord record = new HistoryRecord();
+        record.setComment(comment);
+        record.initialize(preparedBy);
+        record.setObject(object);
+        session.save(record);
+    }
+
+    public void processPayment (EventPayment payment,
+                                Integer registrationId,
+                                boolean isAdd)
     {
         if (payment.getAmountPaid() == null || payment.getAmountPaid() == 0) {
             return;
@@ -159,9 +200,43 @@ public class ParticipantDAOImpl implements ParticipantDAO
         EventRegistration registration = (EventRegistration) session.load(EventRegistration.class, registrationId);
 
         payment.setRegistration(registration);
-        session.save(payment);
 
-        Long totalAmoutPaid = getTotalPayments(registration);
+        if (isAdd) {
+            session.save(payment);
+            createAndAddHistoryRecord(
+                    messageSource.getMessage("key.paymentAdded",
+                            new Object[] {payment.getId(), payment.getAmountPaid()},
+                            null),
+                    payment.getPreparedBy(),
+                    registration, session);
+        }
+        else {
+            session.update(payment);
+            createAndAddHistoryRecord(
+                    messageSource.getMessage("key.paymentUpdated",
+                            new Object[] {payment.getId(), payment.getAmountPaid()},
+                            null),
+                    Util.getCurrentUser().getEmail(),
+                    registration, session);
+        }
+
+        session.flush();
+        session.close();
+
+        updateTotalPayments(registration);
+
+        updatePDCCount(registration);
+
+    }
+
+    private void updateTotalPayments (EventRegistration registration)
+    {
+        Session session = sessionFactory.openSession();
+        Criteria criteria = session.createCriteria(EventPayment.class);
+        criteria.add(Restrictions.eq("registration", registration));
+        criteria.setProjection(Projections.sum("amountPaid"));
+        Long totalAmoutPaid = (Long) criteria.uniqueResult();
+
         if (totalAmoutPaid == null) {
             totalAmoutPaid = new Long(0);
         }
@@ -169,21 +244,9 @@ public class ParticipantDAOImpl implements ParticipantDAO
         registration.setTotalAmountPaid(totalAmoutPaid);
         registration.setAmountDue(registration.getAmountPayable() - registration.getTotalAmountPaid());
 
-        session.save(registration);
-
+        session.update(registration);
         session.flush();
         session.close();
-    }
-
-    private Long getTotalPayments (EventRegistration registration)
-    {
-        Session session = sessionFactory.openSession();
-        Criteria criteria = session.createCriteria(EventPayment.class);
-        criteria.add(Restrictions.eq("registration", registration));
-        criteria.setProjection(Projections.sum("amountPaid"));
-        Long totalAmount = (Long) criteria.uniqueResult();
-        session.close();
-        return  totalAmount;
     }
 
     public Participant getParticipant (Integer participantId)

@@ -36,4 +36,6 @@ public interface ParticipantService
 
     public List<EventPayment> listPayments (PaymentCriteria paymentCriteria);
 
+    public void processPayment (EventPayment payment, Integer registrationId, boolean isAdd);
+
 }
