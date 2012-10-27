@@ -82,6 +82,9 @@ public class EventRegistration extends BaseForm
     @Column(name = "STATUS")
     private String status;
 
+    @Column(name = "REGISTRATIONDATE", updatable=false)
+    private Date registrationDate;
+
     @Column(name = "PREPAREDBY", updatable=false)
     private String preparedBy;
 
@@ -244,6 +247,16 @@ public class EventRegistration extends BaseForm
     public void setStatus (String status)
     {
         this.status = status;
+    }
+
+    public Date getRegistrationDate ()
+    {
+        return registrationDate;
+    }
+
+    public void setRegistrationDate (Date registrationDate)
+    {
+        this.registrationDate = registrationDate;
     }
 
     public String getPreparedBy ()

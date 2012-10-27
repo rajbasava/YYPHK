@@ -49,7 +49,7 @@ public class ImportServiceImpl implements ImportService
     private static final String[] ParticipantImportFields =
             new String[] {"Name","Email","Mobile","Home","Foundation","Vip","VipDesc"};
     private static final String[] RegistrationImportFields =
-            new String[] {"AmountPayable","Review","Level","Reference","Application","Certificates","Comments"};
+            new String[] {"AmountPayable","Review","Level","Reference","Application","Certificates","RegistrationDate","Comments"};
     private static final String[] PaymentImportFields =
             new String[] {"AmountPaid","Mode","ReceiptInfo","ReceiptDate","PdcNotClear","Pdc","PdcDate","Remarks"};
 

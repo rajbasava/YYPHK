@@ -89,6 +89,7 @@ CREATE TABLE phk_eventregstrn (
 	application varchar(1),
 	certificates varchar(1),
 	status varchar(25),
+	registrationdate TIMESTAMP null,
 	level varchar(10),
 	preparedby VARCHAR(50),
 	timecreated TIMESTAMP null,

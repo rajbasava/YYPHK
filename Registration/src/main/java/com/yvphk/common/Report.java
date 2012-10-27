@@ -33,57 +33,11 @@ public class Report
     private void initialize()
     {
         if ("Registrations".equals(this.getReportName())) {
-            List<String> registrationFieldPaths = new ArrayList<String>();
-            registrationFieldPaths.add("id");
-            registrationFieldPaths.add("participant.name");
-            registrationFieldPaths.add("participant.email");
-            registrationFieldPaths.add("participant.mobile");
-            registrationFieldPaths.add("participant.home");
-            registrationFieldPaths.add("participant.foundation");
-            registrationFieldPaths.add("participant.vip");
-            registrationFieldPaths.add("participant.vipDesc");
-            registrationFieldPaths.add("event.name");
-            registrationFieldPaths.add("amountPayable");
-            registrationFieldPaths.add("totalAmountPaid");
-            registrationFieldPaths.add("amountDue");
-            registrationFieldPaths.add("pendingPdc");
-            registrationFieldPaths.add("review");
-            registrationFieldPaths.add("level");
-            registrationFieldPaths.add("reference");
-            registrationFieldPaths.add("application");
-            registrationFieldPaths.add("certificates");
-            registrationFieldPaths.add("foodCoupon");
-            registrationFieldPaths.add("eventKit");
-            registrationFieldPaths.add("Category");
-            ReportSheet registrationSheet =
-                    new ReportSheet("Registrations", registrationFieldPaths);
+            ReportSheet registrationSheet = getRegistrationSheet();
             this.addSheet(registrationSheet);
         }
         else if ("ConsolidatedRegistrations".equals(this.getReportName())) {
-            List<String> registrationFieldPaths = new ArrayList<String>();
-            registrationFieldPaths.add("id");
-            registrationFieldPaths.add("participant.name");
-            registrationFieldPaths.add("participant.email");
-            registrationFieldPaths.add("participant.mobile");
-            registrationFieldPaths.add("participant.home");
-            registrationFieldPaths.add("participant.foundation");
-            registrationFieldPaths.add("participant.vip");
-            registrationFieldPaths.add("participant.vipDesc");
-            registrationFieldPaths.add("event.name");
-            registrationFieldPaths.add("amountPayable");
-            registrationFieldPaths.add("totalAmountPaid");
-            registrationFieldPaths.add("amountDue");
-            registrationFieldPaths.add("pendingPdc");
-            registrationFieldPaths.add("review");
-            registrationFieldPaths.add("level");
-            registrationFieldPaths.add("reference");
-            registrationFieldPaths.add("application");
-            registrationFieldPaths.add("certificates");
-            registrationFieldPaths.add("foodCoupon");
-            registrationFieldPaths.add("eventKit");
-            registrationFieldPaths.add("Category");
-            ReportSheet registrationSheet =
-                    new ReportSheet("Registrations", registrationFieldPaths);
+            ReportSheet registrationSheet = getRegistrationSheet();
             this.addSheet(registrationSheet);
 
             List<String> registrationPMTFieldPaths = new ArrayList<String>();
@@ -121,6 +75,34 @@ public class Report
                     new ReportSheet("Payments", paymentFieldPaths);
             this.addSheet(paymentSheet);
         }
+    }
+
+    private ReportSheet getRegistrationSheet ()
+    {
+        List<String> registrationFieldPaths = new ArrayList<String>();
+        registrationFieldPaths.add("id");
+        registrationFieldPaths.add("participant.name");
+        registrationFieldPaths.add("participant.email");
+        registrationFieldPaths.add("participant.mobile");
+        registrationFieldPaths.add("participant.home");
+        registrationFieldPaths.add("participant.foundation");
+        registrationFieldPaths.add("participant.vip");
+        registrationFieldPaths.add("participant.vipDesc");
+        registrationFieldPaths.add("event.name");
+        registrationFieldPaths.add("amountPayable");
+        registrationFieldPaths.add("totalAmountPaid");
+        registrationFieldPaths.add("amountDue");
+        registrationFieldPaths.add("pendingPdc");
+        registrationFieldPaths.add("review");
+        registrationFieldPaths.add("level");
+        registrationFieldPaths.add("reference");
+        registrationFieldPaths.add("application");
+        registrationFieldPaths.add("certificates");
+        registrationFieldPaths.add("foodCoupon");
+        registrationFieldPaths.add("eventKit");
+        registrationFieldPaths.add("registrationDate");
+        registrationFieldPaths.add("Category");
+        return new ReportSheet("Registrations", registrationFieldPaths);
     }
 
 

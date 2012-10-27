@@ -32,6 +32,7 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
 import org.springframework.stereotype.Repository;
 
 import java.text.MessageFormat;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -78,6 +79,9 @@ public class ParticipantDAOImpl implements ParticipantDAO
                     registration,
                     session);
             registration.setParticipant(participant);
+            if (registration.getRegistrationDate() == null) {
+                registration.setRegistrationDate(new Date());
+            }
             session.save(registration);
             createAndAddHistoryRecord(
                     messageSource.getMessage("key.registrationAdded",
