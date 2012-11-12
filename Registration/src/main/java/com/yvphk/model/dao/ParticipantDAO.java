@@ -4,10 +4,12 @@
 */
 package com.yvphk.model.dao;
 
+import com.yvphk.model.form.Event;
 import com.yvphk.model.form.EventPayment;
 import com.yvphk.model.form.EventRegistration;
 import com.yvphk.model.form.Participant;
 import com.yvphk.model.form.ParticipantCriteria;
+import com.yvphk.model.form.ParticipantSeat;
 import com.yvphk.model.form.PaymentCriteria;
 import com.yvphk.model.form.ReferenceGroup;
 import com.yvphk.model.form.RegisteredParticipant;
@@ -39,5 +41,7 @@ public interface ParticipantDAO
     public List<EventPayment> listPayments (PaymentCriteria paymentCriteria);
 
     public void processPayment (EventPayment payment, Integer registrationId, boolean isAdd);
+
+    public List<ParticipantSeat> getAllSeats (Event event, String level);
 
 }

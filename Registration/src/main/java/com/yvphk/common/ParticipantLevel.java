@@ -4,7 +4,9 @@
 */
 package com.yvphk.common;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 public enum ParticipantLevel
@@ -68,4 +70,11 @@ public enum ParticipantLevel
         return allParticipantLevels().get(key);
     }
 
+    public static List<String> getAllLessLevels (String startLevel, String endLevel)
+    {
+        List<String> list = new ArrayList<String>();
+        list.addAll(allParticipantLevels().keySet());
+
+        return list.subList(list.indexOf(startLevel)+1, list.indexOf(endLevel)+1);
+    }
 }

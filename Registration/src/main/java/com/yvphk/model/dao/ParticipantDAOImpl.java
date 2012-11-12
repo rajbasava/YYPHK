@@ -6,6 +6,7 @@ package com.yvphk.model.dao;
 
 import com.yvphk.common.AmountPaidCategory;
 import com.yvphk.common.Foundation;
+import com.yvphk.common.ParticipantLevel;
 import com.yvphk.common.Util;
 import com.yvphk.model.form.BaseForm;
 import com.yvphk.model.form.Event;
@@ -97,18 +98,7 @@ public class ParticipantDAOImpl implements ParticipantDAO
             if (participantSeat ==  null) {
                 participantSeat = new ParticipantSeat();
             }
-            if (participantSeat.getSeat() == null) {
-                Integer greatestSeat = getGreatestSeat(event);   // todo seating should be changed per event and multi seating if the multi seat enabled based on the level
-                Integer greatestSeatNo = new Integer(1);
-                if (greatestSeat != null) {
-                    greatestSeatNo = greatestSeat.intValue() + 1;
-                }
-                participantSeat.setSeat(greatestSeatNo);
-            }
-            participantSeat.setLevel(event.getEligibilityLevel());
-            participantSeat.setEvent(event);
-            participantSeat.setRegistration(registration);
-            session.save(participantSeat);
+            addParticipantSeats(participantSeat, registration, session);
         }
         else if (RegisteredParticipant.ActionUpdate.equals(registeredParticipant.getAction())) {
             //  todo update changes properties of registration objects to comments
@@ -142,6 +132,48 @@ public class ParticipantDAOImpl implements ParticipantDAO
         }
 
         return registration;
+    }
+
+    private void addParticipantSeats (ParticipantSeat participantSeat,
+                                      EventRegistration registration,
+                                      Session session)
+    {
+        Event event = registration.getEvent();
+        populateSeatNo(participantSeat, registration, event.getEligibilityLevel());
+        session.save(participantSeat);
+        if (!registration.getEvent().getEligibilityLevel().equals(registration.getLevel())) {
+            if (!registration.getEvent().isSeatPerLevel()) {
+                return;
+            }
+
+            List<String> lessLevels =
+                    ParticipantLevel.getAllLessLevels(
+                            registration.getEvent().getEligibilityLevel(),
+                            registration.getLevel());
+
+            for (String level: lessLevels) {
+                ParticipantSeat seat = new ParticipantSeat();
+                populateSeatNo(seat, registration, level);
+                session.save(seat);
+            }
+        }
+    }
+
+    private void populateSeatNo (ParticipantSeat participantSeat,
+                                 EventRegistration registration, String level)
+    {
+        Event event = registration.getEvent();
+        if (participantSeat.getSeat() == null) {
+            Integer greatestSeat = getGreatestSeat(event, level);
+            Integer greatestSeatNo = new Integer(1);
+            if (greatestSeat != null) {
+                greatestSeatNo = greatestSeat.intValue() + 1;
+            }
+            participantSeat.setSeat(greatestSeatNo);
+        }
+        participantSeat.setLevel(level);
+        participantSeat.setEvent(registration.getEvent());
+        participantSeat.setRegistration(registration);
     }
 
     private void updatePDCCount (EventRegistration registration)
@@ -317,6 +349,15 @@ public class ParticipantDAOImpl implements ParticipantDAO
         if (participantCriteria.getSeat() != null) {
             criteria.createAlias("seats", "seats");
             criteria.add(Restrictions.eq("seats.seat", participantCriteria.getSeat()));
+
+            if (!Util.nullOrEmptyOrBlank(participantCriteria.getLevel())) {
+                criteria.add(Restrictions.eq("seats.level", participantCriteria.getLevel()));
+            }
+        }
+        else {
+            if (!Util.nullOrEmptyOrBlank(participantCriteria.getLevel())) {
+                criteria.add(Restrictions.eq("level", participantCriteria.getLevel()));
+            }
         }
 
         if (!Util.nullOrEmptyOrBlank(participantCriteria.getName())) {
@@ -345,8 +386,8 @@ public class ParticipantDAOImpl implements ParticipantDAO
             criteria.add(Restrictions.like("participant.mobile", "%" + participantCriteria.getMobile() + "%"));
         }
 
-        if (!Util.nullOrEmptyOrBlank(participantCriteria.getLevel())) {
-            criteria.add(Restrictions.eq("level", participantCriteria.getLevel()));
+        if (participantCriteria.isVip()) {
+            criteria.add(Restrictions.eq("participant.vip", participantCriteria.isVip()));
         }
 
         if (!Util.nullOrEmptyOrBlank(participantCriteria.getReference())) {
@@ -367,15 +408,14 @@ public class ParticipantDAOImpl implements ParticipantDAO
         return results;
     }
 
-    private Integer getGreatestSeat (String level)
+    private Integer getGreatestSeat (Event event, String level)
     {
         Session session = sessionFactory.openSession();
         Criteria criteria = session.createCriteria(ParticipantSeat.class);
         criteria.setProjection(Projections.max("seat"));
 
-        if (!Util.nullOrEmptyOrBlank(level)) {
-            criteria.add(Restrictions.like("level", level));
-        }
+        criteria.add(Restrictions.like("event", event));
+        criteria.add(Restrictions.eq("level", level));
 
         List seats = criteria.list();
         session.close();
@@ -387,22 +427,18 @@ public class ParticipantDAOImpl implements ParticipantDAO
         }
     }
 
-    private Integer getGreatestSeat (Event event)
+    public List<ParticipantSeat> getAllSeats (Event event, String level)
     {
         Session session = sessionFactory.openSession();
+
         Criteria criteria = session.createCriteria(ParticipantSeat.class);
-        criteria.setProjection(Projections.max("seat"));
+        criteria.add(Restrictions.eq("event", event));
+        criteria.add(Restrictions.eq("level", level));
+        criteria.addOrder(Order.asc("seat"));
 
-        criteria.add(Restrictions.like("event", event));
+        List<ParticipantSeat> seats = criteria.list();
 
-        List seats = criteria.list();
-        session.close();
-        if (!seats.isEmpty()) {
-            return (Integer) seats.get(0);
-        }
-        else {
-            return null;
-        }
+        return seats;
     }
 
     public void processBatchEntry (List<RegisteredParticipant> participants)
@@ -478,7 +514,9 @@ public class ParticipantDAOImpl implements ParticipantDAO
             criteria.add(Restrictions.eq("mode", paymentCriteria.getMode()));
         }
 
-        criteria.add(Restrictions.eq("pdcNotClear", paymentCriteria.isPdcNotClear()));
+        if (paymentCriteria.isPdcNotClear()) {
+            criteria.add(Restrictions.eq("pdcNotClear", paymentCriteria.isPdcNotClear()));
+        }
 
         if (paymentCriteria.getFromReceiptDate() != null) {
             criteria.add(Restrictions.ge("receiptDate", paymentCriteria.getFromReceiptDate()));
