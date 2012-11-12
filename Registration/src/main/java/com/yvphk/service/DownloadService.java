@@ -5,14 +5,14 @@
 
 package com.yvphk.service;
 
-import com.yvphk.model.form.ParticipantCriteria;
+import com.yvphk.model.form.RegistrationCriteria;
 import com.yvphk.model.form.PaymentCriteria;
 
 import javax.servlet.http.HttpServletResponse;
 
 public interface DownloadService
 {
-    public void downloadRegistrationsReport (HttpServletResponse response, ParticipantCriteria criteria);
+    public void downloadRegistrationsReport (HttpServletResponse response, RegistrationCriteria criteria);
 
     public void downloadPaymentsReport (HttpServletResponse response, PaymentCriteria criteria);
 }

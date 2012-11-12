@@ -4,12 +4,10 @@
 */
 package com.yvphk.web.controller;
 
-import com.yvphk.common.AmountPaidCategory;
 import com.yvphk.common.Foundation;
 import com.yvphk.common.ParticipantLevel;
 import com.yvphk.common.PaymentMode;
 import com.yvphk.common.Util;
-import com.yvphk.model.form.Event;
 import com.yvphk.model.form.EventFee;
 import com.yvphk.model.form.EventPayment;
 import com.yvphk.model.form.EventRegistration;
@@ -17,14 +15,13 @@ import com.yvphk.model.form.HistoryRecord;
 import com.yvphk.model.form.Login;
 import com.yvphk.model.form.Option;
 import com.yvphk.model.form.Participant;
-import com.yvphk.model.form.ParticipantCriteria;
+import com.yvphk.model.form.RegistrationCriteria;
 import com.yvphk.model.form.ParticipantSeat;
 import com.yvphk.model.form.ReferenceGroup;
 import com.yvphk.model.form.RegisteredParticipant;
 import com.yvphk.model.form.RegistrationPayments;
 import com.yvphk.service.EventService;
 import com.yvphk.service.ParticipantService;
-import org.omg.PortableServer.RequestProcessingPolicy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,7 +41,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -73,7 +69,7 @@ public class ParticipantController extends CommonController
     @RequestMapping("/search")
     public String search (Map<String, Object> map)
     {
-        map.put("participantCriteria", new ParticipantCriteria());
+        map.put("registrationCriteria", new RegistrationCriteria());
         map.put("allParticipantLevels", ParticipantLevel.allParticipantLevels());
         map.put("allFoundations", Foundation.allFoundations());
         map.put("allEvents", getAllEventMap(eventService.allEvents()));
@@ -82,11 +78,11 @@ public class ParticipantController extends CommonController
 
     @RequestMapping("/list")
     public String searchParticipant (Map<String, Object> map,
-                                     ParticipantCriteria participantCriteria)
+                                     RegistrationCriteria registrationCriteria)
     {
-        map.put("participantCriteria", participantCriteria);
-        if (participantCriteria != null) {
-            map.put("registrationList", participantService.listRegistrations(participantCriteria));
+        map.put("registrationCriteria", registrationCriteria);
+        if (registrationCriteria != null) {
+            map.put("registrationList", participantService.listRegistrations(registrationCriteria));
             map.put("allParticipantLevels", ParticipantLevel.allParticipantLevels());
             map.put("allFoundations", Foundation.allFoundations());
             map.put("allEvents", getAllEventMap(eventService.allEvents()));

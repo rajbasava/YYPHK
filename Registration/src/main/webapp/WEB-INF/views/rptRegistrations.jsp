@@ -13,13 +13,13 @@
             $("a#excel").button();
             $("a#excel").css("font-size", "11px");
             $( "a#excel" ).click(function() {
-                 $("#participantCriteria").get(0).setAttribute('action', 'exportRegistrations.htm');
-                 $("#participantCriteria").submit();
+                 $("#registrationCriteria").get(0).setAttribute('action', 'exportRegistrations.htm');
+                 $("#registrationCriteria").submit();
             });
 
             $("select#foundation").change(function() {
                 if ($(this).val() == "Others") {
-                    $("#participantCriteria input[name='otherFoundation']").val("");
+                    $("#registrationCriteria input[name='otherFoundation']").val("");
                     $("div#othersTextBox").show();
                     $("div#othersTextBox").focus().select();
                 }
@@ -43,7 +43,7 @@
 <mytags:menu/>
 <h2 align="center">Registrations</h2>
 
-<form:form method="post" action="genRptRegistrations.htm" commandName="participantCriteria">
+<form:form method="post" action="genRptRegistrations.htm" commandName="registrationCriteria">
 
 <table align="center" cellspacing="2">
     <tr>

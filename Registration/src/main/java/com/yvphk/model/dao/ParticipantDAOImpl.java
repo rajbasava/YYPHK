@@ -14,7 +14,7 @@ import com.yvphk.model.form.HistoryRecord;
 import com.yvphk.model.form.EventPayment;
 import com.yvphk.model.form.EventRegistration;
 import com.yvphk.model.form.Participant;
-import com.yvphk.model.form.ParticipantCriteria;
+import com.yvphk.model.form.RegistrationCriteria;
 import com.yvphk.model.form.ParticipantSeat;
 import com.yvphk.model.form.PaymentCriteria;
 import com.yvphk.model.form.ReferenceGroup;
@@ -323,7 +323,7 @@ public class ParticipantDAOImpl implements ParticipantDAO
         return registration;
     }
 
-    public List<Participant> listParticipants (ParticipantCriteria participantCriteria)
+    public List<Participant> listParticipants (RegistrationCriteria registrationCriteria)
     {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
@@ -337,7 +337,7 @@ public class ParticipantDAOImpl implements ParticipantDAO
         return results;
     }
 
-    public List<EventRegistration> listRegistrations (ParticipantCriteria participantCriteria)
+    public List<EventRegistration> listRegistrations (RegistrationCriteria registrationCriteria)
     {
         Session session = sessionFactory.openSession();
         Criteria criteria = session.createCriteria(EventRegistration.class);
@@ -346,58 +346,58 @@ public class ParticipantDAOImpl implements ParticipantDAO
         criteria.createAlias("participant", "participant");
         criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 
-        if (participantCriteria.getSeat() != null) {
+        if (registrationCriteria.getSeat() != null) {
             criteria.createAlias("seats", "seats");
-            criteria.add(Restrictions.eq("seats.seat", participantCriteria.getSeat()));
+            criteria.add(Restrictions.eq("seats.seat", registrationCriteria.getSeat()));
 
-            if (!Util.nullOrEmptyOrBlank(participantCriteria.getLevel())) {
-                criteria.add(Restrictions.eq("seats.level", participantCriteria.getLevel()));
+            if (!Util.nullOrEmptyOrBlank(registrationCriteria.getLevel())) {
+                criteria.add(Restrictions.eq("seats.level", registrationCriteria.getLevel()));
             }
         }
         else {
-            if (!Util.nullOrEmptyOrBlank(participantCriteria.getLevel())) {
-                criteria.add(Restrictions.eq("level", participantCriteria.getLevel()));
+            if (!Util.nullOrEmptyOrBlank(registrationCriteria.getLevel())) {
+                criteria.add(Restrictions.eq("level", registrationCriteria.getLevel()));
             }
         }
 
-        if (!Util.nullOrEmptyOrBlank(participantCriteria.getName())) {
-            criteria.add(Restrictions.ilike("participant.name", participantCriteria.getName(), MatchMode.ANYWHERE));
+        if (!Util.nullOrEmptyOrBlank(registrationCriteria.getName())) {
+            criteria.add(Restrictions.ilike("participant.name", registrationCriteria.getName(), MatchMode.ANYWHERE));
         }
 
-        if (participantCriteria.getEventId() != null) {
-            criteria.add(Restrictions.eq("event.id", participantCriteria.getEventId()));
+        if (registrationCriteria.getEventId() != null) {
+            criteria.add(Restrictions.eq("event.id", registrationCriteria.getEventId()));
         }
 
-        if (!Util.nullOrEmptyOrBlank(participantCriteria.getEmail())) {
-            criteria.add(Restrictions.ilike("participant.email", participantCriteria.getEmail(), MatchMode.ANYWHERE));
+        if (!Util.nullOrEmptyOrBlank(registrationCriteria.getEmail())) {
+            criteria.add(Restrictions.ilike("participant.email", registrationCriteria.getEmail(), MatchMode.ANYWHERE));
         }
 
-        if (!Util.nullOrEmptyOrBlank(participantCriteria.getFoundation())) {
-            String foundation = participantCriteria.getFoundation();
+        if (!Util.nullOrEmptyOrBlank(registrationCriteria.getFoundation())) {
+            String foundation = registrationCriteria.getFoundation();
             if (Foundation.Others.getName().equalsIgnoreCase(foundation)) {
-                if (!Util.nullOrEmptyOrBlank(participantCriteria.getOtherFoundation())) {
-                    foundation = participantCriteria.getOtherFoundation();
+                if (!Util.nullOrEmptyOrBlank(registrationCriteria.getOtherFoundation())) {
+                    foundation = registrationCriteria.getOtherFoundation();
                 }
             }
             criteria.add(Restrictions.ilike("participant.foundation", foundation, MatchMode.ANYWHERE));
         }
 
-        if (!Util.nullOrEmptyOrBlank(participantCriteria.getMobile())) {
-            criteria.add(Restrictions.like("participant.mobile", "%" + participantCriteria.getMobile() + "%"));
+        if (!Util.nullOrEmptyOrBlank(registrationCriteria.getMobile())) {
+            criteria.add(Restrictions.like("participant.mobile", "%" + registrationCriteria.getMobile() + "%"));
         }
 
-        if (participantCriteria.isVip()) {
-            criteria.add(Restrictions.eq("participant.vip", participantCriteria.isVip()));
+        if (registrationCriteria.isVip()) {
+            criteria.add(Restrictions.eq("participant.vip", registrationCriteria.isVip()));
         }
 
-        if (!Util.nullOrEmptyOrBlank(participantCriteria.getReference())) {
-            criteria.add(Restrictions.eq("reference", participantCriteria.getReference()));
+        if (!Util.nullOrEmptyOrBlank(registrationCriteria.getReference())) {
+            criteria.add(Restrictions.eq("reference", registrationCriteria.getReference()));
         }
 
-        if (!Util.nullOrEmptyOrBlank(participantCriteria.getAmountPaidCategory())) {
+        if (!Util.nullOrEmptyOrBlank(registrationCriteria.getAmountPaidCategory())) {
             String[] args = {"totalAmountPaid", "amountPayable"};
             String conditionTemplate =
-                    AmountPaidCategory.getConditionTemplate(participantCriteria.getAmountPaidCategory(), true);
+                    AmountPaidCategory.getConditionTemplate(registrationCriteria.getAmountPaidCategory(), true);
             MessageFormat format = new MessageFormat(conditionTemplate);
             String sql = format.format(args);
             criteria.add(Restrictions.sqlRestriction(sql));

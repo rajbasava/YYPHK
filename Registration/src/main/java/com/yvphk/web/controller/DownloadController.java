@@ -9,7 +9,7 @@ import com.yvphk.common.AmountPaidCategory;
 import com.yvphk.common.Foundation;
 import com.yvphk.common.ParticipantLevel;
 import com.yvphk.common.PaymentMode;
-import com.yvphk.model.form.ParticipantCriteria;
+import com.yvphk.model.form.RegistrationCriteria;
 import com.yvphk.model.form.PaymentCriteria;
 import com.yvphk.service.DownloadService;
 import com.yvphk.service.EventService;
@@ -36,15 +36,15 @@ public class DownloadController extends CommonController
     @RequestMapping(value = "/exportRegistrations")
     public void getXLS (HttpServletResponse response,
                         Map<String, Object> map,
-                        ParticipantCriteria participantCriteria)
+                        RegistrationCriteria registrationCriteria)
     {
-        downloadService.downloadRegistrationsReport(response, participantCriteria);
+        downloadService.downloadRegistrationsReport(response, registrationCriteria);
     }
 
     @RequestMapping(value = "/rptRegistrations")
     public String rptRegistrations (Map<String, Object> map)
     {
-        map.put("participantCriteria", new ParticipantCriteria());
+        map.put("registrationCriteria", new RegistrationCriteria());
         map.put("allParticipantLevels", ParticipantLevel.allParticipantLevels());
         map.put("allFoundations", Foundation.allFoundations());
         map.put("allReferenceGroups", getAllReferenceGroups(participantService.listReferenceGroups()));

@@ -7,7 +7,7 @@ package com.yvphk.service;
 import com.yvphk.model.form.EventPayment;
 import com.yvphk.model.form.EventRegistration;
 import com.yvphk.model.form.Participant;
-import com.yvphk.model.form.ParticipantCriteria;
+import com.yvphk.model.form.RegistrationCriteria;
 import com.yvphk.model.form.PaymentCriteria;
 import com.yvphk.model.form.ReferenceGroup;
 import com.yvphk.model.form.RegisteredParticipant;
@@ -22,9 +22,9 @@ public interface ParticipantService
 
     public EventRegistration getEventRegistration (Integer registrationId);
 
-    public List<Participant> listParticipants (ParticipantCriteria participantCriteria);
+    public List<Participant> listParticipants (RegistrationCriteria registrationCriteria);
 
-    public List<EventRegistration> listRegistrations (ParticipantCriteria participantCriteria);
+    public List<EventRegistration> listRegistrations (RegistrationCriteria registrationCriteria);
 
     public void processBatchEntry (List<RegisteredParticipant> participants);
 

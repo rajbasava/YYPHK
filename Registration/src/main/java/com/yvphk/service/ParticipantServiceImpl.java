@@ -8,7 +8,7 @@ import com.yvphk.model.dao.ParticipantDAO;
 import com.yvphk.model.form.EventPayment;
 import com.yvphk.model.form.EventRegistration;
 import com.yvphk.model.form.Participant;
-import com.yvphk.model.form.ParticipantCriteria;
+import com.yvphk.model.form.RegistrationCriteria;
 import com.yvphk.model.form.PaymentCriteria;
 import com.yvphk.model.form.ReferenceGroup;
 import com.yvphk.model.form.RegisteredParticipant;
@@ -43,15 +43,15 @@ public class ParticipantServiceImpl implements ParticipantService
     }
 
     @Transactional
-    public List<Participant> listParticipants (ParticipantCriteria participantCriteria)
+    public List<Participant> listParticipants (RegistrationCriteria registrationCriteria)
     {
-        return participantDAO.listParticipants(participantCriteria);
+        return participantDAO.listParticipants(registrationCriteria);
     }
 
     @Transactional
-    public List<EventRegistration> listRegistrations (ParticipantCriteria participantCriteria)
+    public List<EventRegistration> listRegistrations (RegistrationCriteria registrationCriteria)
     {
-        return participantDAO.listRegistrations(participantCriteria);
+        return participantDAO.listRegistrations(registrationCriteria);
     }
 
     @Transactional

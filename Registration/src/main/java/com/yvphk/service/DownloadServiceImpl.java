@@ -10,10 +10,8 @@ import com.yvphk.common.Report;
 import com.yvphk.common.Util;
 import com.yvphk.model.form.EventPayment;
 import com.yvphk.model.form.EventRegistration;
-import com.yvphk.model.form.ParticipantCriteria;
+import com.yvphk.model.form.RegistrationCriteria;
 import com.yvphk.model.form.PaymentCriteria;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,13 +27,13 @@ public class DownloadServiceImpl implements DownloadService
     private ParticipantService participantService;
 
     @Transactional
-    public void downloadRegistrationsReport (HttpServletResponse response, ParticipantCriteria participantCriteria)
+    public void downloadRegistrationsReport (HttpServletResponse response, RegistrationCriteria registrationCriteria)
     {
-        List<EventRegistration> registrations = participantService.listRegistrations(participantCriteria);
+        List<EventRegistration> registrations = participantService.listRegistrations(registrationCriteria);
 
         Workbook workbook = null;
         String fileName = "";
-        if (participantCriteria.isConsolidated()) {
+        if (registrationCriteria.isConsolidated()) {
             workbook = ExcelReport.generateReport(registrations, Report.ConsolidatedRegistrations);
             fileName = Report.ConsolidatedRegistrations.getReportName()+"Export.xls";
         }

@@ -15,8 +15,8 @@
             $("a#submit").button();
             $("a#submit").css("font-size", "11px");
             $( "a#submit" ).click(function() {
-                 $("#participantCriteria").get(0).setAttribute('action', 'list.htm');
-                 $("#participantCriteria").submit();
+                 $("#registrationCriteria").get(0).setAttribute('action', 'list.htm');
+                 $("#registrationCriteria").submit();
             });
 
             $(".popup").click(function(e) {
@@ -41,7 +41,7 @@
 
             $("select#foundation").change(function() {
                 if ($(this).val() == "Others") {
-                    $("#participantCriteria input[name='otherFoundation']").val("");
+                    $("#registrationCriteria input[name='otherFoundation']").val("");
                     $("div#othersTextBox").show();
                     $("div#othersTextBox").focus().select();
                 }
@@ -65,7 +65,7 @@
 <mytags:menu/>
 <h2 align="center">Search Participants</h2>
 
-<form:form method="post" action="list.htm" commandName="participantCriteria">
+<form:form method="post" action="list.htm" commandName="registrationCriteria">
 
 <table align="center" cellspacing="2">
     <tr>

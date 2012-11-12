@@ -6,7 +6,7 @@ package com.yvphk.model.form;
 
 import java.io.Serializable;
 
-public class ParticipantCriteria implements Serializable
+public class RegistrationCriteria implements Serializable
 {
     private String name;
     private String mobile;
