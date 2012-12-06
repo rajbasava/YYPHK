@@ -170,3 +170,25 @@ CREATE TABLE phk_vollogin (
 
 INSERT INTO phk_volunteer(name,   email,   password,   mobile,   activity,   permission,   preparedby,   timecreated,   timeupdated)
 VALUES('Admin',   'admin@yvphk.com',   'admin',   '9999999999',   'admin',   'admin',   'system',   now(),   now());
+
+/*
+ * permission codes assumed:
+ * A -> Adminstrator
+ * S -> Spot Registration
+ * R -> Regitration Volunteer
+ * I -> Info Volunteer
+ * 
+ */
+INSERT INTO phk_volunteer(name,   email,   password,   mobile,   activity,   permission,   preparedby,   timecreated,   timeupdated)
+VALUES('Admin',   'admin@yvphk.com',   'admin',   '9999999999',   'admin',   'A',   'system',   now(),   now());
+
+INSERT INTO phk_volunteer(name,   email,   password,   mobile,   activity,   permission,   preparedby,   timecreated,   timeupdated)
+VALUES('Rajesh',   'rajesh@yvphk.com',   'rajesh',   '9999999999',   '',   'S',   'system',   now(),   now());
+
+INSERT INTO phk_volunteer(name,   email,   password,   mobile,   activity,   permission,   preparedby,   timecreated,   timeupdated)
+VALUES('Srikant',   'sri@yvphk.com',   'sri',   '9999999999',   '',   'R',   'system',   now(),   now());
+
+INSERT INTO phk_volunteer(name,   email,   password,   mobile,   activity,   permission,   preparedby,   timecreated,   timeupdated)
+VALUES('Vivek',   'vivek@yvphk.com',   'vivek',   '9999999999',   '',   'I',   'system',   now(),   now());
+
+
