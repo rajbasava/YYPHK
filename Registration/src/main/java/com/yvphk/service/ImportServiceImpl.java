@@ -110,7 +110,11 @@ public class ImportServiceImpl implements ImportService
             Integer key = (Integer) itr.next();
             ArrayList list = (ArrayList) mergedMap.get(key);
             List regData = (List)((Map)list.get(0)).get(Registrations);
-            List paymentData = (List)((Map)list.get(1)).get(Payments);
+            Map tmpMap = (Map) list.get(1);
+            List paymentData = new ArrayList();
+            if (tmpMap != null) {
+                paymentData = (List)tmpMap.get(Payments);
+            }
             RegisteredParticipant registeredParticipant = new RegisteredParticipant();
             processEventRegistration(regData, paymentData, registeredParticipant);
             registeredParticipant.initialize(login.getEmail());
@@ -227,8 +231,8 @@ public class ImportServiceImpl implements ImportService
             Row row = (Row) regisSheetRowItr.next();
             Iterator cellIter = row.cellIterator();
             ArrayList singleRow = new ArrayList();
-            while (cellIter.hasNext()) {
-                Cell cell = (Cell) cellIter.next();
+            for(int cn=0; cn < row.getLastCellNum(); cn++) {
+                Cell cell = row.getCell(cn, Row.CREATE_NULL_AS_BLANK);
                 singleRow.add(cell);
             }
             Map data = new LinkedHashMap();
