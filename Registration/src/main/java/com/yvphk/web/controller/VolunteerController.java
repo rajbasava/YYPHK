@@ -11,6 +11,7 @@ import com.yvphk.model.form.Volunteer;
 import com.yvphk.service.VolunteerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -64,14 +65,16 @@ public class VolunteerController
     }
 
     @RequestMapping("/login")
-    public String processlogin (@ModelAttribute("login") Login login,
+    public String processlogin (ModelMap map, @ModelAttribute("login") Login login,
                                 HttpSession session)
     {
         boolean isValid = volunteerService.processLogin(login);
+        map.addAttribute("user", login);
         if (isValid) {
             login.setLastAccessed(new Date().getTime());
             session.setAttribute(Login.ClassName, login);
-            return "redirect:/welcome.htm";
+            //return "redirect:/welcome.htm";
+            return "welcome";
         }
         else {
             return "redirect:/index.htm";
