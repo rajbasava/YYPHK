@@ -19,7 +19,9 @@
                 </tr>
                 <tr>
                     <td width="80px"><a href="welcome.htm">Home</a></td>
-                    <td width="125px"><a href="searchParticipants.htm">Search Participants</a></td>
+                    <c:if test="${user.permission == 'A'}" >
+                        <td width="125px"><a href="searchParticipants.htm">Search Participants</a></td>
+                    </c:if>
                     <c:if test="${user.permission == 'S' || user.permission == 'A'}" >
 	                    <td width="125px"><a href="register.htm">Spot Registration</a></td>
 	                </c:if>
