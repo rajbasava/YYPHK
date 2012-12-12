@@ -15,11 +15,39 @@
                 $("#tabs").css("min-height", "400px");
                 $("#tabs").css("resize", "none");
                 $("#tabs").css("font-size", "11px");
-                $("input:submit").button();
-                $("input:reset").button();
-                $("input:submit").css("font-size", "11px");
-                $("input:reset").css("font-size", "11px");
-                $( "input:submit" ).click(function() {
+
+                $("a#submit").button();
+                $("a#submit").css("font-size", "11px");
+                $("a#submit").click(function() {
+                     $("#registeredParticipant").get(0).setAttribute('action', 'addRegistration.htm');
+                     $("#registeredParticipant").submit();
+                });
+
+                $("a#showPayments").button();
+                $("a#showPayments").css("font-size", "11px");
+                $("a#showPayments").click(function() {
+                     $("#registeredParticipant").get(0).setAttribute('action', 'showPayments.htm');
+                     $("#registeredParticipant").submit();
+                });
+
+                $("a#cancelRegistration").button();
+                $("a#cancelRegistration").css("font-size", "11px");
+                $("a#cancelRegistration").click(function() {
+                     $("#registeredParticipant").get(0).setAttribute('action', 'cancelRegistration.htm');
+                     $("#registeredParticipant").submit();
+                });
+
+                $("a#replaceRegistration").button();
+                $("a#replaceRegistration").css("font-size", "11px");
+                $("a#replaceRegistration").click(function() {
+                     $("#registeredParticipant").get(0).setAttribute('action', 'showReplaceRegistration.htm');
+                     $("#registeredParticipant").submit();
+                });
+
+                $("a#back").button();
+                $("a#back").css("font-size", "11px");
+                $("a#back").click(function() {
+                     $("#registeredParticipant").get(0).setAttribute('action', 'search.htm');
                      $("#registeredParticipant").submit();
                 });
 
@@ -87,6 +115,8 @@
                     $("div#othersTextBox").show();
                     $("div#othersTextBox").focus().select();
                 }
+
+                $('#tabs').tabs({ selected: 1 });
             });
 	    });
     </script>
@@ -98,6 +128,13 @@
     <form:hidden path="action"/>
     <form:hidden path="participant.id"/>
     <form:hidden path="registration.id"/>
+    <table width="100%" cellpadding="1" cellspacing="1">
+        <tr>
+            <td align="left" style="font-size:18px">
+                <c:out value="${registeredParticipant.participant.name}"/> - <c:out value="${registeredParticipant.registration.event.name}"/>
+            </td>
+        </tr>
+    </table>
     <div id="tabs">
         <ul>
             <li><a href="#tabs-1">Participant</a></li>
@@ -146,139 +183,156 @@
             </table>
         </div>
         <div id="tabs-2">
-            <table>
-                <tr>
-                    <td><form:label path="eventId"><spring:message code="label.eventId"/></form:label></td>
-                    <td>
-                        <form:select path="eventId">
-                            <form:option value="NONE" label="--- Select ---"/>
-                            <form:options items="${allEvents}" />
-                        </form:select>
-                    </td>
-                </tr>
-                <tr>
-                    <td><form:label path="registration.review"><spring:message code="label.review"/></form:label></td>
-                    <td><form:checkbox path="registration.review"/></td>
-                </tr>
-                <tr>
-                    <td><form:label path="registration.level"><spring:message code="label.level"/></form:label></td>
-                    <td>
-                        <form:select path="registration.level">
-                            <form:option value="NONE" label="--- Select ---"/>
-                            <form:options items="${allParticipantLevels}" />
-                        </form:select>
-                    </td>
-                </tr>
-                <tr>
-                    <td><form:label path="eventFeeId"><spring:message code="label.eventFeeId"/></form:label></td>
-                    <td>
-                        <form:select path="eventFeeId">
-                            <form:option value="-1" label="--- Select ---"/>
-                            <form:options items="${allEventFees}" itemValue="id" itemLabel="value"/>
-                        </form:select>
-                    </td>
-                </tr>
-                <tr>
-                    <td><form:label path="registration.amountPayable"><spring:message code="label.amountPayable"/></form:label></td>
-                    <td><form:input path="registration.amountPayable"/></td>
-                </tr>
-                <tr>
-                    <td><form:label path="registration.totalAmountPaid"><spring:message code="label.totalAmountPaid"/></form:label></td>
-                    <td><form:input path="registration.totalAmountPaid"/></td>
-                </tr>
-                <tr>
-                    <td><form:label path="registration.amountDue"><spring:message code="label.amountDue"/></form:label></td>
-                    <td><form:input path="registration.amountDue"/></td>
-                </tr>
-                <tr>
-                    <td><form:label path="registration.foodCoupon"><spring:message code="label.foodCoupon"/></form:label></td>
-                    <td><form:checkbox path="registration.foodCoupon"/></td>
-                </tr>
-                <tr>
-                    <td><form:label path="registration.eventKit"><spring:message code="label.eventKit"/></form:label></td>
-                    <td><form:checkbox path="registration.eventKit"/></td>
-                </tr>
-                <tr>
-                    <td><form:label path="registration.application"><spring:message code="label.application"/></form:label></td>
-                    <td><form:checkbox path="registration.application"/></td>
-                </tr>
-                <tr>
-                    <td><form:label path="registration.certificates"><spring:message code="label.certificates"/></form:label></td>
-                    <td><form:checkbox path="registration.certificates"/></td>
-                </tr>
-                <tr>
-                    <td><form:label path="currentSeat.seat"><spring:message code="label.seat"/></form:label></td>
-                    <td><form:input path="currentSeat.seat"/></td>
-                </tr>
-                <tr>
-                    <td><form:label path="currentHistoryRecord.comment"><spring:message code="label.comments"/></form:label></td>
-                    <td><form:textarea path="currentHistoryRecord.comment" rows="5" cols="30"/></td>
-                </tr>
-            </table>
+			<table width="80%">
+				<tr>
+					<td>
+                        <table>
+                            <tr>
+                                <td><form:label path="eventId"><spring:message code="label.eventId"/></form:label></td>
+                                <td>
+                                    <form:select path="eventId">
+                                        <form:option value="NONE" label="--- Select ---"/>
+                                        <form:options items="${allEvents}" />
+                                    </form:select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><form:label path="registration.review"><spring:message code="label.review"/></form:label></td>
+                                <td><form:checkbox path="registration.review"/></td>
+                            </tr>
+                            <tr>
+                                <td><form:label path="registration.level"><spring:message code="label.level"/></form:label></td>
+                                <td>
+                                    <form:select path="registration.level">
+                                        <form:option value="NONE" label="--- Select ---"/>
+                                        <form:options items="${allParticipantLevels}" />
+                                    </form:select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><form:label path="eventFeeId"><spring:message code="label.eventFeeId"/></form:label></td>
+                                <td>
+                                    <form:select path="eventFeeId">
+                                        <form:option value="-1" label="--- Select ---"/>
+                                        <form:options items="${allEventFees}" itemValue="id" itemLabel="value"/>
+                                    </form:select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><form:label path="registration.amountPayable"><spring:message code="label.amountPayable"/></form:label></td>
+                                <td><form:input path="registration.amountPayable"/></td>
+                            </tr>
+                            <tr>
+                                <td><form:label path="registration.totalAmountPaid"><spring:message code="label.totalAmountPaid"/></form:label></td>
+                                <td><form:input path="registration.totalAmountPaid"/></td>
+                            </tr>
+                            <tr>
+                                <td><form:label path="registration.amountDue"><spring:message code="label.amountDue"/></form:label></td>
+                                <td><form:input path="registration.amountDue"/></td>
+                            </tr>
+						</table>	
+					</td>
+					<td>	
+						<table>
+                            <tr>
+                                <td><form:label path="registration.foodCoupon"><spring:message code="label.foodCoupon"/></form:label></td>
+                                <td><form:checkbox path="registration.foodCoupon"/></td>
+                            </tr>
+                            <tr>
+                                <td><form:label path="registration.eventKit"><spring:message code="label.eventKit"/></form:label></td>
+                                <td><form:checkbox path="registration.eventKit"/></td>
+                            </tr>
+                            <tr>
+                                <td><form:label path="registration.application"><spring:message code="label.application"/></form:label></td>
+                                <td><form:checkbox path="registration.application"/></td>
+                            </tr>
+                            <tr>
+                                <td><form:label path="registration.certificates"><spring:message code="label.certificates"/></form:label></td>
+                                <td><form:checkbox path="registration.certificates"/></td>
+                            </tr>
+                            <tr>
+                                <td><form:label path="currentHistoryRecord.comment"><spring:message code="label.comments"/></form:label></td>
+                                <td><form:textarea path="currentHistoryRecord.comment" rows="5" cols="30"/></td>
+                            </tr>
+						</table>
+					</td>		
+				</tr>
+			</table>
         </div>
         <div id="tabs-3">
-            <br>
-            <c:if  test="${!empty registeredParticipant.registration.payments}">
-                <tr align="left">
-                </tr>
-                <tr>
-                    <table class="data" border="1" cellpadding="1" cellspacing="1" width="100%">
-                    <tr>
-                        <td>Prepared By</td>
-                        <td>Time Created</td>
-                        <td><spring:message code="label.amountPaid"/></td>
-                        <td><spring:message code="label.receiptInfo"/></td>
-                        <td><spring:message code="label.receiptDate"/></td>
-                        <td><spring:message code="label.mode"/></td>
-                        <td><spring:message code="label.pdcNotClear"/></td>
-                        <td><spring:message code="label.pdc"/></td>
-                        <td><spring:message code="label.pdcDate"/></td>
-                        <td><spring:message code="label.remarks"/></td>
-                    </tr>
-                    <c:forEach items="${registeredParticipant.registration.payments}" var="payment">
-                        <tr>
-                            <td><c:out value="${payment.preparedBy}"/> </td>
-                            <td><c:out value="${payment.timeCreated}"/></td>
-                            <td><c:out value="${payment.amountPaid}"/></td>
-                            <td><c:out value="${payment.receiptInfo}"/></td>
-                            <td><c:out value="${payment.receiptDate}"/></td>
-                            <td><c:out value="${payment.mode}"/></td>
-                            <td><c:out value="${payment.pdcNotClear}"/></td>
-                            <td><c:out value="${payment.pdc}"/></td>
-                            <td><c:out value="${payment.pdcDate}"/></td>
-                            <td><c:out value="${payment.remarks}"/></td>
-                        </tr>
-                    </c:forEach>
-                    </table>
-                </tr>
-            </c:if>
+			<table>
+				<tr>
+					<c:if  test="${!empty registeredParticipant.registration.payments}">
+						<table class="data" border="1" cellpadding="1" cellspacing="1" width="100%">
+							<tr>
+								<td>Prepared By</td>
+								<td>Time Created</td>
+								<td><spring:message code="label.amountPaid"/></td>
+								<td><spring:message code="label.receiptInfo"/></td>
+								<td><spring:message code="label.receiptDate"/></td>
+								<td><spring:message code="label.mode"/></td>
+								<td><spring:message code="label.pdcNotClear"/></td>
+								<td><spring:message code="label.pdc"/></td>
+								<td><spring:message code="label.pdcDate"/></td>
+								<td><spring:message code="label.remarks"/></td>
+							</tr>
+							<c:forEach items="${registeredParticipant.registration.payments}" var="payment">
+								<tr>
+									<td><c:out value="${payment.preparedBy}"/> </td>
+									<td><c:out value="${payment.timeCreated}"/></td>
+									<td><c:out value="${payment.amountPaid}"/></td>
+									<td><c:out value="${payment.receiptInfo}"/></td>
+									<td><c:out value="${payment.receiptDate}"/></td>
+									<td><c:out value="${payment.mode}"/></td>
+									<td><c:out value="${payment.pdcNotClear}"/></td>
+									<td><c:out value="${payment.pdc}"/></td>
+									<td><c:out value="${payment.pdcDate}"/></td>
+									<td><c:out value="${payment.remarks}"/></td>
+								</tr>
+							</c:forEach>
+						</table>
+					</c:if>
+				</tr>
+			</table>
         </div>
         <div id="tabs-4">
             <c:if  test="${!empty registeredParticipant.registration.historyRecords}">
-                <tr>
-                    <table class="data" border="1" cellpadding="1" cellspacing="1" width="100%">
-                    <tr>
-                        <td>Prepared By</td>
-                        <td>Time Created</td>
-                        <td>Comment</td>
-                    </tr>
-                    <c:forEach items="${registeredParticipant.registration.historyRecords}" var="historyRecord">
-                        <c:if  test="${!empty historyRecord.comment}">
-                            <tr>
-                                <td><c:out value="${historyRecord.preparedBy}"/> </td>
-                                <td><c:out value="${historyRecord.timeCreated}"/></td>
-                                <td><c:out value="${historyRecord.comment}"/></td>
-                            </tr>
-                        </c:if>
-                    </c:forEach>
-                    </table>
-                </tr>
+				<table class="data" border="1" cellpadding="1" cellspacing="1" width="100%">
+					<tr>
+						<td>Prepared By</td>
+						<td>Time Created</td>
+						<td>Comment</td>
+					</tr>
+					<c:forEach items="${registeredParticipant.registration.historyRecords}" var="historyRecord">
+						<c:if  test="${!empty historyRecord.comment}">
+							<tr>
+								<td><c:out value="${historyRecord.preparedBy}"/> </td>
+								<td><c:out value="${historyRecord.timeCreated}"/></td>
+								<td><c:out value="${historyRecord.comment}"/></td>
+							</tr>
+						</c:if>
+					</c:forEach>
+				</table>
             </c:if>
         </div>
     </div>
+    <table width="100%" cellpadding="2" cellspacing="2" align="center">
+        <tr>
+            <td>&nbsp;</td>
+        </tr>
+    </table>
     <div id="button">
-        <input type="submit" value="<c:out value="${registeredParticipant.action}"/>"/>
-        <input type="reset" value="Cancel"/>
+        <table width="100%" cellpadding="2" cellspacing="2">
+            <tr style="background-color:#DFDFDF;">
+                <td align="center">
+                    <a id="submit" href="#"><c:out value="${registeredParticipant.action}"/></a>
+                    <a id="showPayments" href="#">Payments</a>
+                    <a id="cancelRegistration" href="#">Cancel Registration</a>
+                    <a id="replaceRegistration" href="#">Replace Registration</a>
+                    <a id="back" href="#">Back</a>
+                </td>
+            </tr>
+        </table>
     </div>
 </form:form>
 <mytags:footer/>

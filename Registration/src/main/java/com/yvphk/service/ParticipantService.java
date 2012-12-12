@@ -7,6 +7,7 @@ package com.yvphk.service;
 import com.yvphk.model.form.EventPayment;
 import com.yvphk.model.form.EventRegistration;
 import com.yvphk.model.form.Participant;
+import com.yvphk.model.form.ParticipantCriteria;
 import com.yvphk.model.form.RegistrationCriteria;
 import com.yvphk.model.form.PaymentCriteria;
 import com.yvphk.model.form.ReferenceGroup;
@@ -22,11 +23,9 @@ public interface ParticipantService
 
     public EventRegistration getEventRegistration (Integer registrationId);
 
-    public List<Participant> listParticipants (RegistrationCriteria registrationCriteria);
+    public List<Participant> listParticipants (ParticipantCriteria participantCriteria);
 
     public List<EventRegistration> listRegistrations (RegistrationCriteria registrationCriteria);
-
-    public void processBatchEntry (List<RegisteredParticipant> participants);
 
     public void addReferenceGroup (ReferenceGroup referenceGroup);
 
@@ -37,5 +36,11 @@ public interface ParticipantService
     public List<EventPayment> listPayments (PaymentCriteria paymentCriteria);
 
     public void processPayment (EventPayment payment, Integer registrationId, boolean isAdd);
+
+    public void cancelRegistration (EventRegistration registration);
+
+    public void replaceParticipant (EventRegistration registration, Participant participantToReplace);
+
+    public void addParticipant (Participant participant);
 
 }

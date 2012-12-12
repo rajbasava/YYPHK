@@ -101,6 +101,7 @@ public class Report
         registrationFieldPaths.add("foodCoupon");
         registrationFieldPaths.add("eventKit");
         registrationFieldPaths.add("registrationDate");
+        registrationFieldPaths.add("status");
         registrationFieldPaths.add("Category");
         return new ReportSheet("Registrations", registrationFieldPaths);
     }

@@ -5,7 +5,7 @@
 
 <html>
 <head>
-    <title>Arhatic Yoga Retreat - Registrations</title>
+    <title>Arhatic Yoga Retreat - Export Payments</title>
     <script type="text/javascript" src="<c:url value="/resources/script/jquery-1.7.2.min.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/resources/script/jquery-ui-1.8.23.custom.min.js"/>"></script>
     <script type="text/javascript">
@@ -69,7 +69,7 @@
 </head>
 <body>
 <mytags:menu/>
-<h2 align="center">Registrations</h2>
+<h2 align="center">Export Payments</h2>
 
 <form:form method="post" commandName="paymentCriteria">
 

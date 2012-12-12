@@ -6,6 +6,7 @@
 package com.yvphk.web.controller;
 
 import com.yvphk.model.form.Event;
+import com.yvphk.model.form.EventRegistration;
 import com.yvphk.model.form.ReferenceGroup;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.web.bind.WebDataBinder;
@@ -44,5 +45,13 @@ public class CommonController
             map.put(name, name);
         }
         return map;
+    }
+
+    public Map<String, String> getRegistrationStatusMap ()
+    {
+        LinkedHashMap registrationStatusMap = new LinkedHashMap<String, String>();
+        registrationStatusMap.put(EventRegistration.StatusRegistered, EventRegistration.StatusRegistered);
+        registrationStatusMap.put(EventRegistration.StatusCancelled, EventRegistration.StatusCancelled);
+        return registrationStatusMap;
     }
 }

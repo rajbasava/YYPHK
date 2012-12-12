@@ -12,14 +12,14 @@
         <td>
             <table align="center" cellspacing="1" cellpadding="1">
                 <tr>
-                    <th colspan="5">Yoga Vidya Pranic Healing Foundation of Karnataka </th>
+                    <th colspan="11">Yoga Vidya Pranic Healing Foundation of Karnataka </th>
                 </tr>
                 <tr>
-                    <th colspan="5">Arhatic Yoga Retreat - 2013 </th>
+                    <th colspan="11">Arhatic Yoga Retreat - 2013 </th>
                 </tr>
                 <tr>
                     <td width="80px"><a href="welcome.htm">Home</a></td>
-                    <td width="125px"><a href="search.htm">Search Participants</a></td>
+                    <td width="125px"><a href="searchParticipants.htm">Search Participants</a></td>
                     <c:if test="${user.permission == 'S' || user.permission == 'A'}" >
 	                    <td width="125px"><a href="register.htm">Spot Registration</a></td>
 	                </c:if>
@@ -36,6 +36,7 @@
             </table>
         </td>
     </tr>
+    <tr>
+        <td>&nbsp;</td>
+    </tr>
 </table>
-<hr/>
-<br>

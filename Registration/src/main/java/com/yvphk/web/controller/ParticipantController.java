@@ -15,6 +15,7 @@ import com.yvphk.model.form.HistoryRecord;
 import com.yvphk.model.form.Login;
 import com.yvphk.model.form.Option;
 import com.yvphk.model.form.Participant;
+import com.yvphk.model.form.ParticipantCriteria;
 import com.yvphk.model.form.RegistrationCriteria;
 import com.yvphk.model.form.ParticipantSeat;
 import com.yvphk.model.form.ReferenceGroup;
@@ -73,12 +74,13 @@ public class ParticipantController extends CommonController
         map.put("allParticipantLevels", ParticipantLevel.allParticipantLevels());
         map.put("allFoundations", Foundation.allFoundations());
         map.put("allEvents", getAllEventMap(eventService.allEvents()));
+        map.put("allStatuses", getRegistrationStatusMap());
         return "search";
     }
 
     @RequestMapping("/list")
-    public String searchParticipant (Map<String, Object> map,
-                                     RegistrationCriteria registrationCriteria)
+    public String searchRegistration (Map<String, Object> map,
+                                      RegistrationCriteria registrationCriteria)
     {
         map.put("registrationCriteria", registrationCriteria);
         if (registrationCriteria != null) {
@@ -86,6 +88,7 @@ public class ParticipantController extends CommonController
             map.put("allParticipantLevels", ParticipantLevel.allParticipantLevels());
             map.put("allFoundations", Foundation.allFoundations());
             map.put("allEvents", getAllEventMap(eventService.allEvents()));
+            map.put("allStatuses", getRegistrationStatusMap());
         }
         return "search";
     }
@@ -175,103 +178,6 @@ public class ParticipantController extends CommonController
         return null;
     }
 
-    @RequestMapping(value = "/batchEntry", method = RequestMethod.GET)
-    public String batchEntry ()
-    {
-        return "batchEntry";
-    }
-
-    @RequestMapping(value = "/batchEntry", method = RequestMethod.POST)
-    public String processBatchEntry (HttpServletRequest request, Map<String, Object> map)
-    {
-        Login login = (Login) request.getSession().getAttribute(Login.ClassName);
-        String preparedBy = login.getEmail();
-
-        List<RegisteredParticipant> participantList = new ArrayList<RegisteredParticipant>();
-
-        String parentNode = "/ParticipantsData";
-        final String LAST_ELEMENT_IN_RECORD = "Level";
-
-        Method method = null;
-        String nodeName = "", nodeValue = "";
-
-        XPath xPath = XPathFactory.newInstance().newXPath();
-        try {
-            NodeList nodes = (NodeList) xPath.evaluate(
-                    parentNode,
-                    new InputSource(new StringReader(request.getParameter("content"))),
-                    XPathConstants.NODESET
-            );
-            for (int i = 0; i < nodes.getLength(); i++) {
-                Element iNodes = (Element) nodes.item(i);
-                NodeList node = (NodeList) xPath.evaluate("Participant/*", iNodes, XPathConstants.NODESET);
-                Participant participant = Participant.class.newInstance();
-                RegisteredParticipant registeredParticipant = new RegisteredParticipant();
-                registeredParticipant.setAction(RegisteredParticipant.ActionRegister);
-                for (int k = 0; k < node.getLength(); k++) {
-                    Element element = (Element) node.item(k);
-                    nodeName = element.getNodeName();
-                    nodeValue = element.getFirstChild().getNodeValue();
-                    if (nodeName.equalsIgnoreCase("Amount") ||
-                            nodeName.equalsIgnoreCase("AmountPaid") ||
-                            nodeName.equalsIgnoreCase("DueAmount")) {
-                        method = Participant.class.getDeclaredMethod("set" + nodeName, Integer.class);
-                        method.invoke(participant, Integer.parseInt(nodeValue));
-                    }
-                    else if (nodeName.equalsIgnoreCase("Comments")) {
-                        HistoryRecord historyRecord = new HistoryRecord();
-                        historyRecord.setComment(nodeValue);
-                        historyRecord.setPreparedBy(preparedBy);
-                        registeredParticipant.setCurrentHistoryRecord(historyRecord);
-                    }
-                    else if (nodeName.equalsIgnoreCase("Seat")) {
-                        ParticipantSeat seat = new ParticipantSeat();
-                        seat.setSeat(Integer.parseInt(nodeValue));
-                        registeredParticipant.setCurrentSeat(seat);
-                    }
-                    else if (nodeName.equalsIgnoreCase("Foodcoupon") ||
-                            nodeName.equalsIgnoreCase("Eventkit")) {
-                        method = Participant.class.getDeclaredMethod("set" + nodeName, boolean.class);
-                        method.invoke(participant, Boolean.parseBoolean(nodeValue));
-                    }
-                    else {
-                        method = Participant.class.getDeclaredMethod("set" + nodeName, String.class);
-                        method.invoke(participant, nodeValue);
-                    }
-
-                    if (nodeName.equalsIgnoreCase(LAST_ELEMENT_IN_RECORD)) {
-                        participant.setPreparedBy(preparedBy);
-                        registeredParticipant.setParticipant(participant);
-                        participantList.add(registeredParticipant);
-                        // creating new objects for next iteration.
-                        participant = Participant.class.newInstance();
-                        registeredParticipant = RegisteredParticipant.class.newInstance();
-                        registeredParticipant.setAction(RegisteredParticipant.ActionRegister);
-                    }
-                }
-            }
-        }
-        catch (InvocationTargetException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-        catch (NoSuchMethodException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-        catch (XPathExpressionException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-        catch (IllegalAccessException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-        catch (InstantiationException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-
-        participantService.processBatchEntry(participantList);
-        map.put("batchResults", "Batch upload successful. Imported " + participantList.size() + " records.");
-        return "batchResults";
-    }
-
     private List<com.yvphk.model.form.Option> getAllEventFees (Integer eventId)
     {
         List<EventFee> eventFeeList = eventService.getEventFees(eventId);
@@ -326,7 +232,7 @@ public class ParticipantController extends CommonController
     @RequestMapping("/showPayments")
     public String showPayments (HttpServletRequest request, Map<String, Object> map)
     {
-        String strRegistrationId = request.getParameter("registrationId");
+        String strRegistrationId = request.getParameter("registration.id");
         String strPaymentId = request.getParameter("paymentId");
         RegistrationPayments registrationPayments =
                 populateRegistrationPayments(strRegistrationId, strPaymentId);
@@ -350,7 +256,7 @@ public class ParticipantController extends CommonController
         participantService.processPayment(payment, registrationPayments.getRegistrationId(), isAdd);
 
         request.setAttribute("registrationId",registrationPayments.getRegistrationId());
-        return "forward:/showPayments.htm";
+        return "forward:/updateRegistration.htm";
     }
 
     private RegistrationPayments populateRegistrationPayments (String strRegistrationId, String strPaymentId)
@@ -389,6 +295,114 @@ public class ParticipantController extends CommonController
             registrationPayments.setAction(RegistrationPayments.Add);
         }
         return registrationPayments;
+    }
+
+    @RequestMapping("/cancelRegistration")
+    public String cancelRegistration (Map<String, Object> map,
+                                      HttpServletRequest request)
+    {
+        String strRegistrationId = request.getParameter("registration.id");
+        if (!Util.nullOrEmptyOrBlank(strRegistrationId)) {
+            Integer registrationId = Integer.parseInt(strRegistrationId);
+            EventRegistration registration = participantService.getEventRegistration(registrationId);
+            participantService.cancelRegistration(registration);
+        }
+        return "redirect:/search.htm";
+    }
+
+    @RequestMapping("/showReplaceRegistration")
+    public String showReplaceRegistration (Map<String, Object> map,
+                                           HttpServletRequest request)
+    {
+
+        map.put("participantCriteria", new ParticipantCriteria());
+        map.put("allParticipantLevels", ParticipantLevel.allParticipantLevels());
+        map.put("allFoundations", Foundation.allFoundations());
+        map.put("page", "replaceRegistration");
+
+        String strRegistrationId = request.getParameter("registration.id");
+        RegisteredParticipant registeredParticipant = populateRegisteredParticipant(strRegistrationId);
+        if (registeredParticipant != null) {
+            map.put("registeredParticipant", registeredParticipant);
+        }
+        map.put("registrationId", strRegistrationId);
+        return "replaceRegistration";
+    }
+
+    @RequestMapping("/replaceRegistration")
+    public String replaceRegistration (Map<String, Object> map,
+                                       HttpServletRequest request)
+    {
+        String strRegistrationId = request.getParameter("registrationId");
+        String strParticipantId = request.getParameter("participantId");
+        if (Util.nullOrEmptyOrBlank(strRegistrationId) || Util.nullOrEmptyOrBlank(strParticipantId) ) {
+            return null;
+        }
+
+        Integer registrationId = Integer.parseInt(strRegistrationId);
+        Integer participantId = Integer.parseInt(strParticipantId);
+        EventRegistration registration = participantService.getEventRegistration(registrationId);
+        Participant participantToReplace = participantService.getParticipant(participantId);
+
+        participantService.replaceParticipant(registration, participantToReplace);
+
+        map.put("registrationId", strRegistrationId);
+        return "forward:/updateRegistration.htm";
+    }
+
+    @RequestMapping("/listParticipants")
+    public String listParticipants (Map<String, Object> map,
+                                    ParticipantCriteria participantCriteria,
+                                    HttpServletRequest request)
+    {
+        map.put("participantCriteria", new ParticipantCriteria());
+        if (participantCriteria != null) {
+            //todo if the page is replace, we should search participant that are not participating in the current event.
+            map.put("participantList", participantService.listParticipants(participantCriteria));
+            map.put("allParticipantLevels", ParticipantLevel.allParticipantLevels());
+            map.put("allFoundations", Foundation.allFoundations());
+        }
+
+        String page = request.getParameter("page");
+        map.put("page", page);
+
+
+        String strRegistrationId = request.getParameter("registrationId");
+        RegisteredParticipant registeredParticipant = populateRegisteredParticipant(strRegistrationId);
+        if (registeredParticipant != null) {
+            map.put("registeredParticipant", registeredParticipant);
+        }
+        return page;
+    }
+
+    @RequestMapping("/searchParticipants")
+    public String searchParticipants (Map<String, Object> map)
+    {
+        map.put("participantCriteria", new ParticipantCriteria());
+        map.put("allParticipantLevels", ParticipantLevel.allParticipantLevels());
+        map.put("allFoundations", Foundation.allFoundations());
+        map.put("page", "searchParticipants");
+        return "searchParticipants";
+    }
+
+    @RequestMapping("/showAddParticipant")
+    public String showAddParticipant (Map<String, Object> map,
+                                      HttpServletRequest request)
+    {
+        map.put("participant", new Participant());
+        map.put("allFoundations", Foundation.allFoundations());
+        return "addParticipant";
+    }
+
+    @RequestMapping("/addParticipant")
+    public String addParticipant (Map<String, Object> map,
+                                  Participant participant,
+                                  HttpServletRequest request)
+    {
+        Login login = (Login) request.getSession().getAttribute(Login.ClassName);
+        participant.initialize(login.getEmail());
+        participantService.addParticipant(participant);
+        return "redirect:/searchParticipants.htm";
     }
 
 }

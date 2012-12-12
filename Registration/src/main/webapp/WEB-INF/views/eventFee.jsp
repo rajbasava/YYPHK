@@ -54,7 +54,6 @@
 </form:form>
 
 <c:if  test="${!empty eventFeeList}">
-<h3>Volunteers</h3>
 <table class="data" border="1" cellpadding="1" cellspacing="1" width="100%">
 <tr>
     <th><spring:message code="label.name"/></th>
@@ -70,10 +69,10 @@
 		<td><c:out value="${eventFee.amount}"/> </td>
 		<td><c:out value="${eventFee.review}"/></td>
 		<td>
-            <form id="delDisc<c:out value="${eventFee.id}"/>" method="post" action="deleteEventDiscount.htm">
-                <input type="hidden" name="eventDiscountId" value="<c:out value="${eventFee.id}"/>" />
+            <form id="delEventFee<c:out value="${eventFee.id}"/>" method="post" action="deleteEventFee.htm">
+                <input type="hidden" name="eventFeeId" value="<c:out value="${eventFee.id}"/>" />
                 <input type="hidden" name="eventId" value="<c:out value="${event.id}"/>" />
-                <a href="#" onclick="document.getElementById('delDisc<c:out value="${eventFee.id}"/>').submit();"><spring:message code="label.delete"/></a>
+                <a href="#" onclick="document.getElementById('delEventFee<c:out value="${eventFee.id}"/>').submit();"><spring:message code="label.delete"/></a>
             </form>
         </td>
 	</tr>

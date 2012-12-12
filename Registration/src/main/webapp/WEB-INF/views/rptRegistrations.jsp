@@ -5,7 +5,7 @@
 
 <html>
 <head>
-    <title>Arhatic Yoga Retreat - Registrations</title>
+    <title>Arhatic Yoga Retreat - Export Registrations</title>
     <script type="text/javascript" src="<c:url value="/resources/script/jquery-1.7.2.min.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/resources/script/jquery-ui-1.8.23.custom.min.js"/>"></script>
     <script type="text/javascript">
@@ -33,6 +33,20 @@
                     $("div#othersTextBox").show();
                     $("div#othersTextBox").focus().select();
                 }
+
+                $("#registrationCriteria input[name='fromRegistrationDate']").datepicker({
+                    showOn: 'button',
+                    dateFormat: 'dd/mm/yy',
+                    buttonImageOnly: true,
+                    buttonImage: '<c:url value="/resources/img/calendar.gif"/>'
+                });
+
+                $("#registrationCriteria input[name='toRegistrationDate']").datepicker({
+                    showOn: 'button',
+                    dateFormat: 'dd/mm/yy',
+                    buttonImageOnly: true,
+                    buttonImage: '<c:url value="/resources/img/calendar.gif"/>'
+                });
             });
         });
     </script>
@@ -41,7 +55,7 @@
 </head>
 <body>
 <mytags:menu/>
-<h2 align="center">Registrations</h2>
+<h2 align="center">Export Registrations</h2>
 
 <form:form method="post" action="genRptRegistrations.htm" commandName="registrationCriteria">
 
@@ -105,8 +119,25 @@
         </td>
     </tr>
     <tr>
+        <td><form:label path="foodCoupon"><spring:message code="label.foodCoupon"/></form:label></td>
+        <td><form:checkbox path="foodCoupon"/></td>
+        <td><form:label path="eventKit"><spring:message code="label.eventKit"/></form:label></td>
+        <td><form:checkbox path="eventKit"/></td>
+    </tr>
+    <tr>
         <td><form:label path="consolidated"><spring:message code="label.consolidated"/></form:label></td>
         <td><form:checkbox path="consolidated"/></td>
+        <td><spring:message code="label.registrationDate"/></td>
+        <td>From: <form:input path="fromRegistrationDate"/> To: <form:input path="toRegistrationDate"/></td>
+    </tr>
+    <tr>
+        <td><form:label path="status"><spring:message code="label.status"/></form:label></td>
+        <td>
+            <form:select path="status">
+                <form:option value="" label="--- Select ---"/>
+                <form:options items="${allStatuses}" />
+            </form:select>
+        </td>
     </tr>
     <tr>
         <td colspan="4" align="center">

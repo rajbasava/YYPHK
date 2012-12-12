@@ -50,6 +50,7 @@ public class DownloadController extends CommonController
         map.put("allReferenceGroups", getAllReferenceGroups(participantService.listReferenceGroups()));
         map.put("allAmountPaidCategories", AmountPaidCategory.allAmountPaidCategories());
         map.put("allEvents", getAllEventMap(eventService.allEvents()));
+        map.put("allStatuses", getRegistrationStatusMap());
         return "rptRegistrations";
     }
 

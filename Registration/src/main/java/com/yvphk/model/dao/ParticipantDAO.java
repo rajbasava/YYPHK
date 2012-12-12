@@ -8,6 +8,7 @@ import com.yvphk.model.form.Event;
 import com.yvphk.model.form.EventPayment;
 import com.yvphk.model.form.EventRegistration;
 import com.yvphk.model.form.Participant;
+import com.yvphk.model.form.ParticipantCriteria;
 import com.yvphk.model.form.RegistrationCriteria;
 import com.yvphk.model.form.ParticipantSeat;
 import com.yvphk.model.form.PaymentCriteria;
@@ -18,7 +19,7 @@ import java.util.List;
 
 public interface ParticipantDAO
 {
-    public Participant addParticipant (RegisteredParticipant registeredParticipant);
+    public Participant addParticipant (Participant Participant);
 
     public EventRegistration registerParticipant (RegisteredParticipant registeredParticipant);
 
@@ -26,11 +27,9 @@ public interface ParticipantDAO
 
     public EventRegistration getEventRegistration (Integer registrationId);
 
-    public List<Participant> listParticipants (RegistrationCriteria registrationCriteria);
+    public List<Participant> listParticipants (ParticipantCriteria participantCriteria);
 
     public List<EventRegistration> listRegistrations (RegistrationCriteria registrationCriteria);
-
-    public void processBatchEntry (List<RegisteredParticipant> participants);
 
     public void addReferenceGroup (ReferenceGroup referenceGroup);
 
@@ -43,5 +42,9 @@ public interface ParticipantDAO
     public void processPayment (EventPayment payment, Integer registrationId, boolean isAdd);
 
     public List<ParticipantSeat> getAllSeats (Event event, String level);
+
+    public void cancelRegistration (EventRegistration registration);
+
+    public void replaceParticipant (EventRegistration registration, Participant participantToReplace);
 
 }

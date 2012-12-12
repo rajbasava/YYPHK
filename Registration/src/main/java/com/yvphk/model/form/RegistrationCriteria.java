@@ -5,6 +5,7 @@
 package com.yvphk.model.form;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class RegistrationCriteria implements Serializable
 {
@@ -20,6 +21,11 @@ public class RegistrationCriteria implements Serializable
     private Integer eventId;
     private boolean consolidated;
     private boolean vip;
+    private boolean foodCoupon;
+    private boolean eventKit;
+    private Date fromRegistrationDate;
+    private Date toRegistrationDate;
+    private String status;
 
     public String getName ()
     {
@@ -139,5 +145,55 @@ public class RegistrationCriteria implements Serializable
     public void setVip (boolean vip)
     {
         this.vip = vip;
+    }
+
+    public Date getFromRegistrationDate ()
+    {
+        return fromRegistrationDate;
+    }
+
+    public void setFromRegistrationDate (Date fromRegistrationDate)
+    {
+        this.fromRegistrationDate = fromRegistrationDate;
+    }
+
+    public Date getToRegistrationDate ()
+    {
+        return toRegistrationDate;
+    }
+
+    public void setToRegistrationDate (Date toRegistrationDate)
+    {
+        this.toRegistrationDate = toRegistrationDate;
+    }
+
+    public boolean isFoodCoupon ()
+    {
+        return foodCoupon;
+    }
+
+    public void setFoodCoupon (boolean foodCoupon)
+    {
+        this.foodCoupon = foodCoupon;
+    }
+
+    public boolean isEventKit ()
+    {
+        return eventKit;
+    }
+
+    public void setEventKit (boolean eventKit)
+    {
+        this.eventKit = eventKit;
+    }
+
+    public String getStatus ()
+    {
+        return status;
+    }
+
+    public void setStatus (String status)
+    {
+        this.status = status;
     }
 }

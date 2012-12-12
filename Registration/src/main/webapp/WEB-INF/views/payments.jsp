@@ -23,6 +23,20 @@
                 buttonImageOnly: true,
                 buttonImage: '<c:url value="/resources/img/calendar.gif"/>'
             });
+
+            $("a#submit").button();
+            $("a#submit").css("font-size", "11px");
+            $("a#submit").click(function() {
+                 $("#registrationPayments").get(0).setAttribute('action', 'processPayments.htm');
+                 $("#registrationPayments").submit();
+            });
+
+            $("a#back").button();
+            $("a#back").css("font-size", "11px");
+            $("a#back").click(function() {
+                 $("#registrationPayments").get(0).setAttribute('action', 'updateRegistration.htm');
+                 $("#registrationPayments").submit();
+            });
         });
     </script>
 </head>
@@ -35,7 +49,7 @@
     <form:hidden path="action"/>
     <form:hidden path="registrationId"/>
     <form:hidden path="currentPayment.id"/>
-    <table align="center" border="1">
+    <table align="center">
         <tr>
             <td><form:label path="currentPayment.amountPaid"><spring:message code="label.amountPaid"/></form:label></td>
             <td><form:input path="currentPayment.amountPaid"/></td>
@@ -75,7 +89,14 @@
             <td><form:textarea path="currentPayment.remarks" rows="5" cols="30"/></td>
         </tr>
         <tr align="center">
-            <td colspan="2"><input type="submit" value="<c:out value="${registrationPayments.action}"/> Payment"/></td>
+            <table width="100%" cellpadding="2" cellspacing="2" align="center">
+                <tr align="center">
+                    <td>
+                        <a id="submit" href="#"><c:out value="${registrationPayments.action}"/> Payment</a>
+                        <a id="back" href="#">Back</a>
+                    </td>
+                </tr>
+            </table>
         </tr>
     </table>
 </form:form>
@@ -103,7 +124,7 @@
                 <td><c:out value="${payment.timeCreated}"/></td>
                 <td>
                     <form id="showPayments<c:out value="${payment.id}"/>" method="post" action="showPayments.htm">
-                        <input type="hidden" name="registrationId" value="<c:out value="${payment.registration.id}"/>" />
+                        <input type="hidden" name="registration.id" value="<c:out value="${payment.registration.id}"/>" />
                         <input type="hidden" name="paymentId" value="<c:out value="${payment.id}"/>" />
                         <a href="#" onclick="document.getElementById('showPayments<c:out value="${payment.id}"/>').submit();">
                             <c:out value="${payment.amountPaid}"/>

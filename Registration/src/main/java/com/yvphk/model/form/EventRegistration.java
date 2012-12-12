@@ -33,6 +33,9 @@ import java.util.Set;
 @org.hibernate.annotations.Entity(dynamicUpdate = true)
 public class EventRegistration extends BaseForm
 {
+    public static final String StatusRegistered = "Registered";
+    public static final String StatusCancelled= "Cancelled";
+
     public static final String ClassName = "com.yvphk.model.form.EventRegistration";
 
     public static final String[] ImportFields =
