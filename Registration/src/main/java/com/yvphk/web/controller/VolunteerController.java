@@ -4,24 +4,28 @@
 */
 package com.yvphk.web.controller;
 
-import com.yvphk.common.Util;
-import com.yvphk.common.VolunteerPermission;
-import com.yvphk.model.form.Login;
-import com.yvphk.model.form.Volunteer;
-import com.yvphk.service.VolunteerService;
+import java.util.Date;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.util.Date;
-import java.util.Map;
+import com.yvphk.common.Util;
+import com.yvphk.common.VolunteerPermission;
+import com.yvphk.model.form.Login;
+import com.yvphk.model.form.Volunteer;
+import com.yvphk.service.VolunteerService;
 
 @Controller
+@SessionAttributes({"user"})
 public class VolunteerController
 {
     @Autowired
@@ -73,7 +77,6 @@ public class VolunteerController
         if (isValid) {
             login.setLastAccessed(new Date().getTime());
             session.setAttribute(Login.ClassName, login);
-            //return "redirect:/welcome.htm";
             return "welcome";
         }
         else {

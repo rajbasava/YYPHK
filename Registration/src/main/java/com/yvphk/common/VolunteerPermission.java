@@ -58,4 +58,23 @@ public enum VolunteerPermission
         return allVolunteerPermissions().get(key);
     }
 
+    public static boolean isAdmin (String permission)
+    {
+        return VolunteerPermission.Admin.getKey().equalsIgnoreCase(permission);
+    }
+
+    public static boolean isSpotRegVolunteeer (String permission)
+    {
+        return VolunteerPermission.SptRegVol.getKey().equalsIgnoreCase(permission);
+    }
+
+    public static boolean isRegVolunteer (String permission)
+    {
+        return VolunteerPermission.RegVol.getKey().equalsIgnoreCase(permission);
+    }
+
+    public static boolean isInfoVolunteer (String permission)
+    {
+        return VolunteerPermission.InfVol.getKey().equalsIgnoreCase(permission);
+    }
 }

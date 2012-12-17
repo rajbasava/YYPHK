@@ -61,7 +61,6 @@
 </form:form>
 
 <c:if  test="${!empty eventList}">
-<h3>Volunteers</h3>
 <table class="data" border="1" cellpadding="1" cellspacing="1" width="100%">
 <tr>
     <th><spring:message code="label.name"/></th>

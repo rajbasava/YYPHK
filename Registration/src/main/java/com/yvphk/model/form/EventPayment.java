@@ -23,9 +23,6 @@ public class EventPayment extends BaseForm
 {
     public static final String ClassName = "com.yvphk.model.form.EventPayment";
 
-    public static final String[] ReportFields =
-            new String[] {"AmountPaid","Mode","ReceiptInfo","ReceiptDate","TimeCreated"};
-
     @Id
     @Column(name = "ID")
     @GeneratedValue

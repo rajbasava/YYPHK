@@ -223,12 +223,12 @@
                                 <td><form:input path="registration.amountPayable"/></td>
                             </tr>
                             <tr>
-                                <td><form:label path="registration.totalAmountPaid"><spring:message code="label.totalAmountPaid"/></form:label></td>
-                                <td><form:input path="registration.totalAmountPaid"/></td>
+                                <td><spring:message code="label.totalAmountPaid"/></td>
+                                <td><c:out value="${registeredParticipant.registration.totalAmountPaid}"/></td>
                             </tr>
                             <tr>
-                                <td><form:label path="registration.amountDue"><spring:message code="label.amountDue"/></form:label></td>
-                                <td><form:input path="registration.amountDue"/></td>
+                                <td><spring:message code="label.amountDue"/></td>
+                                <td><c:out value="${registeredParticipant.registration.amountDue}"/></td>
                             </tr>
 						</table>	
 					</td>

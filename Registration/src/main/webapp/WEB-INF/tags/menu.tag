@@ -19,13 +19,14 @@
                 </tr>
                 <tr>
                     <td width="80px"><a href="welcome.htm">Home</a></td>
-                    <c:if test="${user.permission == 'A'}" >
+                    <c:if test="${user.access.admin}" >
                         <td width="125px"><a href="searchParticipants.htm">Search Participants</a></td>
                     </c:if>
-                    <c:if test="${user.permission == 'S' || user.permission == 'A'}" >
+                    <td width="125px"><a href="search.htm">Search Registrations</a></td>
+                    <c:if test="${user.access.spotRegVolunteer || user.access.admin}" >
 	                    <td width="125px"><a href="register.htm">Spot Registration</a></td>
 	                </c:if>
-	                <c:if test="${user.permission == 'A'}" >
+	                <c:if test="${user.access.admin}" >
 	                    <td width="125px"><a href="volunteer.htm">Manage Volunteers</a></td>
 	                    <td width="125px"><a href="event.htm">Manage Events</a></td>
 	                    <td width="125px"><a href="referenceGroup.htm">Manage Reference Groups</a></td>

@@ -22,12 +22,6 @@ public class Participant extends BaseForm
 {
     public static final String ClassName = "com.yvphk.model.form.Participant";
 
-    public static final String[] ImportFields =
-            new String[] {"Name","Email","Mobile","Home","Foundation","Vip","VipDesc"};
-
-    public static final String[] ReportFields =
-            new String[] {"Name","Email","Mobile","Home","Foundation","Vip","VipDesc"};
-
     @Id
     @Column(name = "ID")
     @GeneratedValue

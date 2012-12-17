@@ -38,12 +38,6 @@ public class EventRegistration extends BaseForm
 
     public static final String ClassName = "com.yvphk.model.form.EventRegistration";
 
-    public static final String[] ImportFields =
-            new String[] {"AmountPayable","Review","Level","Reference","Application","Certificates","Comments"};
-
-    public static final String[] ReportFields =
-            new String[] {"Event","AmountPayable","TotalAmountPaid","AmountDue","Review","Level","Reference","Application","Certificates","FoodCoupon","EventKit", "Category"};
-
     @Id
     @Column(name = "ID")
     @GeneratedValue
