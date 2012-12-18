@@ -82,16 +82,18 @@
             <td><form:input path="vipDesc"/></td>
         </tr>
         <tr align="center">
-            <table width="100%" cellpadding="2" cellspacing="2">
-                <tr>
-                    <td align="right">
-                        <a id="addParticipant" href="addParticipant.htm">Add Participant</a>
-                    </td>
-                    <td align="left">
-                        <a id="back" href="searchParticipants.htm">Back</a>
-                    </td>
-                </tr>
-            </table>
+            <td>
+                <table width="100%" cellpadding="2" cellspacing="2">
+                    <tr>
+                        <td align="right">
+                            <a id="addParticipant" href="addParticipant.htm">Add Participant</a>
+                        </td>
+                        <td align="left">
+                            <a id="back" href="searchParticipants.htm">Back</a>
+                        </td>
+                    </tr>
+                </table>
+            </td>
         </tr>
     </table>
 </form:form>

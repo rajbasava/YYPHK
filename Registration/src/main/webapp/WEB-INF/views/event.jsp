@@ -74,7 +74,7 @@
 </tr>
 <c:forEach items="${eventList}" var="event">
 	<tr>
-	    <td>
+	    <td class="YLink">
             <form id="addDisc<c:out value="${event.id}"/>" method="post" action="eventFee.htm">
                 <input type="hidden" name="eventId" value="<c:out value="${event.id}"/>" />
                 <a href="#" onclick="document.getElementById('addDisc<c:out value="${event.id}"/>').submit();"><c:out value="${event.name}"/></a>
@@ -86,7 +86,7 @@
 		<td><c:out value="${event.startDate}"/> </td>
 		<td><c:out value="${event.endDate}"/></td>
 		<td><c:out value="${event.seatPerLevel}"/></td>
-		<td>
+		<td class="YLink">
             <form id="delEvent<c:out value="${event.id}"/>" method="post" action="deleteEvent.htm">
                 <input type="hidden" name="eventId" value="<c:out value="${event.id}"/>" />
                 <a href="#" onclick="document.getElementById('delEvent<c:out value="${event.id}"/>').submit();"><spring:message code="label.delete"/></a>

@@ -71,10 +71,10 @@
 		<td><c:out value="${volunteer.mobile}"/></td>
 		<td><c:out value="${volunteer.activity}"/></td>
 		<td><c:out value="${volunteer.permissionName}"/></td>
-		<td>
+		<td class="YLink">
             <form id="delVol<c:out value="${volunteer.id}"/>" method="post" action="delete.htm">
             <input type="hidden" name="volunteerId" value="<c:out value="${volunteer.id}"/>" />
-            <a href="#" onclick="document.getElementById('delVol<c:out value="${volunteer.id}"/>').submit();"><spring:message code="label.delete"/></a>
+            <a href="#" onclick="document.getElementById('delVol<c:out value="${volunteer.id}"/>').submit();"><spring:message code="label.deactivate"/></a>
             </form>    
         </td>
 	</tr>

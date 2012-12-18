@@ -409,6 +409,7 @@ public class ParticipantDAOImpl implements ParticipantDAO
         criteria.setFetchMode("payments", FetchMode.EAGER);
         criteria.createAlias("participant", "participant");
         criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+        criteria.add(Restrictions.eq("active", true));
 
         if (registrationCriteria.getSeat() != null) {
             criteria.createAlias("seats", "seats");
@@ -566,6 +567,7 @@ public class ParticipantDAOImpl implements ParticipantDAO
 
         if (paymentCriteria.getEventId() != null) {
             criteria.add(Restrictions.eq("registration.event.id", paymentCriteria.getEventId()));
+            criteria.add(Restrictions.eq("registration.event.active", true));
         }
 
         if (!Util.nullOrEmptyOrBlank(paymentCriteria.getFoundation())) {
@@ -632,6 +634,21 @@ public class ParticipantDAOImpl implements ParticipantDAO
                 registration,
                 session);
         session.update(registration);
+        session.flush();
+        session.close();
+    }
+
+    @Override
+    public void removeEventRegistrations(Integer id) {
+        Session session = sessionFactory.openSession();
+        Event event = (Event) session.load(Event.class, id);
+        Criteria criteria = session.createCriteria(EventRegistration.class);
+        criteria.add(Restrictions.eq("event", event));
+        List<EventRegistration> results = criteria.list();
+        for (EventRegistration reg: results) {
+            reg.setActive(false);
+            session.update(reg);
+        }
         session.flush();
         session.close();
     }

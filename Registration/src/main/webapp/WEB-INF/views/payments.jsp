@@ -91,7 +91,7 @@
         <tr align="center">
             <table width="100%" cellpadding="2" cellspacing="2" align="center">
                 <tr align="center">
-                    <td>
+                    <td class="YLink">
                         <a id="submit" href="#"><c:out value="${registrationPayments.action}"/> Payment</a>
                         <a id="back" href="#">Back</a>
                     </td>
@@ -122,7 +122,7 @@
             <tr>
                 <td><c:out value="${payment.preparedBy}"/> </td>
                 <td><c:out value="${payment.timeCreated}"/></td>
-                <td>
+                <td class="YLink">
                     <form id="showPayments<c:out value="${payment.id}"/>" method="post" action="showPayments.htm">
                         <input type="hidden" name="registration.id" value="<c:out value="${payment.registration.id}"/>" />
                         <input type="hidden" name="paymentId" value="<c:out value="${payment.id}"/>" />

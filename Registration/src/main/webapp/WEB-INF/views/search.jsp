@@ -202,7 +202,7 @@
                                 <c:forEach items="${registrationList}" var="registration">
                                     <tr>
                                         <td width="3%"><c:out value="${registration.id}"/></td>
-                                        <td width="8%">
+                                        <td width="8%" class="YLink">
                                             <form id="updatePart<c:out value="${registration.id}"/>" method="post" action="updateRegistration.htm">
                                                 <input type="hidden" name="registrationId" value="<c:out value="${registration.id}"/>" />
                                                 <a href="#" onclick="document.getElementById('updatePart<c:out value="${registration.id}"/>').submit();">

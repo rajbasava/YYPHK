@@ -48,3 +48,18 @@
     right:140px;
     cursor:pointer;
 }
+
+.YLink a:link {
+	color:#336699;
+	text-decoration:none;
+}
+
+.YLink a:hover {
+    color:#336699 !important;
+    text-decoration:underline;
+}
+
+.YLink a:visited {
+	color:#336699;
+	text-decoration:none;
+}

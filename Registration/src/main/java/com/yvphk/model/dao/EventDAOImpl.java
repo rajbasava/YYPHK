@@ -41,6 +41,7 @@ public class EventDAOImpl implements EventDAO
         criteria.setFetchMode("fees", FetchMode.EAGER);
 
         criteria.add(Restrictions.eq("id", eventId));
+        criteria.add(Restrictions.eq("active", true));
         List<Event> events = criteria.list();
 
         session.close();
@@ -59,6 +60,7 @@ public class EventDAOImpl implements EventDAO
         Criteria criteria = session.createCriteria(Event.class);
         criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
         criteria.addOrder(Order.asc("timeCreated"));
+        criteria.add(Restrictions.eq("active", true));
         List<Event> events = criteria.list();
         session.close();
         return events;
@@ -86,7 +88,8 @@ public class EventDAOImpl implements EventDAO
             removeEventFee((Integer) fee.getId(), session);
         }
 
-        session.delete(event);
+        event.setActive(false);
+        session.update(event);
         session.flush();
         session.close();
 
@@ -125,6 +128,7 @@ public class EventDAOImpl implements EventDAO
         Session session = sessionFactory.openSession();
         Criteria criteria = session.createCriteria(EventFee.class);
         criteria.add(Restrictions.eq("event", event));
+        criteria.add(Restrictions.eq("active", true));
         criteria.addOrder(Order.asc("timeCreated"));
         List<EventFee> eventFees = criteria.list();
         session.close();
@@ -149,6 +153,7 @@ public class EventDAOImpl implements EventDAO
 
         Criteria criteria = session.createCriteria(EventFee.class);
         criteria.add(Restrictions.eq("id", eventFeeId));
+        criteria.add(Restrictions.eq("active", true));
         EventFee fee = (EventFee) criteria.uniqueResult();
 
         session.flush();
@@ -160,6 +165,11 @@ public class EventDAOImpl implements EventDAO
 
     private void removeEventFee (Integer eventFeeId, Session session)
     {
+        removeEventFee(eventFeeId, session, true);
+    }
+
+    private void removeEventFee (Integer eventFeeId, Session session, boolean isSoftDelete)
+    {
         if (eventFeeId == null) {
             return;
         }
@@ -170,6 +180,12 @@ public class EventDAOImpl implements EventDAO
             return;
         }
 
-        session.delete(fee);
+        if (isSoftDelete) {
+            fee.setActive(false);
+            session.update(fee);
+        }
+        else {
+            session.delete(fee);
+        }
     }
 }

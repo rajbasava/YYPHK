@@ -15,7 +15,7 @@
 
 <table align="center" cellspacing="2" cellpadding="2" width="50%">
     <tr>
-		<td><spring:message code="label.erid"/></td>
+		<td><spring:message code="label.id"/></td>
 		<td><b><c:out value="${registeredParticipant.registration.id}"/></b></td>
 	</tr>
     <tr>

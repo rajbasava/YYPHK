@@ -68,7 +68,7 @@
 		<td><c:out value="${eventFee.cutOffDate}"/></td>
 		<td><c:out value="${eventFee.amount}"/> </td>
 		<td><c:out value="${eventFee.review}"/></td>
-		<td>
+		<td class="YLink">
             <form id="delEventFee<c:out value="${eventFee.id}"/>" method="post" action="deleteEventFee.htm">
                 <input type="hidden" name="eventFeeId" value="<c:out value="${eventFee.id}"/>" />
                 <input type="hidden" name="eventId" value="<c:out value="${event.id}"/>" />

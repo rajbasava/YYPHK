@@ -47,4 +47,6 @@ public interface ParticipantDAO
 
     public void replaceParticipant (EventRegistration registration, Participant participantToReplace);
 
+    public void removeEventRegistrations (Integer id);
+
 }

@@ -6,6 +6,7 @@
 package com.yvphk.service;
 
 import com.yvphk.model.dao.EventDAO;
+import com.yvphk.model.dao.ParticipantDAO;
 import com.yvphk.model.form.Event;
 import com.yvphk.model.form.EventFee;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,10 @@ public class EventServiceImpl implements EventService
 
     @Autowired
     private EventDAO eventDAO;
+
+    @Autowired
+    private ParticipantDAO participantDAO;
+
 
     @Override
     @Transactional
@@ -47,6 +52,7 @@ public class EventServiceImpl implements EventService
     public void removeEvent (Integer id)
     {
         eventDAO.removeEvent(id);
+        participantDAO.removeEventRegistrations(id);
     }
 
     @Override
