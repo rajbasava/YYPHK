@@ -5,25 +5,24 @@
 
 package com.yvphk.web.controller;
 
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
 import com.yvphk.common.ParticipantLevel;
 import com.yvphk.common.Util;
 import com.yvphk.model.form.Event;
 import com.yvphk.model.form.EventFee;
 import com.yvphk.model.form.Login;
+import com.yvphk.model.form.validator.EventValidator;
 import com.yvphk.service.EventService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-
-import javax.servlet.http.HttpServletRequest;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Map;
 
 @Controller
 public class EventController extends CommonController
@@ -41,10 +40,15 @@ public class EventController extends CommonController
     }
 
     @RequestMapping(value = "/addEvent", method = RequestMethod.POST)
-    public String addEvent (@ModelAttribute("event") Event event,
+    public String addEvent (@ModelAttribute("event") Event event, BindingResult errors,
                             HttpServletRequest request)
     {
-        Login login = (Login) request.getSession().getAttribute(Login.ClassName);
+    	EventValidator val = new EventValidator();
+    	val.validate(event, errors);
+    	if(errors.hasErrors()){
+    		return "event";
+    	}
+    	Login login = (Login) request.getSession().getAttribute(Login.ClassName);
         event.initialize(login.getEmail());
         eventService.addEvent(event);
         return "redirect:/event.htm";

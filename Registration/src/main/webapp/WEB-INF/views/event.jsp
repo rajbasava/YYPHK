@@ -14,6 +14,19 @@
             $("#endDate").datepicker({ showOn: 'button', dateFormat: 'dd/mm/yy', buttonImageOnly: true, buttonImage: '<c:url value="/resources/img/calendar.gif"/>' });
         });
     </script>
+    <style>
+	.error {
+		color: #ff0000;
+	}
+ 
+	.errorblock {
+		color: #000;
+		background-color: #ffEEEE;
+		border: 3px solid #ff0000;
+		padding: 8px;
+		margin: 16px;
+	}
+</style>
 </head>
 <mytags:style/>
 <body>
@@ -21,7 +34,7 @@
 <h2 align="center">Events</h2>
 
 <form:form method="post" action="addEvent.htm" commandName="event">
-
+<form:errors path="*" cssClass="errorblock" element="div" />
 <table align="center" cellspacing="2">
     <tr>
 		<td><form:label path="name"><spring:message code="label.name"/></form:label></td>
