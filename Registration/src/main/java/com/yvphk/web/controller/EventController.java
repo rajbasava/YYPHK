@@ -6,12 +6,20 @@
 package com.yvphk.web.controller;
 
 import java.util.Map;
-
+import com.yvphk.common.SeatingType;
 import javax.servlet.http.HttpServletRequest;
 
+import com.yvphk.common.Util;
+import com.yvphk.model.form.Event;
+import com.yvphk.model.form.EventFee;
+import com.yvphk.model.form.Login;
+import com.yvphk.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,6 +31,10 @@ import com.yvphk.model.form.EventFee;
 import com.yvphk.model.form.Login;
 import com.yvphk.model.form.validator.EventValidator;
 import com.yvphk.service.EventService;
+import javax.servlet.http.HttpServletRequest;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Map;
 
 @Controller
 public class EventController extends CommonController
@@ -36,6 +48,8 @@ public class EventController extends CommonController
         map.put("event", new Event());
         map.put("eventList", eventService.allEvents());
         map.put("allParticipantLevels", ParticipantLevel.allParticipantLevels());
+        map.put("allSeatingTypes", SeatingType.allSeatingTypes());
+        map.put("allRowMetaNames", eventService.getAllRowMetaNames());
         return "event";
     }
 
@@ -107,4 +121,19 @@ public class EventController extends CommonController
         return "forward:/eventFee.htm";
     }
 
+    @RequestMapping("/allocateSeats")
+    public String allocateSeats (HttpServletRequest request, Map<String, Object> map)
+    {
+        String strEventId = request.getParameter("eventId");
+        if (Util.nullOrEmptyOrBlank(strEventId)) {
+            return "redirect:/event.htm";
+        }
+
+        Integer eventId = Integer.parseInt(strEventId);
+        Event event = eventService.getEvent(eventId);
+        if (event != null) {
+            eventService.allocateSeats(event);
+        }
+        return "redirect:/event.htm";
+    }
 }

@@ -87,7 +87,7 @@
     <tr><td>&nbsp;</td></tr>
 </table>
 <form:form method="post" action="list.htm" commandName="registrationCriteria">
-<table align="center" cellspacing="1" cellpadding="1">
+<table align="center" cellspacing="3" cellpadding="3">
     <tr>
         <td><form:label path="name"><spring:message code="label.name"/></form:label></td>
         <td><form:input path="name" /></td>
@@ -132,9 +132,15 @@
     </tr>
     <tr>
         <td><form:label path="foodCoupon"><spring:message code="label.foodCoupon"/></form:label></td>
-        <td><form:checkbox path="foodCoupon"/></td>
+        <td>
+            <form:radiobutton path="foodCoupon" value="true"/>True &nbsp;
+            <form:radiobutton path="foodCoupon" value="false"/>False &nbsp;
+        </td>
         <td><form:label path="eventKit"><spring:message code="label.eventKit"/></form:label></td>
-        <td><form:checkbox path="eventKit"/></td>
+        <td>
+            <form:radiobutton path="eventKit" value="true"/>True &nbsp;
+            <form:radiobutton path="eventKit" value="false"/>False &nbsp;
+        </td>
     </tr>
     <tr>
         <td><spring:message code="label.registrationDate"/></td>

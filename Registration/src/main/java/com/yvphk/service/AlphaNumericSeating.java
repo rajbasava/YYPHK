@@ -1,12 +1,112 @@
+/*
+    Copyright (c) 2012-2015 Yoga Vidya Pranic Healing Foundation of Karnataka.
+    All rights reserved. Patents pending.
+*/
 package com.yvphk.service;
 
-/**
- * Created by IntelliJ IDEA.
- * User: byummadisingh
- * Date: 12/16/12
- * Time: 10:50 PM
- * To change this template use File | Settings | File Templates.
- */
-public class AlphaNumericSeating
+import com.yvphk.model.dao.EventDAO;
+import com.yvphk.model.dao.ParticipantDAO;
+import com.yvphk.model.form.Event;
+import com.yvphk.model.form.EventRegistration;
+import com.yvphk.model.form.ParticipantSeat;
+import com.yvphk.model.form.RowMeta;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+@Component
+public class AlphaNumericSeating implements SeatingService
 {
+    @Autowired
+    private ParticipantDAO participantDAO;
+
+    @Autowired
+    private EventDAO eventDAO;
+
+    @Transactional
+    public void allocateSeats (Event event)
+    {
+        // fetch all the foreign registrations for this event with not VIPs and country not india and not null
+        // fetch all the indian registrations for this event with not VIPs and country is india or null
+        // fetch the all row meta by querying select row name, row max where row full is false order by sort order asc
+        // for each row meta, construct a boolean seat flag array with row max length and set all the allocated seats as true. We should cache this row till the row is full
+        // Increment the seat counter and check whether incremented counter is set true in the boolean seat flag array, if so increment once again, if not allocate.
+        // saveOrUpdate tha allocated seat.
+        // we should do batching and committing at 50 say.
+        // once completed mark event as seat computed to true.
+
+        if (event.isSeatAllocated()) {
+            return;
+        }
+
+        List<EventRegistration> allUnallocatedForeignRegistrations =
+                participantDAO.allUnallocatedRegistrations(event, false, false);
+        List<EventRegistration> allUnallocatedIndianRegistrations =
+                participantDAO.allUnallocatedRegistrations(event, false, true);
+        List<EventRegistration> allUnallocatedRegistrations = new ArrayList<EventRegistration>();
+        allUnallocatedRegistrations.addAll(allUnallocatedForeignRegistrations);
+        allUnallocatedRegistrations.addAll(allUnallocatedIndianRegistrations);
+        List<RowMeta> rowMetas = eventDAO.getAllEmptyRowMetas(event);
+
+        int regsCount = 0;
+        int regsSize = allUnallocatedRegistrations.size();
+
+        for (RowMeta rowMeta : rowMetas) {
+
+            if (regsCount >= regsSize) {
+                break;
+            }
+            int seatCounter = 1;
+            boolean[] seatFlags = new boolean[rowMeta.getRowMax()];
+            Arrays.fill(seatFlags, false);
+
+            List<ParticipantSeat> allocatedSeats =
+                    participantDAO.getAllocatedSeats(event, rowMeta.getRowName(), null);
+            for (ParticipantSeat allocatedSeat : allocatedSeats) {
+                seatFlags[allocatedSeat.getSeat().intValue() - 1] = true;
+            }
+
+            for (int i = 0; i < seatFlags.length; i++) {
+
+                if (regsCount >= regsSize) {
+                    break;
+                }
+                seatCounter = seatCounter + i;
+
+                if (!seatFlags[i]) {
+                    EventRegistration registration = allUnallocatedRegistrations.get(regsCount);
+                    ParticipantSeat seat = createSeat(registration, rowMeta.getRowName(), seatCounter);
+                    participantDAO.saveOrUpdate(seat);
+                    seatFlags[i] = true;
+                    regsCount++;
+                }
+            }
+        }
+        event.setSeatAllocated(true);
+        eventDAO.saveOrUpdate(event);
+    }
+
+    private ParticipantSeat createSeat (EventRegistration registration,
+                                        String alpha,
+                                        Integer seatNo)
+    {
+        ParticipantSeat seat = new ParticipantSeat();
+        seat.setAlpha(alpha);
+        seat.setSeat(seatNo);
+        seat.setEvent(registration.getEvent());
+        seat.setLevel(registration.getEvent().getEligibilityLevel());
+        seat.setRegistration(registration);
+
+        return seat;
+    }
+
+    @Transactional
+    public ParticipantSeat getNextSeat (Event event)
+    {
+        return null;
+    }
 }

@@ -39,6 +39,10 @@ public interface ParticipantService
 
     public void cancelRegistration (EventRegistration registration);
 
+    public void onHoldRegistration (EventRegistration registration);
+
+    public void changeToRegistered (EventRegistration registration);
+
     public void replaceParticipant (EventRegistration registration, Participant participantToReplace);
 
     public void addParticipant (Participant participant);

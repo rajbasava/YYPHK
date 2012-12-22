@@ -45,6 +45,8 @@
         </property>
     </bean>
 
+    <bean id="applicationContextUtils" class="com.yvphk.common.ApplicationContextUtils"/>
+
     <bean id="authenticationInterceptor"
                  class="com.yvphk.web.controller.AuthenticationInterceptor" />
 
@@ -63,10 +65,17 @@
     </bean>
 
     <bean id="dataSource"
-		class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close"
-		p:driverClassName="${jdbc.driverClassName}"
-		p:url="${jdbc.databaseurl}" p:username="${jdbc.username}"
-		p:password="${jdbc.password}" />
+		class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close"
+		p:driverClass="${jdbc.driverClass}"
+		p:jdbcUrl="${jdbc.jdbcUrl}"
+        p:user="${jdbc.user}"
+		p:password="${jdbc.password}"
+		p:maxPoolSize="${jdbc.maxPoolSize}"
+		p:minPoolSize="${jdbc.minPoolSize}"
+		p:acquireIncrement="${jdbc.acquireIncrement}"
+		p:maxStatements="${jdbc.maxStatements}"
+		p:maxStatementsPerConnection="${jdbc.maxStatementsPerConnection}"
+		p:maxIdleTime="${jdbc.maxIdleTime}" />
 
 
 	<bean id="sessionFactory"

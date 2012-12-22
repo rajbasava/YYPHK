@@ -37,6 +37,20 @@
                      $("#registeredParticipant").submit();
                 });
 
+                $("a#onHoldRegistration").button();
+                $("a#onHoldRegistration").css("font-size", "11px");
+                $("a#onHoldRegistration").click(function() {
+                     $("#registeredParticipant").get(0).setAttribute('action', 'onHoldRegistration.htm');
+                     $("#registeredParticipant").submit();
+                });
+
+                $("a#changeToRegistered").button();
+                $("a#changeToRegistered").css("font-size", "11px");
+                $("a#changeToRegistered").click(function() {
+                     $("#registeredParticipant").get(0).setAttribute('action', 'changeToRegistered.htm');
+                     $("#registeredParticipant").submit();
+                });
+
                 $("a#replaceRegistration").button();
                 $("a#replaceRegistration").css("font-size", "11px");
                 $("a#replaceRegistration").click(function() {
@@ -128,10 +142,14 @@
     <form:hidden path="action"/>
     <form:hidden path="participant.id"/>
     <form:hidden path="registration.id"/>
+    <form:hidden path="registration.status"/>
     <table width="100%" cellpadding="1" cellspacing="1">
         <tr>
             <td align="left" style="font-size:18px">
                 <c:out value="${registeredParticipant.participant.name}"/> - <c:out value="${registeredParticipant.registration.event.name}"/>
+            </td>
+            <td align="right" style="font-size:18px">
+                 <c:out value="${registeredParticipant.registration.status}"/>
             </td>
         </tr>
     </table>
@@ -328,7 +346,9 @@
                     <a id="submit" href="#"><c:out value="${registeredParticipant.action}"/></a>
                     <a id="showPayments" href="#">Payments</a>
                     <a id="cancelRegistration" href="#">Cancel Registration</a>
-                    <a id="replaceRegistration" href="#">Replace Registration</a>
+                    <a id="onHoldRegistration" href="#">On Hold</a>
+                    <a id="changeToRegistered" href="#">Change To Registered</a>
+                    <a id="replaceRegistration" href="#">Replace</a>
                     <a id="back" href="#">Back</a>
                 </td>
             </tr>

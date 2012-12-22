@@ -9,7 +9,7 @@ import com.yvphk.model.form.Volunteer;
 
 import java.util.List;
 
-public interface VolunteerDAO
+public interface VolunteerDAO extends CommonDAO
 {
     public void addVolunteer (Volunteer volunteer);
 

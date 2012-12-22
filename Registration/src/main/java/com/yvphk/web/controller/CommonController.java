@@ -52,6 +52,7 @@ public class CommonController
         LinkedHashMap registrationStatusMap = new LinkedHashMap<String, String>();
         registrationStatusMap.put(EventRegistration.StatusRegistered, EventRegistration.StatusRegistered);
         registrationStatusMap.put(EventRegistration.StatusCancelled, EventRegistration.StatusCancelled);
+        registrationStatusMap.put(EventRegistration.StatusOnHold, EventRegistration.StatusOnHold);
         return registrationStatusMap;
     }
 }

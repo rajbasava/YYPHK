@@ -124,7 +124,7 @@ public class ParticipantController extends CommonController
     }
 
     @RequestMapping("/updateRegistration")
-    public String updateParticipant (HttpServletRequest request, Map<String, Object> map)
+    public String updateRegistration (HttpServletRequest request, Map<String, Object> map)
     {
         String strRegistrationId = request.getParameter("registrationId");
         RegisteredParticipant registeredParticipant = populateRegisteredParticipant(strRegistrationId);
@@ -172,6 +172,7 @@ public class ParticipantController extends CommonController
             registeredParticipant.setAllHistoryRecords(registration.getHistoryRecords());
             registeredParticipant.setEventId(registration.getEvent().getId());
             registeredParticipant.setAction(RegisteredParticipant.ActionUpdate);
+            registeredParticipant.setStatus(registration.getStatus());
             return registeredParticipant;
         }
 
@@ -306,6 +307,32 @@ public class ParticipantController extends CommonController
             Integer registrationId = Integer.parseInt(strRegistrationId);
             EventRegistration registration = participantService.getEventRegistration(registrationId);
             participantService.cancelRegistration(registration);
+        }
+        return "redirect:/search.htm";
+    }
+
+    @RequestMapping("/onHoldRegistration")
+    public String onHoldRegistration (Map<String, Object> map,
+                                      HttpServletRequest request)
+    {
+        String strRegistrationId = request.getParameter("registration.id");
+        if (!Util.nullOrEmptyOrBlank(strRegistrationId)) {
+            Integer registrationId = Integer.parseInt(strRegistrationId);
+            EventRegistration registration = participantService.getEventRegistration(registrationId);
+            participantService.onHoldRegistration(registration);
+        }
+        return "redirect:/search.htm";
+    }
+
+    @RequestMapping("/changeToRegistered")
+    public String changeToRegistered (Map<String, Object> map,
+                                      HttpServletRequest request)
+    {
+        String strRegistrationId = request.getParameter("registration.id");
+        if (!Util.nullOrEmptyOrBlank(strRegistrationId)) {
+            Integer registrationId = Integer.parseInt(strRegistrationId);
+            EventRegistration registration = participantService.getEventRegistration(registrationId);
+            participantService.changeToRegistered(registration);
         }
         return "redirect:/search.htm";
     }

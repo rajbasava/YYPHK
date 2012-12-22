@@ -20,11 +20,14 @@ import com.yvphk.model.form.ParticipantSeat;
 import com.yvphk.model.form.PaymentCriteria;
 import com.yvphk.model.form.ReferenceGroup;
 import com.yvphk.model.form.RegisteredParticipant;
+import org.apache.xmlbeans.impl.xb.xsdschema.RestrictionDocument;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.CriteriaSpecification;
+import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
@@ -40,7 +43,7 @@ import java.util.List;
 import java.util.Set;
 
 @Repository
-public class ParticipantDAOImpl implements ParticipantDAO
+public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
 {
     @Autowired
     private SessionFactory sessionFactory;
@@ -103,10 +106,9 @@ public class ParticipantDAOImpl implements ParticipantDAO
                     session);
 
             ParticipantSeat participantSeat = registeredParticipant.getCurrentSeat();
-            if (participantSeat ==  null) {
-                participantSeat = new ParticipantSeat();
+            if (participantSeat !=  null) {
+                saveOrUpdate(participantSeat);
             }
-            addParticipantSeats(participantSeat, registration, session);
         }
         else if (RegisteredParticipant.ActionUpdate.equals(registeredParticipant.getAction())) {
             //  todo update changes properties of registration objects to comments
@@ -318,13 +320,45 @@ public class ParticipantDAOImpl implements ParticipantDAO
     public void cancelRegistration (EventRegistration registration)
     {
         Session session = sessionFactory.openSession();
-        session.refresh(registration);
         registration.setStatus(EventRegistration.StatusCancelled);
         session.update(registration);
         createAndAddHistoryRecord(
                 messageSource.getMessage("key.registrationCancelled",
                         new Object[] {registration.getId(),
                                 registration.getParticipant().getName()},
+                        null),
+                Util.getCurrentUser().getEmail(),
+                registration, session);
+        session.flush();
+        session.close();
+    }
+
+    public void onHoldRegistration (EventRegistration registration)
+    {
+        Session session = sessionFactory.openSession();
+        registration.setStatus(EventRegistration.StatusOnHold);
+        session.update(registration);
+        createAndAddHistoryRecord(
+                messageSource.getMessage("key.registrationCancelled",
+                        new Object[] {registration.getId(),
+                                registration.getParticipant().getName()},
+                        null),
+                Util.getCurrentUser().getEmail(),
+                registration, session);
+        session.flush();
+        session.close();
+    }
+
+    public void changeToRegistered (EventRegistration registration)
+    {
+        Session session = sessionFactory.openSession();
+        registration.setStatus(EventRegistration.StatusRegistered);
+        session.update(registration);
+        createAndAddHistoryRecord(
+                messageSource.getMessage("key.registrationUpdated",
+                        new Object[] {registration.getId(),
+                                registration.getParticipant().getName(),
+                                    registration.getEvent().getName()},
                         null),
                 Util.getCurrentUser().getEmail(),
                 registration, session);
@@ -468,9 +502,13 @@ public class ParticipantDAOImpl implements ParticipantDAO
             criteria.add(Restrictions.sqlRestriction(sql));
         }
 
-        criteria.add(Restrictions.eq("foodCoupon", registrationCriteria.isFoodCoupon()));
+        if (!Util.nullOrEmptyOrBlank(registrationCriteria.getFoodCoupon())) {
+            criteria.add(Restrictions.eq("foodCoupon", Boolean.valueOf(registrationCriteria.getFoodCoupon()).booleanValue()));
+        }
 
-        criteria.add(Restrictions.eq("eventKit", registrationCriteria.isEventKit()));
+        if (!Util.nullOrEmptyOrBlank(registrationCriteria.getEventKit())) {
+            criteria.add(Restrictions.eq("eventKit", Boolean.valueOf(registrationCriteria.getEventKit()).booleanValue()));
+        }
 
         if (registrationCriteria.getFromRegistrationDate() != null) {
             criteria.add(Restrictions.ge("registrationDate", registrationCriteria.getFromRegistrationDate()));
@@ -483,6 +521,45 @@ public class ParticipantDAOImpl implements ParticipantDAO
         if (!Util.nullOrEmptyOrBlank(registrationCriteria.getStatus())) {
             criteria.add(Restrictions.eq("status", registrationCriteria.getStatus()));
         }
+
+        List<EventRegistration> results = criteria.list();
+
+        session.close();
+        return results;
+    }
+
+    public List<EventRegistration> allUnallocatedRegistrations (Event event, boolean vip, boolean indian)
+    {
+        if (event == null) {
+            return null;
+        }
+
+        Session session = sessionFactory.openSession();
+        Criteria criteria = session.createCriteria(EventRegistration.class);
+        criteria.createAlias("event", "event");
+        criteria.createAlias("participant", "participant");
+        criteria.createAlias("seats", "seats", CriteriaSpecification.LEFT_JOIN);
+
+        criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+        criteria.addOrder(Order.asc("registrationDate"));
+
+        criteria.add(Restrictions.eq("event.id", event.getId()));
+        criteria.add(Restrictions.isNull("seats.seat"));
+        criteria.add(Restrictions.eq("participant.vip", vip));
+
+        if (indian) {
+            Criterion indCond = Restrictions.eq("participant.country", "India");
+            Criterion nullCond = Restrictions.isNull("participant.country");
+            criteria.add(Restrictions.or(indCond, nullCond));
+        }
+        else {
+            Criterion forgnCond = Restrictions.ne("participant.country", "India");
+            Criterion notNullCond = Restrictions.isNotNull("participant.country");
+            criteria.add(Restrictions.or(forgnCond, notNullCond));
+        }
+
+        criteria.add(Restrictions.eq("status", EventRegistration.StatusRegistered));
+        criteria.add(Restrictions.eq("active", true));
 
         List<EventRegistration> results = criteria.list();
 
@@ -651,6 +728,33 @@ public class ParticipantDAOImpl implements ParticipantDAO
         }
         session.flush();
         session.close();
+    }
+
+    public List<ParticipantSeat> getAllocatedSeats (Event event, String alpha, String suffix)
+    {
+        if (event == null) {
+            return null;
+        }
+
+        Session session = sessionFactory.openSession();
+        Criteria criteria = session.createCriteria(ParticipantSeat.class);
+        criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+        criteria.addOrder(Order.asc("seat"));
+
+        criteria.add(Restrictions.eq("event", event));
+
+        if (!Util.nullOrEmptyOrBlank(alpha)) {
+            criteria.add(Restrictions.eq("alpha", alpha));
+        }
+
+        if (!Util.nullOrEmptyOrBlank(suffix)) {
+            criteria.add(Restrictions.eq("suffix", suffix));
+        }
+
+        List<ParticipantSeat> results = criteria.list();
+        session.flush();
+        session.close();
+        return results;
     }
 
 }

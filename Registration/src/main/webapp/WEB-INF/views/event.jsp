@@ -12,6 +12,28 @@
         $(document).ready(function(){
             $("#startDate").datepicker({ showOn: 'button', dateFormat: 'dd/mm/yy', buttonImageOnly: true, buttonImage: '<c:url value="/resources/img/calendar.gif"/>' });
             $("#endDate").datepicker({ showOn: 'button', dateFormat: 'dd/mm/yy', buttonImageOnly: true, buttonImage: '<c:url value="/resources/img/calendar.gif"/>' });
+
+            $("a#allocateSeats").button();
+            $("a#allocateSeats").css("font-size", "11px");
+            $("a#allocateSeats").click(function() {
+                 $("#modifyEvent").get(0).setAttribute('action', 'allocateSeats.htm');
+                 $("#modifyEvent").submit();
+            });
+
+            $("a#addEventFee").button();
+            $("a#addEventFee").css("font-size", "11px");
+            $("a#addEventFee").click(function() {
+                 $("#modifyEvent").get(0).setAttribute('action', 'eventFee.htm');
+                 $("#modifyEvent").submit();
+            });
+
+            $("a#deleteEvent").button();
+            $("a#deleteEvent").css("font-size", "11px");
+            $("a#deleteEvent").click(function() {
+                 $("#modifyEvent").get(0).setAttribute('action', 'deleteEvent.htm');
+                 $("#modifyEvent").submit();
+            });
+
         });
     </script>
     <style>
@@ -31,8 +53,14 @@
 <mytags:style/>
 <body>
 <mytags:menu/>
-<h2 align="center">Events</h2>
-
+<table width="100%" cellpadding="2" cellspacing="2">
+    <tr>
+        <td align="center" style="font-size:18px">
+            Manage Events
+        </td>
+    </tr>
+    <tr><td>&nbsp;</td></tr>
+</table>
 <form:form method="post" action="addEvent.htm" commandName="event">
 <form:errors path="*" cssClass="errorblock" element="div" />
 <table align="center" cellspacing="2">
@@ -66,6 +94,22 @@
         <td><form:input path="state" /></td>
 	</tr>
 	<tr>
+	    <td><form:label path="seatingType"><spring:message code="label.seatingType"/></form:label></td>
+        <td>
+            <form:select path="seatingType">
+                <form:option value="NONE" label="--- Select ---"/>
+                <form:options items="${allSeatingTypes}" />
+            </form:select>
+        </td>
+        <td><form:label path="rowMetaName"><spring:message code="label.rowMetaName"/></form:label></td>
+        <td>
+            <form:select path="rowMetaName">
+                <form:option value="NONE" label="--- Select ---"/>
+                <form:options items="${allRowMetaNames}" />
+            </form:select>
+        </td>
+	</tr>
+	<tr>
 		<td colspan="4" align="center">
 			<input type="submit" value="<spring:message code="label.addEvent"/>"/>
 		</td>
@@ -74,39 +118,67 @@
 </form:form>
 
 <c:if  test="${!empty eventList}">
-<table class="data" border="1" cellpadding="1" cellspacing="1" width="100%">
-<tr>
-    <th><spring:message code="label.name"/></th>
-    <th><spring:message code="label.venue"/></th>
-    <th><spring:message code="label.city"/></th>
-    <th><spring:message code="label.eligibilityLevel"/></th>
-    <th><spring:message code="label.startDate"/></th>
-    <th><spring:message code="label.endDate"/></th>
-    <th><spring:message code="label.seatPerLevel"/></th>
-	<th>&nbsp;</th>
-</tr>
-<c:forEach items="${eventList}" var="event">
-	<tr>
-	    <td class="YLink">
-            <form id="addDisc<c:out value="${event.id}"/>" method="post" action="eventFee.htm">
-                <input type="hidden" name="eventId" value="<c:out value="${event.id}"/>" />
-                <a href="#" onclick="document.getElementById('addDisc<c:out value="${event.id}"/>').submit();"><c:out value="${event.name}"/></a>
-            </form>
+<table width="100%" cellpadding="3" cellspacing="3">
+    <tr style="background-color:#E8E8E8;">
+        <td>Events</td>
+    </tr>
+    <tr>
+        <td>
+            <table style="width:100%; table-layout:fixed;">
+                <tr>
+                    <td>
+                        <table border="1" width="100%">
+                            <tr>
+                                <td width="3%">&nbsp;&nbsp;</td>
+                                <td width="20%"><spring:message code="label.name"/></td>
+                                <td width="10%"><spring:message code="label.venue"/></td>
+                                <td width="8%"><spring:message code="label.city"/></td>
+                                <td width="10%"><spring:message code="label.eligibilityLevel"/></td>
+                                <td width="12%"><spring:message code="label.startDate"/></td>
+                                <td width="12%"><spring:message code="label.endDate"/></td>
+                                <td><spring:message code="label.seatPerLevel"/></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div style="width:100%; height:150px; overflow-y:scroll; overflow-x:hidden; empty-cells:show; font-size:11px">
+                            <table border="1" width="100%">
+                                <form id="modifyEvent" method="post" action="">
+                                    <c:forEach items="${eventList}" var="event">
+                                        <tr>
+                                            <td width="3%"><input type="radio" name="eventId" value="<c:out value="${event.id}"/>"></td>
+                                            <td width="20.5%"><c:out value="${event.name}"/></td>
+                                            <td width="10%"><c:out value="${event.venue}"/></td>
+                                            <td width="8%"><c:out value="${event.city}"/> </td>
+                                            <td width="10%"><c:out value="${event.eligibilityLevel}"/></td>
+                                            <td width="12%"><c:out value="${event.startDate}"/> </td>
+                                            <td width="12%"><c:out value="${event.endDate}"/></td>
+                                            <td><c:out value="${event.seatPerLevel}"/></td>
+                                        </tr>
+                                    </c:forEach>
+                                </form>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+            </table>
         </td>
-		<td><c:out value="${event.venue}"/></td>
-		<td><c:out value="${event.city}"/> </td>
-		<td><c:out value="${event.eligibilityLevel}"/></td>
-		<td><c:out value="${event.startDate}"/> </td>
-		<td><c:out value="${event.endDate}"/></td>
-		<td><c:out value="${event.seatPerLevel}"/></td>
-		<td class="YLink">
-            <form id="delEvent<c:out value="${event.id}"/>" method="post" action="deleteEvent.htm">
-                <input type="hidden" name="eventId" value="<c:out value="${event.id}"/>" />
-                <a href="#" onclick="document.getElementById('delEvent<c:out value="${event.id}"/>').submit();"><spring:message code="label.delete"/></a>
-            </form>
+    </tr>
+    <tr style="background-color:#E8E8E8;">
+        <td>
+            <table width="100%" cellpadding="2" cellspacing="2">
+                <tr>
+                    <td align="left">
+                        <a id="addEventFee" href="#">Add Event Fee</a>
+                        <a id="allocateSeats" href="#">Allocate Seats</a>
+                        <a id="deleteEvent" href="#">Deactivate</a>
+                    </td>
+                </tr>
+            </table>
         </td>
-	</tr>
-</c:forEach>
+    </tr>
 </table>
 </c:if>
 

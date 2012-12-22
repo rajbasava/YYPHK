@@ -5,6 +5,7 @@
 
 package com.yvphk.service;
 
+import com.yvphk.common.SeatingType;
 import com.yvphk.model.dao.EventDAO;
 import com.yvphk.model.dao.ParticipantDAO;
 import com.yvphk.model.form.Event;
@@ -81,5 +82,24 @@ public class EventServiceImpl implements EventService
     public EventFee getEventFee (Integer eventFeeId)
     {
         return eventDAO.getEventFee(eventFeeId);
+    }
+
+    @Override
+    @Transactional
+    public List<String> getAllRowMetaNames ()
+    {
+        return eventDAO.getAllRowMetaNames();
+    }
+
+    @Override
+    @Transactional
+    public void allocateSeats (Event event)
+    {
+        String seatingType = event.getSeatingType();
+        Object obj = SeatingType.createService(seatingType);
+        if (obj != null && obj instanceof SeatingService) {
+            SeatingService service = (SeatingService) obj;
+            service.allocateSeats(event);
+        }
     }
 }

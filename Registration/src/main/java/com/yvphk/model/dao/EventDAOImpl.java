@@ -7,8 +7,10 @@ package com.yvphk.model.dao;
 
 import com.yvphk.model.form.Event;
 import com.yvphk.model.form.EventFee;
+import com.yvphk.model.form.RowMeta;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
@@ -22,7 +24,7 @@ import java.util.List;
 import java.util.Set;
 
 @Repository
-public class EventDAOImpl implements EventDAO
+public class EventDAOImpl extends CommonDAOImpl implements EventDAO
 {
     @Autowired
     private SessionFactory sessionFactory;
@@ -187,5 +189,52 @@ public class EventDAOImpl implements EventDAO
         else {
             session.delete(fee);
         }
+    }
+
+    public RowMeta getFirstEmptyRowMeta (Event event)
+    {
+        Session session = sessionFactory.openSession();
+
+        Criteria criteria = session.createCriteria(RowMeta.class);
+        criteria.add(Restrictions.eq("name", event.getRowMetaName()));
+        criteria.add(Restrictions.eq("rowFull", false));
+        criteria.addOrder(Order.asc("sortOrder"));
+        criteria.setMaxResults(1);
+        RowMeta rowMeta = (RowMeta) criteria.uniqueResult();
+
+        session.flush();
+        session.close();
+
+        return rowMeta;
+    }
+
+    public List<RowMeta> getAllEmptyRowMetas (Event event)
+    {
+        Session session = sessionFactory.openSession();
+
+        Criteria criteria = session.createCriteria(RowMeta.class);
+        criteria.add(Restrictions.eq("name", event.getRowMetaName()));
+        criteria.add(Restrictions.eq("rowFull", false));
+        criteria.addOrder(Order.asc("sortOrder"));
+        List<RowMeta> rowMetas = criteria.list();
+
+        session.flush();
+        session.close();
+
+        return rowMetas;
+    }
+
+    public List<String> getAllRowMetaNames ()
+    {
+        Session session = sessionFactory.openSession();
+
+        Query query = session.createSQLQuery("select distinct name from phk_rowmeta where active = :active");
+        query.setParameter("active","1");
+        List<String> rowMetaNames = query.list();
+
+        session.flush();
+        session.close();
+
+        return rowMetaNames;
     }
 }

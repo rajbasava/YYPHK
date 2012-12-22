@@ -6,10 +6,11 @@ package com.yvphk.model.dao;
 
 import com.yvphk.model.form.Event;
 import com.yvphk.model.form.EventFee;
+import com.yvphk.model.form.RowMeta;
 
 import java.util.List;
 
-public interface EventDAO
+public interface EventDAO extends CommonDAO
 {
     public void addEvent (Event event);
 
@@ -26,4 +27,10 @@ public interface EventDAO
     public void removeEventFee (Integer eventFeeId);
 
     public EventFee getEventFee (Integer eventFeeId);
+
+    public RowMeta getFirstEmptyRowMeta (Event event);
+
+    public List<RowMeta> getAllEmptyRowMetas (Event event);
+
+    public List<String> getAllRowMetaNames ();
 }

@@ -59,7 +59,7 @@
 
 <form:form method="post" action="genRptRegistrations.htm" commandName="registrationCriteria">
 
-<table align="center" cellspacing="2">
+<table align="center" cellpadding="3" cellspacing="3">
     <tr>
         <td><form:label path="name"><spring:message code="label.name"/></form:label></td>
         <td><form:input path="name" /></td>
@@ -120,9 +120,17 @@
     </tr>
     <tr>
         <td><form:label path="foodCoupon"><spring:message code="label.foodCoupon"/></form:label></td>
-        <td><form:checkbox path="foodCoupon"/></td>
+        <td>
+            <form:radiobutton path="foodCoupon" value="true"/>True &nbsp;
+            <form:radiobutton path="foodCoupon" value="false"/>False &nbsp;
+            <form:radiobutton path="foodCoupon" value=""/>Both
+        </td>
         <td><form:label path="eventKit"><spring:message code="label.eventKit"/></form:label></td>
-        <td><form:checkbox path="eventKit"/></td>
+        <td>
+            <form:radiobutton path="eventKit" value="true"/>True &nbsp;
+            <form:radiobutton path="eventKit" value="false"/>False &nbsp;
+            <form:radiobutton path="eventKit" value=""/>Both
+        </td>
     </tr>
     <tr>
         <td><form:label path="consolidated"><spring:message code="label.consolidated"/></form:label></td>

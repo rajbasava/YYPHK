@@ -28,4 +28,8 @@ public interface EventService
 
     public EventFee getEventFee (Integer eventFeeId);
 
+    public List<String> getAllRowMetaNames ();
+
+    public void allocateSeats (Event event);
+
 }

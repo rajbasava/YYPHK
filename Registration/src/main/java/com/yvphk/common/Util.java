@@ -8,7 +8,6 @@ import com.yvphk.model.form.BaseForm;
 import com.yvphk.model.form.Login;
 import ognl.Ognl;
 import ognl.OgnlException;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -144,5 +143,23 @@ public class Util
                 (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpSession session = requestAttributes.getRequest().getSession();
         return (Login) session.getAttribute(Login.ClassName);
+    }
+
+    public static Object createInstance (String className)
+    {
+        Class clazz = loadClass(className);
+        Object obj = null;
+
+        try {
+            obj = clazz.newInstance();
+        }
+        catch (InstantiationException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        catch (IllegalAccessException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+
+        return obj;
     }
 }

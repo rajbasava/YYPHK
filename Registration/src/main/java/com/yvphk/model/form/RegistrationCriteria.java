@@ -21,8 +21,8 @@ public class RegistrationCriteria implements Serializable
     private Integer eventId;
     private boolean consolidated;
     private boolean vip;
-    private boolean foodCoupon;
-    private boolean eventKit;
+    private String foodCoupon = "false";
+    private String eventKit = "false";
     private Date fromRegistrationDate;
     private Date toRegistrationDate;
     private String status;
@@ -167,22 +167,22 @@ public class RegistrationCriteria implements Serializable
         this.toRegistrationDate = toRegistrationDate;
     }
 
-    public boolean isFoodCoupon ()
+    public String getFoodCoupon ()
     {
         return foodCoupon;
     }
 
-    public void setFoodCoupon (boolean foodCoupon)
+    public void setFoodCoupon (String foodCoupon)
     {
         this.foodCoupon = foodCoupon;
     }
 
-    public boolean isEventKit ()
+    public String getEventKit ()
     {
         return eventKit;
     }
 
-    public void setEventKit (boolean eventKit)
+    public void setEventKit (String eventKit)
     {
         this.eventKit = eventKit;
     }

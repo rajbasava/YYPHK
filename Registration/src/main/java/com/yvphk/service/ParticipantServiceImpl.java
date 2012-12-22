@@ -92,6 +92,18 @@ public class ParticipantServiceImpl implements ParticipantService
     }
 
     @Transactional
+    public void onHoldRegistration (EventRegistration registration)
+    {
+        participantDAO.onHoldRegistration(registration);
+    }
+
+    @Transactional
+    public void changeToRegistered (EventRegistration registration)
+    {
+        participantDAO.changeToRegistered(registration);
+    }
+
+    @Transactional
     public void replaceParticipant (EventRegistration registration, Participant participantToReplace)
     {
         participantDAO.replaceParticipant(registration, participantToReplace);

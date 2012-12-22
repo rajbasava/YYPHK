@@ -42,6 +42,15 @@ public class ParticipantSeat extends BaseForm
     @Column(name = "SEAT")
     private Integer seat;
 
+    @Column(name = "ALPHA")
+    private String alpha;
+
+    @Column(name = "SUFFIX")
+    private String suffix;
+
+    @Column(name = "CUSTOM")
+    private boolean custom;
+
     public Integer getId ()
     {
         return id;
@@ -105,5 +114,35 @@ public class ParticipantSeat extends BaseForm
     public void setEvent (Event event)
     {
         this.event = event;
+    }
+
+    public String getAlpha ()
+    {
+        return alpha;
+    }
+
+    public void setAlpha (String alpha)
+    {
+        this.alpha = alpha;
+    }
+
+    public String getSuffix ()
+    {
+        return suffix;
+    }
+
+    public void setSuffix (String suffix)
+    {
+        this.suffix = suffix;
+    }
+
+    public boolean isCustom ()
+    {
+        return custom;
+    }
+
+    public void setCustom (boolean custom)
+    {
+        this.custom = custom;
     }
 }

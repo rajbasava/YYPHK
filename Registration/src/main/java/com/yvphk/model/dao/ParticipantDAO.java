@@ -17,7 +17,7 @@ import com.yvphk.model.form.RegisteredParticipant;
 
 import java.util.List;
 
-public interface ParticipantDAO
+public interface ParticipantDAO extends CommonDAO
 {
     public Participant addParticipant (Participant Participant);
 
@@ -30,6 +30,8 @@ public interface ParticipantDAO
     public List<Participant> listParticipants (ParticipantCriteria participantCriteria);
 
     public List<EventRegistration> listRegistrations (RegistrationCriteria registrationCriteria);
+
+    public List<EventRegistration> allUnallocatedRegistrations (Event event, boolean vip, boolean indian);
 
     public void addReferenceGroup (ReferenceGroup referenceGroup);
 
@@ -45,7 +47,13 @@ public interface ParticipantDAO
 
     public void cancelRegistration (EventRegistration registration);
 
+    public void onHoldRegistration (EventRegistration registration);
+
+    public void changeToRegistered (EventRegistration registration);
+
     public void replaceParticipant (EventRegistration registration, Participant participantToReplace);
+
+    public List<ParticipantSeat> getAllocatedSeats (Event event, String alpha, String suffix);
 
     public void removeEventRegistrations (Integer id);
 

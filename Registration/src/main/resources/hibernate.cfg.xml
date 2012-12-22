@@ -14,5 +14,6 @@
         <mapping class="com.yvphk.model.form.EventRegistration"/>
         <mapping class="com.yvphk.model.form.EventPayment"/>
         <mapping class="com.yvphk.model.form.ReferenceGroup"/>
+        <mapping class="com.yvphk.model.form.RowMeta"/>
     </session-factory>
 </hibernate-configuration>

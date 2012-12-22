@@ -20,7 +20,7 @@ import java.util.List;
 
 
 @Repository
-public class VolunteerDAOImpl implements VolunteerDAO
+public class VolunteerDAOImpl extends CommonDAOImpl implements VolunteerDAO
 {
     @Autowired
     private SessionFactory sessionFactory;

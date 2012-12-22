@@ -48,6 +48,15 @@ public class Participant extends BaseForm
     @Column(name = "VIPDESC")
     private String vipDesc;
 
+    @Column(name = "CITY")
+    private String city;
+
+    @Column(name = "STATE")
+    private String state;
+
+    @Column(name = "COUNTRY")
+    private String country;
+
     @Column(name = "PREPAREDBY", updatable=false)
     private String preparedBy;
 
@@ -145,6 +154,36 @@ public class Participant extends BaseForm
     public void setVipDesc (String vipDesc)
     {
         this.vipDesc = vipDesc;
+    }
+
+    public String getCity ()
+    {
+        return city;
+    }
+
+    public void setCity (String city)
+    {
+        this.city = city;
+    }
+
+    public String getState ()
+    {
+        return state;
+    }
+
+    public void setState (String state)
+    {
+        this.state = state;
+    }
+
+    public String getCountry ()
+    {
+        return country;
+    }
+
+    public void setCountry (String country)
+    {
+        this.country = country;
     }
 
     public String getPreparedBy()

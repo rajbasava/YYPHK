@@ -26,6 +26,7 @@ public class RegisteredParticipant implements Serializable
     private Integer eventId;
     private Integer eventFeeId;
     private String otherFoundation;
+    private String status;
 
 
     public void initialize (String email)
@@ -189,5 +190,15 @@ public class RegisteredParticipant implements Serializable
     public void setOtherFoundation (String otherFoundation)
     {
         this.otherFoundation = otherFoundation;
+    }
+
+    public String getStatus ()
+    {
+        return status;
+    }
+
+    public void setStatus (String status)
+    {
+        this.status = status;
     }
 }

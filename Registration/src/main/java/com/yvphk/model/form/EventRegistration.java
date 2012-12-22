@@ -35,6 +35,7 @@ public class EventRegistration extends BaseForm
 {
     public static final String StatusRegistered = "Registered";
     public static final String StatusCancelled= "Cancelled";
+    public static final String StatusOnHold= "OnHold";
 
     public static final String ClassName = "com.yvphk.model.form.EventRegistration";
 

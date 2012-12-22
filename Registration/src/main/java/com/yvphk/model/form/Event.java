@@ -51,6 +51,15 @@ public class Event extends BaseForm
     @Column(name = "isseatperlvl")
     private boolean seatPerLevel;
 
+    @Column(name = "SEATALLOCATED")
+    private boolean seatAllocated;
+
+    @Column(name = "SEATINGTYPE")
+    private String seatingType;
+
+    @Column(name = "ROWMETANAME")
+    private String rowMetaName;
+
     @Column(name = "PREPAREDBY", updatable=false)
     private String preparedBy;
 
@@ -210,5 +219,35 @@ public class Event extends BaseForm
     public void setFees (Set<EventFee> fees)
     {
         this.fees = fees;
+    }
+
+    public boolean isSeatAllocated ()
+    {
+        return seatAllocated;
+    }
+
+    public void setSeatAllocated (boolean seatAllocated)
+    {
+        this.seatAllocated = seatAllocated;
+    }
+
+    public String getSeatingType ()
+    {
+        return seatingType;
+    }
+
+    public void setSeatingType (String seatingType)
+    {
+        this.seatingType = seatingType;
+    }
+
+    public String getRowMetaName ()
+    {
+        return rowMetaName;
+    }
+
+    public void setRowMetaName (String rowMetaName)
+    {
+        this.rowMetaName = rowMetaName;
     }
 }

@@ -1,13 +1,13 @@
-DROP TABLE phk_seat;
-DROP TABLE phk_history;
-DROP TABLE phk_vollogin;
-DROP TABLE phk_volunteer;
-DROP TABLE phk_eventpmt;
-DROP TABLE phk_eventregstrn;
-DROP TABLE phk_eventfee;
-DROP TABLE phk_event;
-DROP TABLE phk_participant;
-DROP TABLE phk_reference;
+DROP TABLE IF EXISTS phk_seat;
+DROP TABLE IF EXISTS phk_history;
+DROP TABLE IF EXISTS phk_vollogin;
+DROP TABLE IF EXISTS phk_volunteer;
+DROP TABLE IF EXISTS phk_eventpmt;
+DROP TABLE IF EXISTS phk_eventregstrn;
+DROP TABLE IF EXISTS phk_eventfee;
+DROP TABLE IF EXISTS phk_event;
+DROP TABLE IF EXISTS phk_participant;
+DROP TABLE IF EXISTS phk_reference;
 
 CREATE TABLE phk_event (
 	id INT PRIMARY KEY auto_increment,
@@ -95,10 +95,8 @@ CREATE TABLE phk_eventregstrn (
 	timecreated TIMESTAMP null,
 	timeupdated TIMESTAMP null,
 	active VARCHAR(1),
-    FOREIGN KEY (eventid) REFERENCES phk_event(id)
-                                  ON DELETE CASCADE,
+    FOREIGN KEY (eventid) REFERENCES phk_event(id),
 	FOREIGN KEY (participantid) REFERENCES phk_participant(id)
-                                  ON DELETE CASCADE
 );
 
 CREATE TABLE phk_eventpmt (
@@ -117,7 +115,6 @@ CREATE TABLE phk_eventpmt (
 	timeupdated TIMESTAMP null,
 	active VARCHAR(1),
 	FOREIGN KEY (eventregstrnid) REFERENCES phk_eventregstrn(id)
-                              ON DELETE CASCADE
 );
 
 CREATE TABLE phk_volunteer (
@@ -152,10 +149,8 @@ CREATE TABLE phk_seat
 	eventid int,
 	level varchar(10),
 	seat int,
-	FOREIGN KEY (eventid) REFERENCES phk_event(id)
-                              ON DELETE CASCADE,
+	FOREIGN KEY (eventid) REFERENCES phk_event(id),
 	FOREIGN KEY (eventregstrnid) REFERENCES phk_eventregstrn(id)
-                      ON DELETE CASCADE
 );
 
 CREATE TABLE phk_vollogin (
@@ -165,30 +160,8 @@ CREATE TABLE phk_vollogin (
 	loggedin TIMESTAMP null,
 	loggedout TIMESTAMP null,
 	FOREIGN KEY (volunteerid) REFERENCES phk_volunteer(id)
-                      ON DELETE CASCADE
 );
 
 INSERT INTO phk_volunteer(name,   email,   password,   mobile,   activity,   permission,   preparedby,   timecreated,   timeupdated)
 VALUES('Admin',   'admin@yvphk.com',   'admin',   '9999999999',   'admin',   'admin',   'system',   now(),   now());
-
-/*
- * permission codes assumed:
- * A -> Adminstrator
- * S -> Spot Registration
- * R -> Regitration Volunteer
- * I -> Info Volunteer
- * 
- */
-INSERT INTO phk_volunteer(name,   email,   password,   mobile,   activity,   permission,   preparedby,   timecreated,   timeupdated)
-VALUES('Admin',   'admin@yvphk.com',   'admin',   '9999999999',   'admin',   'A',   'system',   now(),   now());
-
-INSERT INTO phk_volunteer(name,   email,   password,   mobile,   activity,   permission,   preparedby,   timecreated,   timeupdated)
-VALUES('Rajesh',   'rajesh@yvphk.com',   'rajesh',   '9999999999',   '',   'S',   'system',   now(),   now());
-
-INSERT INTO phk_volunteer(name,   email,   password,   mobile,   activity,   permission,   preparedby,   timecreated,   timeupdated)
-VALUES('Srikant',   'sri@yvphk.com',   'sri',   '9999999999',   '',   'R',   'system',   now(),   now());
-
-INSERT INTO phk_volunteer(name,   email,   password,   mobile,   activity,   permission,   preparedby,   timecreated,   timeupdated)
-VALUES('Vivek',   'vivek@yvphk.com',   'vivek',   '9999999999',   '',   'I',   'system',   now(),   now());
-
 
