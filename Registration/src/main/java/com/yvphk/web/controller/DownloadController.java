@@ -6,7 +6,6 @@
 package com.yvphk.web.controller;
 
 import com.yvphk.common.AmountPaidCategory;
-import com.yvphk.common.Foundation;
 import com.yvphk.common.ParticipantLevel;
 import com.yvphk.common.PaymentMode;
 import com.yvphk.model.form.RegistrationCriteria;
@@ -46,7 +45,7 @@ public class DownloadController extends CommonController
     {
         map.put("registrationCriteria", new RegistrationCriteria());
         map.put("allParticipantLevels", ParticipantLevel.allParticipantLevels());
-        map.put("allFoundations", Foundation.allFoundations());
+        map.put("allFoundations", allFoundations());
         map.put("allReferenceGroups", getAllReferenceGroups(participantService.listReferenceGroups()));
         map.put("allAmountPaidCategories", AmountPaidCategory.allAmountPaidCategories());
         map.put("allEvents", getAllEventMap(eventService.allEvents()));
@@ -66,7 +65,7 @@ public class DownloadController extends CommonController
     {
         map.put("paymentCriteria", new PaymentCriteria());
         map.put("allParticipantLevels", ParticipantLevel.allParticipantLevels());
-        map.put("allFoundations", Foundation.allFoundations());
+        map.put("allFoundations", allFoundations());
         map.put("allReferenceGroups", getAllReferenceGroups(participantService.listReferenceGroups()));
         map.put("allEvents", getAllEventMap(eventService.allEvents()));
         map.put("allPaymentModes", PaymentMode.allPaymentModes());

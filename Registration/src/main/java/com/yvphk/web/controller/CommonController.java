@@ -8,6 +8,8 @@ package com.yvphk.web.controller;
 import com.yvphk.model.form.Event;
 import com.yvphk.model.form.EventRegistration;
 import com.yvphk.model.form.ReferenceGroup;
+import com.yvphk.service.EventService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -20,6 +22,9 @@ import java.util.Map;
 
 public class CommonController
 {
+    @Autowired
+    private EventService eventService;
+
     @InitBinder
     public void initBinder (WebDataBinder binder)
     {
@@ -54,5 +59,10 @@ public class CommonController
         registrationStatusMap.put(EventRegistration.StatusCancelled, EventRegistration.StatusCancelled);
         registrationStatusMap.put(EventRegistration.StatusOnHold, EventRegistration.StatusOnHold);
         return registrationStatusMap;
+    }
+
+    public List<String> allFoundations ()
+    {
+        return eventService.getAllFoundations();
     }
 }

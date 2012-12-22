@@ -25,7 +25,6 @@ public class RegisteredParticipant implements Serializable
     private String action;
     private Integer eventId;
     private Integer eventFeeId;
-    private String otherFoundation;
     private String status;
 
 
@@ -180,16 +179,6 @@ public class RegisteredParticipant implements Serializable
     public void setHistoryRecord (HistoryRecord record)
     {
         allHistoryRecords.add(record);
-    }
-
-    public String getOtherFoundation ()
-    {
-        return otherFoundation;
-    }
-
-    public void setOtherFoundation (String otherFoundation)
-    {
-        this.otherFoundation = otherFoundation;
     }
 
     public String getStatus ()

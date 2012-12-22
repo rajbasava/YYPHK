@@ -65,16 +65,6 @@
                      $("#registeredParticipant").submit();
                 });
 
-                $("#registeredParticipant select[name='participant.foundation']").change(function() {
-                    if ($(this).val() == "Others") {
-                        $("#registeredParticipant input[name='otherFoundation']").val("");
-                        $("div#othersTextBox").show();
-                        $("div#othersTextBox").focus().select();
-                    }
-                    else {
-                        $("div#othersTextBox").hide();
-                    }
-                });
             });
 
             function getEventFees(){
@@ -124,11 +114,6 @@
                 {
                     populateEventFee();
                 });
-
-                if ($("#registeredParticipant select[name='participant.foundation']").val() == "Others") {
-                    $("div#othersTextBox").show();
-                    $("div#othersTextBox").focus().select();
-                }
 
                 $('#tabs').tabs({ selected: 1 });
             });
@@ -185,9 +170,6 @@
                             <form:option value="" label="--- Select ---"/>
                             <form:options items="${allFoundations}" />
                         </form:select>
-                        <div id="othersTextBox" style="display:none;">
-                                <form:input path="otherFoundation" size="60"/>
-                        </div>
                     </td>
                 </tr>
                 <tr>

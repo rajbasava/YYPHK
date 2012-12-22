@@ -30,6 +30,8 @@ public interface EventService
 
     public List<String> getAllRowMetaNames ();
 
+    public List<String> getAllFoundations ();
+
     public void allocateSeats (Event event);
 
 }

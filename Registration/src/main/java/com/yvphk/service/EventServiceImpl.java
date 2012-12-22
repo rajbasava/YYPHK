@@ -93,6 +93,13 @@ public class EventServiceImpl implements EventService
 
     @Override
     @Transactional
+    public List<String> getAllFoundations ()
+    {
+        return eventDAO.getAllFoundations();
+    }
+
+    @Override
+    @Transactional
     public void allocateSeats (Event event)
     {
         String seatingType = event.getSeatingType();

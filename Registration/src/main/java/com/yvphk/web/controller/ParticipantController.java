@@ -4,7 +4,6 @@
 */
 package com.yvphk.web.controller;
 
-import com.yvphk.common.Foundation;
 import com.yvphk.common.ParticipantLevel;
 import com.yvphk.common.PaymentMode;
 import com.yvphk.common.Util;
@@ -28,18 +27,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
-import java.io.StringReader;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +51,7 @@ public class ParticipantController extends CommonController
         map.put("registeredParticipant", registeredParticipant);
         map.put("allParticipantLevels", ParticipantLevel.allParticipantLevels());
         map.put("allPaymentModes", PaymentMode.allPaymentModes());
-        map.put("allFoundations", Foundation.allFoundations());
+        map.put("allFoundations", allFoundations());
         map.put("allEvents", getAllEventMap(eventService.allEvents()));
         return "register";
     }
@@ -72,7 +61,7 @@ public class ParticipantController extends CommonController
     {
         map.put("registrationCriteria", new RegistrationCriteria());
         map.put("allParticipantLevels", ParticipantLevel.allParticipantLevels());
-        map.put("allFoundations", Foundation.allFoundations());
+        map.put("allFoundations", allFoundations());
         map.put("allEvents", getAllEventMap(eventService.allEvents()));
         map.put("allStatuses", getRegistrationStatusMap());
         return "search";
@@ -86,7 +75,7 @@ public class ParticipantController extends CommonController
         if (registrationCriteria != null) {
             map.put("registrationList", participantService.listRegistrations(registrationCriteria));
             map.put("allParticipantLevels", ParticipantLevel.allParticipantLevels());
-            map.put("allFoundations", Foundation.allFoundations());
+            map.put("allFoundations", allFoundations());
             map.put("allEvents", getAllEventMap(eventService.allEvents()));
             map.put("allStatuses", getRegistrationStatusMap());
         }
@@ -132,7 +121,7 @@ public class ParticipantController extends CommonController
             map.put("registeredParticipant", registeredParticipant);
             map.put("allParticipantLevels", ParticipantLevel.allParticipantLevels());
             map.put("allPaymentModes", PaymentMode.allPaymentModes());
-            map.put("allFoundations", Foundation.allFoundations());
+            map.put("allFoundations", allFoundations());
             map.put("allEvents", getAllEventMap(eventService.allEvents()));
             map.put("allEventFees", getAllEventFees(registeredParticipant.getEventId()));
             return "registerTab";
@@ -344,7 +333,7 @@ public class ParticipantController extends CommonController
 
         map.put("participantCriteria", new ParticipantCriteria());
         map.put("allParticipantLevels", ParticipantLevel.allParticipantLevels());
-        map.put("allFoundations", Foundation.allFoundations());
+        map.put("allFoundations", allFoundations());
         map.put("page", "replaceRegistration");
 
         String strRegistrationId = request.getParameter("registration.id");
@@ -387,7 +376,7 @@ public class ParticipantController extends CommonController
             //todo if the page is replace, we should search participant that are not participating in the current event.
             map.put("participantList", participantService.listParticipants(participantCriteria));
             map.put("allParticipantLevels", ParticipantLevel.allParticipantLevels());
-            map.put("allFoundations", Foundation.allFoundations());
+            map.put("allFoundations", allFoundations());
         }
 
         String page = request.getParameter("page");
@@ -407,7 +396,7 @@ public class ParticipantController extends CommonController
     {
         map.put("participantCriteria", new ParticipantCriteria());
         map.put("allParticipantLevels", ParticipantLevel.allParticipantLevels());
-        map.put("allFoundations", Foundation.allFoundations());
+        map.put("allFoundations", allFoundations());
         map.put("page", "searchParticipants");
         return "searchParticipants";
     }
@@ -417,7 +406,7 @@ public class ParticipantController extends CommonController
                                       HttpServletRequest request)
     {
         map.put("participant", new Participant());
-        map.put("allFoundations", Foundation.allFoundations());
+        map.put("allFoundations", allFoundations());
         return "addParticipant";
     }
 

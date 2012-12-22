@@ -33,4 +33,6 @@ public interface EventDAO extends CommonDAO
     public List<RowMeta> getAllEmptyRowMetas (Event event);
 
     public List<String> getAllRowMetaNames ();
+
+    public List<String> getAllFoundations ();
 }

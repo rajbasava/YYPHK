@@ -237,4 +237,18 @@ public class EventDAOImpl extends CommonDAOImpl implements EventDAO
 
         return rowMetaNames;
     }
+
+    public List<String> getAllFoundations ()
+    {
+        Session session = sessionFactory.openSession();
+
+        Query query = session.createSQLQuery("select distinct name from phk_foundation where active = :active");
+        query.setParameter("active","1");
+        List<String> foundations = query.list();
+
+        session.flush();
+        session.close();
+
+        return foundations;
+    }
 }

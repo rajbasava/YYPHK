@@ -17,23 +17,7 @@
                  $("#paymentCriteria").submit();
             });
 
-            $("select#foundation").change(function() {
-                if ($(this).val() == "Others") {
-                    $("#paymentCriteria input[name='otherFoundation']").val("");
-                    $("div#othersTextBox").show();
-                    $("div#othersTextBox").focus().select();
-                }
-                else {
-                    $("div#othersTextBox").hide();
-                }
-            });
-
             $(document).ready(function() {
-                if ($("select#foundation").val() == "Others") {
-                    $("div#othersTextBox").show();
-                    $("div#othersTextBox").focus().select();
-                }
-
                 $("#paymentCriteria input[name='fromReceiptDate']").datepicker({
                     showOn: 'button',
                     dateFormat: 'dd/mm/yy',
@@ -88,9 +72,6 @@
                 <form:option value="" label="--- Select ---"/>
                 <form:options items="${allFoundations}" />
             </form:select>
-            <div id="othersTextBox" style="display:none;">
-                    <form:input path="otherFoundation" size="60"/>
-            </div>
         </td>
     </tr>
     <tr>

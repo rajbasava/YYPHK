@@ -5,7 +5,6 @@
 package com.yvphk.model.dao;
 
 import com.yvphk.common.AmountPaidCategory;
-import com.yvphk.common.Foundation;
 import com.yvphk.common.ParticipantLevel;
 import com.yvphk.common.Util;
 import com.yvphk.model.form.BaseForm;
@@ -20,7 +19,6 @@ import com.yvphk.model.form.ParticipantSeat;
 import com.yvphk.model.form.PaymentCriteria;
 import com.yvphk.model.form.ReferenceGroup;
 import com.yvphk.model.form.RegisteredParticipant;
-import org.apache.xmlbeans.impl.xb.xsdschema.RestrictionDocument;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
 import org.hibernate.Session;
@@ -72,9 +70,6 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
     public EventRegistration registerParticipant (RegisteredParticipant registeredParticipant)
     {
         Participant participant = registeredParticipant.getParticipant();
-        if (Foundation.Others.getName().equals(participant.getFoundation())) {
-            participant.setFoundation(registeredParticipant.getOtherFoundation());
-        }
 
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
@@ -404,11 +399,6 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
 
         if (!Util.nullOrEmptyOrBlank(participantCriteria.getFoundation())) {
             String foundation = participantCriteria.getFoundation();
-            if (Foundation.Others.getName().equalsIgnoreCase(foundation)) {
-                if (!Util.nullOrEmptyOrBlank(participantCriteria.getOtherFoundation())) {
-                    foundation = participantCriteria.getOtherFoundation();
-                }
-            }
             criteria.add(Restrictions.ilike("foundation", foundation, MatchMode.ANYWHERE));
         }
 
@@ -473,11 +463,6 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
 
         if (!Util.nullOrEmptyOrBlank(registrationCriteria.getFoundation())) {
             String foundation = registrationCriteria.getFoundation();
-            if (Foundation.Others.getName().equalsIgnoreCase(foundation)) {
-                if (!Util.nullOrEmptyOrBlank(registrationCriteria.getOtherFoundation())) {
-                    foundation = registrationCriteria.getOtherFoundation();
-                }
-            }
             criteria.add(Restrictions.ilike("participant.foundation", foundation, MatchMode.ANYWHERE));
         }
 
@@ -649,11 +634,6 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
 
         if (!Util.nullOrEmptyOrBlank(paymentCriteria.getFoundation())) {
             String foundation = paymentCriteria.getFoundation();
-            if (Foundation.Others.getName().equalsIgnoreCase(foundation)) {
-                if (!Util.nullOrEmptyOrBlank(paymentCriteria.getOtherFoundation())) {
-                    foundation = paymentCriteria.getOtherFoundation();
-                }
-            }
             criteria.add(Restrictions.ilike("participant.foundation", foundation, MatchMode.ANYWHERE));
         }
 

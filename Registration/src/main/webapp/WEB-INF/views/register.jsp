@@ -45,18 +45,6 @@
                 );
             }
         }
-        $(function() {
-            $("#registeredParticipant select[name='participant.foundation']").change(function() {
-                if ($(this).val() == "Others") {
-                    $("#registeredParticipant input[name='otherFoundation']").val("");
-                    $("div#othersTextBox").show();
-                    $("div#othersTextBox").focus().select();
-                }
-                else {
-                    $("div#othersTextBox").hide();
-                }
-            });
-        });
 
         $(document).ready(function() {
             $("select#eventId").change(function()
@@ -76,10 +64,6 @@
                 buttonImage: '<c:url value="/resources/img/calendar.gif"/>'
             });
 
-            if ($("#registeredParticipant select[name='participant.foundation']").val() == "Others") {
-                $("div#othersTextBox").show();
-                $("div#othersTextBox").focus().select();
-            }
         });
     </script>
 </head>
@@ -112,9 +96,6 @@
                 <form:option value="" label="--- Select ---"/>
                 <form:options items="${allFoundations}" />
             </form:select>
-            <div id="othersTextBox" style="display:none;">
-                    <form:input path="otherFoundation" size="60"/>
-            </div>
         </td>
     </tr>
 	<tr>

@@ -22,23 +22,6 @@
                 $("a#back").button();
                 $("a#back").css("font-size", "11px");
 
-                $("select#foundation").change(function() {
-                    if ($(this).val() == "Others") {
-                        $("#addParticipant input[name='otherFoundation']").val("");
-                        $("div#othersTextBox").show();
-                        $("div#othersTextBox").focus().select();
-                    }
-                    else {
-                        $("div#othersTextBox").hide();
-                    }
-                });
-
-                $(document).ready(function() {
-                    if ($("select#foundation").val() == "Others") {
-                        $("div#othersTextBox").show();
-                        $("div#othersTextBox").focus().select();
-                    }
-                });
             });
         </script>
 

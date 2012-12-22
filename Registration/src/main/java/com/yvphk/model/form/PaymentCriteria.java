@@ -11,7 +11,6 @@ public class PaymentCriteria implements Serializable
 {
     private Integer eventId;
     private String foundation;
-    private String otherFoundation;
     private String level;
     private String mode;
     private String reference;
@@ -39,16 +38,6 @@ public class PaymentCriteria implements Serializable
     public void setFoundation (String foundation)
     {
         this.foundation = foundation;
-    }
-
-    public String getOtherFoundation ()
-    {
-        return otherFoundation;
-    }
-
-    public void setOtherFoundation (String otherFoundation)
-    {
-        this.otherFoundation = otherFoundation;
     }
 
     public String getLevel ()

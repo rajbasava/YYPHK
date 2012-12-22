@@ -15,5 +15,6 @@
         <mapping class="com.yvphk.model.form.EventPayment"/>
         <mapping class="com.yvphk.model.form.ReferenceGroup"/>
         <mapping class="com.yvphk.model.form.RowMeta"/>
+        <mapping class="com.yvphk.model.form.PHFoundation"/>
     </session-factory>
 </hibernate-configuration>

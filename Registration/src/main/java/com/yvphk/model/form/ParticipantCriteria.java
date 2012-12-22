@@ -12,7 +12,6 @@ public class ParticipantCriteria
     private String email;
     private String level;
     private String foundation;
-    private String otherFoundation;
     private boolean vip;
 
     public String getName ()
@@ -63,16 +62,6 @@ public class ParticipantCriteria
     public void setFoundation (String foundation)
     {
         this.foundation = foundation;
-    }
-
-    public String getOtherFoundation ()
-    {
-        return otherFoundation;
-    }
-
-    public void setOtherFoundation (String otherFoundation)
-    {
-        this.otherFoundation = otherFoundation;
     }
 
     public boolean isVip ()
