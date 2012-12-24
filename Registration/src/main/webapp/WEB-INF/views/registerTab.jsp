@@ -149,85 +149,36 @@
             <table>
                 <tr>
                     <td><form:label path="participant.name"><spring:message code="label.name"/></form:label></td>
-                    <c:choose>
-                    <c:when test="${user.access.regVolunteer}" >
-                    	<td><form:input path="participant.name" size="50" disabled="true"/></td>
-                    </c:when>
-                    <c:otherwise>
-                    	<td><form:input path="participant.name" size="50"/></td>
-                    </c:otherwise>
-                    </c:choose>
+                    <td><form:input path="participant.name" size="50"/></td>
                 </tr>
                 <tr>
                     <td><form:label path="participant.mobile"><spring:message code="label.mobile"/></form:label></td>
-                    <c:choose>
-                    <c:when test="${user.access.regVolunteer}" >
-                    	<td><form:input path="participant.mobile" disabled="true"/></td>
-                    </c:when>
-                    <c:otherwise>
-                    	<td><form:input path="participant.mobile" /></td>
-                    </c:otherwise>
-                    </c:choose>
+                    <td><form:input path="participant.mobile" /></td>
                 </tr>
                 <tr>
                     <td><form:label path="participant.home"><spring:message code="label.home"/></form:label></td>
-                    <c:choose>
-                    <c:when test="${user.access.regVolunteer}" >
-                    	<td><form:input path="participant.home" disabled="true"/></td>
-                    </c:when>
-                    <c:otherwise>
-                    	<td><form:input path="participant.home" /></td>
-                    </c:otherwise>
-                    </c:choose>
+                    <td><form:input path="participant.home" /></td>
                 </tr>
                 <tr>
                     <td><form:label path="participant.email"><spring:message code="label.email"/></form:label></td>
-                    <c:choose>
-                    <c:when test="${user.access.regVolunteer}" >
-                    	<td><form:input path="participant.email" disabled="true"/></td>
-                    </c:when>
-                    <c:otherwise>
-                    	<td><form:input path="participant.email" /></td>
-                    </c:otherwise>
-                    </c:choose>
+                    <td><form:input path="participant.email" /></td>
                 </tr>
                 <tr>
                     <td><form:label path="participant.foundation"><spring:message code="label.foundation"/></form:label></td>
                     <td>
                         <form:select path="participant.foundation">
                             <form:option value="" label="--- Select ---"/>
-                            <c:choose>
-		                    <c:when test="${user.access.regVolunteer}" >
-		                    	<form:options items="${allFoundations}" disabled="true"/>
-		                    </c:when>
-		                    <c:otherwise>
-		                    	<form:options items="${allFoundations}"/>
-		                    </c:otherwise>
-		                    </c:choose>
+                            <form:options items="${allFoundations}" />
                         </form:select>
                     </td>
                 </tr>
                 <tr>
                     <td><form:label path="participant.vip"><spring:message code="label.vip"/></form:label></td>
-                    <c:choose>
-                    <c:when test="${user.access.regVolunteer}" >
-                    	<td><form:checkbox path="participant.vip" disabled="true"/></td>
-                    </c:when>
-                    <c:otherwise>
-                    	<td><form:checkbox path="participant.vip"/></td>
-                    </c:otherwise>
-                    </c:choose>
+                    <td><form:checkbox path="participant.vip"/></td>
                 </tr>
                 <tr>
                     <td><form:label path="participant.vipDesc"><spring:message code="label.vipDesc"/></form:label></td>
-                    <c:choose>
-                    <c:when test="${user.access.regVolunteer}" >
-                    	<td><form:input path="participant.vipDesc" disabled="true"/></td>
-                    </c:when>
-                    <c:otherwise>
-                    	<td><form:input path="participant.vipDesc"/></td>
-                    </c:otherwise>
-                    </c:choose>
+                    <td><form:input path="participant.vipDesc"/></td>
                 </tr>
             </table>
         </div>
@@ -241,41 +192,20 @@
                                 <td>
                                     <form:select path="eventId">
                                         <form:option value="NONE" label="--- Select ---"/>
-                                        <c:choose>
-					                    <c:when test="${user.access.infoVolunteer}" >
-					                    	<form:options items="${allEvents}" disabled="true" />
-					                    </c:when>
-					                    <c:otherwise>
-					                    	<form:options items="${allEvents}" />
-					                    </c:otherwise>
-					                    </c:choose>
+                                        <form:options items="${allEvents}" />
                                     </form:select>
                                 </td>
                             </tr>
                             <tr>
                                 <td><form:label path="registration.review"><spring:message code="label.review"/></form:label></td>
-                                <c:choose>
-			                    <c:when test="${user.access.infoVolunteer}" >
-			                    	<td><form:checkbox path="registration.review" disabled="true"/></td>
-			                    </c:when>
-			                    <c:otherwise>
-			                    	<td><form:checkbox path="registration.review"/></td>
-			                    </c:otherwise>
-			                    </c:choose>
+                                <td><form:checkbox path="registration.review"/></td>
                             </tr>
                             <tr>
                                 <td><form:label path="registration.level"><spring:message code="label.level"/></form:label></td>
                                 <td>
                                     <form:select path="registration.level">
                                         <form:option value="NONE" label="--- Select ---"/>
-                                        <c:choose>
-                                        <c:when test="${user.access.infoVolunteer}" >
-					                    	<form:options items="${allParticipantLevels}" disabled="true"/>
-					                    </c:when>
-					                    <c:otherwise>
-					                    	<form:options items="${allParticipantLevels}" />
-					                    </c:otherwise>
-					                    </c:choose>
+                                        <form:options items="${allParticipantLevels}" />
                                     </form:select>
                                 </td>
                             </tr>
@@ -284,27 +214,13 @@
                                 <td>
                                     <form:select path="eventFeeId">
                                         <form:option value="-1" label="--- Select ---"/>
-                                        <c:choose>
-					                    <c:when test="${user.access.infoVolunteer}" >
-					                    	<form:options items="${allEventFees}" itemValue="id" itemLabel="value" disabled="true"/>
-					                    </c:when>
-					                    <c:otherwise>
-					                    	<form:options items="${allEventFees}" itemValue="id" itemLabel="value"/>
-					                    </c:otherwise>
-					                    </c:choose>
+                                        <form:options items="${allEventFees}" itemValue="id" itemLabel="value"/>
                                     </form:select>
                                 </td>
                             </tr>
                             <tr>
                                 <td><form:label path="registration.amountPayable"><spring:message code="label.amountPayable"/></form:label></td>
-                                <c:choose>
-			                    <c:when test="${user.access.infoVolunteer}" >
-			                    	<td><form:input path="registration.amountPayable" disabled="true"/></td>
-			                    </c:when>
-			                    <c:otherwise>
-			                    	<td><form:input path="registration.amountPayable"/></td>
-			                    </c:otherwise>
-			                    </c:choose>
+                                <td><form:input path="registration.amountPayable"/></td>
                             </tr>
                             <tr>
                                 <td><spring:message code="label.totalAmountPaid"/></td>
@@ -320,47 +236,19 @@
 						<table>
                             <tr>
                                 <td><form:label path="registration.foodCoupon"><spring:message code="label.foodCoupon"/></form:label></td>
-                                <c:choose>
-			                    <c:when test="${user.access.infoVolunteer}" >
-			                    	<td><form:checkbox path="registration.foodCoupon" disabled="true"/></td>
-			                    </c:when>
-			                    <c:otherwise>
-			                    	<td><form:checkbox path="registration.foodCoupon"/></td>
-			                    </c:otherwise>
-			                    </c:choose>
+                                <td><form:checkbox path="registration.foodCoupon"/></td>
                             </tr>
                             <tr>
                                 <td><form:label path="registration.eventKit"><spring:message code="label.eventKit"/></form:label></td>
-                                <c:choose>
-			                    <c:when test="${user.access.infoVolunteer}" >
-			                    	<td><form:checkbox path="registration.eventKit" disabled="true"/></td>
-			                    </c:when>
-			                    <c:otherwise>
-			                    	<td><form:checkbox path="registration.eventKit"/></td>
-			                    </c:otherwise>
-			                    </c:choose>
+                                <td><form:checkbox path="registration.eventKit"/></td>
                             </tr>
                             <tr>
                                 <td><form:label path="registration.application"><spring:message code="label.application"/></form:label></td>
-                                <c:choose>
-			                    <c:when test="${user.access.infoVolunteer}" >
-			                    	<td><form:checkbox path="registration.application" disabled="true"/></td>
-			                    </c:when>
-			                    <c:otherwise>
-			                    	<td><form:checkbox path="registration.application"/></td>
-			                    </c:otherwise>
-			                    </c:choose>
+                                <td><form:checkbox path="registration.application"/></td>
                             </tr>
                             <tr>
                                 <td><form:label path="registration.certificates"><spring:message code="label.certificates"/></form:label></td>
-                                <c:choose>
-			                    <c:when test="${user.access.infoVolunteer}" >
-			                    	<td><form:checkbox path="registration.certificates" disabled="true"/></td>
-			                    </c:when>
-			                    <c:otherwise>
-			                    	<td><form:checkbox path="registration.certificates"/></td>
-			                    </c:otherwise>
-			                    </c:choose>
+                                <td><form:checkbox path="registration.certificates"/></td>
                             </tr>
                             <tr>
                                 <td><form:label path="currentHistoryRecord.comment"><spring:message code="label.comments"/></form:label></td>
@@ -439,12 +327,10 @@
                 <td align="center">
                     <a id="submit" href="#"><c:out value="${registeredParticipant.action}"/></a>
                     <a id="showPayments" href="#">Payments</a>
-                    <c:if test="${!user.access.spotRegVolunteer}" >
-	                    <a id="cancelRegistration" href="#">Cancel Registration</a>
-	                    <a id="onHoldRegistration" href="#">On Hold</a>
-	                    <a id="changeToRegistered" href="#">Change To Registered</a>
-	                    <a id="replaceRegistration" href="#">Replace</a>
-                    </c:if>
+                    <a id="cancelRegistration" href="#">Cancel Registration</a>
+                    <a id="onHoldRegistration" href="#">On Hold</a>
+                    <a id="changeToRegistered" href="#">Change To Registered</a>
+                    <a id="replaceRegistration" href="#">Replace</a>
                     <a id="back" href="#">Back</a>
                 </td>
             </tr>
