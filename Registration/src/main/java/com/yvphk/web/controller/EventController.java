@@ -6,35 +6,25 @@
 package com.yvphk.web.controller;
 
 import java.util.Map;
-import com.yvphk.common.SeatingType;
+
 import javax.servlet.http.HttpServletRequest;
 
-import com.yvphk.common.Util;
-import com.yvphk.model.form.Event;
-import com.yvphk.model.form.EventFee;
-import com.yvphk.model.form.Login;
-import com.yvphk.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.yvphk.common.ParticipantLevel;
+import com.yvphk.common.SeatingType;
 import com.yvphk.common.Util;
 import com.yvphk.model.form.Event;
 import com.yvphk.model.form.EventFee;
 import com.yvphk.model.form.Login;
 import com.yvphk.model.form.validator.EventValidator;
 import com.yvphk.service.EventService;
-import javax.servlet.http.HttpServletRequest;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Map;
 
 @Controller
 public class EventController extends CommonController
@@ -54,18 +44,26 @@ public class EventController extends CommonController
     }
 
     @RequestMapping(value = "/addEvent", method = RequestMethod.POST)
-    public String addEvent (@ModelAttribute("event") Event event, BindingResult errors,
+    public ModelAndView addEvent (@ModelAttribute("event") Event event, BindingResult errors,
                             HttpServletRequest request)
     {
+    	ModelAndView mv = null;
     	EventValidator val = new EventValidator();
     	val.validate(event, errors);
     	if(errors.hasErrors()){
-    		return "event";
+    		mv = new ModelAndView("event");
+    		mv.addObject("errors", errors);
+    		mv.addObject("eventList", eventService.allEvents());
+    		mv.addObject("allParticipantLevels", ParticipantLevel.allParticipantLevels());
+    		mv.addObject("allSeatingTypes", SeatingType.allSeatingTypes());
+    		mv.addObject("allRowMetaNames", eventService.getAllRowMetaNames());
+    		return mv;
     	}
     	Login login = (Login) request.getSession().getAttribute(Login.ClassName);
         event.initialize(login.getEmail());
         eventService.addEvent(event);
-        return "redirect:/event.htm";
+        mv = new ModelAndView("redirect:/event.htm");
+        return mv;
     }
 
     @RequestMapping("/eventFee")
