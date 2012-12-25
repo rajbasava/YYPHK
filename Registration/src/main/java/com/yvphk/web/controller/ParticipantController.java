@@ -20,10 +20,12 @@ import com.yvphk.model.form.ParticipantSeat;
 import com.yvphk.model.form.ReferenceGroup;
 import com.yvphk.model.form.RegisteredParticipant;
 import com.yvphk.model.form.RegistrationPayments;
+import com.yvphk.model.form.validator.RegistrationValidator;
 import com.yvphk.service.EventService;
 import com.yvphk.service.ParticipantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -86,7 +88,7 @@ public class ParticipantController extends CommonController
     }
 
     @RequestMapping(value = "/addRegistration", method = RequestMethod.POST)
-    public String addRegistration (RegisteredParticipant registeredParticipant,
+    public String addRegistration (RegisteredParticipant registeredParticipant,BindingResult errors,
                                   Map<String, Object> map,
                                   HttpServletRequest request)
     {
@@ -96,6 +98,18 @@ public class ParticipantController extends CommonController
         registeredParticipant.getRegistration().setEvent(
                 eventService.getEvent(registeredParticipant.getEventId()));
 
+        RegistrationValidator validator = new RegistrationValidator();
+        validator.validate(registeredParticipant, errors);
+        
+        if(errors.hasErrors()){
+        	map.put("registeredParticipant", registeredParticipant);
+            map.put("allParticipantLevels", ParticipantLevel.allParticipantLevels());
+            map.put("allPaymentModes", PaymentMode.allPaymentModes());
+            map.put("allFoundations", allFoundations());
+            map.put("allEvents", getAllEventMap(eventService.allEvents()));
+        	return "register";
+        }
+        
         if (RegisteredParticipant.ActionRegister.equals(action)) {
             registeredParticipant.initialize(login.getEmail());
             ParticipantSeat seat =

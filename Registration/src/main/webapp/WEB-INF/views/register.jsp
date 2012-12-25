@@ -10,9 +10,9 @@
 	<script type="text/javascript" src="<c:url value="/resources/script/jquery-ui-1.8.23.custom.min.js"/>"></script>
     <script type="text/javascript">
         function getEventFees(){
-            if ($("select#eventId").val() == 'NONE'){
+            if ($("select#eventId").val() == ''){
                $("#registeredParticipant input[name='registration.amountPayable']").val('0');
-               $("select#eventFeeId").html('<option value="NONE"> --- Select --- </option>');
+               $("select#eventFeeId").html('<option value=""> --- Select --- </option>');
             }
             else {
                 $.getJSON(
@@ -66,6 +66,19 @@
 
         });
     </script>
+    <style>
+	.error {
+		color: #ff0000;
+	}
+ 
+	.errorblock {
+		color: #000;
+		background-color: #ffEEEE;
+		border: 3px solid #ff0000;
+		padding: 8px;
+		margin: 16px;
+	}
+	</style>
 </head>
 <mytags:style/>
 <body>
@@ -79,6 +92,7 @@
     <tr><td>&nbsp;</td></tr>
 </table>
 <form:form method="post" action="addRegistration.htm" commandName="registeredParticipant">
+<form:errors path="*" cssClass="errorblock" element="div" />
 <table align="center" cellspacing="2" cellspacing="2" width="80%">
     <form:hidden path="participant.id" />
     <form:hidden path="registration.id" />
@@ -159,7 +173,7 @@
                                 <td width="30%"><form:label path="eventId"><spring:message code="label.eventId"/></form:label></td>
                                 <td>
                                     <form:select path="eventId">
-                                        <form:option value="NONE" label="--- Select ---"/>
+                                        <form:option value="" label="--- Select ---"/>
                                         <form:options items="${allEvents}" />
                                     </form:select>
                                 </td>
@@ -168,7 +182,7 @@
                                 <td width="30%"><form:label path="registration.level"><spring:message code="label.level"/></form:label></td>
                                 <td>
                                     <form:select path="registration.level">
-                                        <form:option value="NONE" label="--- Select ---"/>
+                                        <form:option value="" label="--- Select ---"/>
                                         <form:options items="${allParticipantLevels}" />
                                     </form:select>
                                 </td>
@@ -240,7 +254,7 @@
                                 <td width="30%"><form:label path="currentPayment.mode"><spring:message code="label.mode"/></form:label></td>
                                 <td>
                                     <form:select path="currentPayment.mode">
-                                        <form:option value="NONE" label="--- Select ---"/>
+                                        <form:option value="" label="--- Select ---"/>
                                         <form:options items="${allPaymentModes}" />
                                     </form:select>
                                 </td>
