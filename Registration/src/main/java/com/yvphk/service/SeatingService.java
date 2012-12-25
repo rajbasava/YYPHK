@@ -5,12 +5,13 @@
 package com.yvphk.service;
 
 import com.yvphk.model.form.Event;
+import com.yvphk.model.form.EventRegistration;
 import com.yvphk.model.form.ParticipantSeat;
 
 public interface SeatingService
 {
     public void allocateSeats (Event event);
 
-    public ParticipantSeat getNextSeat (Event event);
+    public ParticipantSeat nextSeat (Event event, EventRegistration registration);
 
 }

@@ -70,142 +70,256 @@
 <mytags:style/>
 <body>
 <mytags:menu/>
-<h2 align="center">User Registration</h2>
-
+<table width="100%" cellpadding="1" cellspacing="1">
+    <tr>
+        <td align="center" style="font-size:18px">
+            User Registration Details
+        </td>
+    </tr>
+    <tr><td>&nbsp;</td></tr>
+</table>
 <form:form method="post" action="addRegistration.htm" commandName="registeredParticipant">
-
-<table align="center" cellspacing="2">
+<table align="center" cellspacing="2" cellspacing="2" width="80%">
     <form:hidden path="participant.id" />
     <form:hidden path="registration.id" />
     <tr>
-		<td><form:label path="participant.name"><spring:message code="label.name"/></form:label></td>
-		<td><form:input path="participant.name" size="50"/></td>
-		<td><form:label path="participant.mobile"><spring:message code="label.mobile"/></form:label></td>
-		<td><form:input path="participant.mobile" /></td>
-	</tr>
-	<tr>
-		<td><form:label path="participant.email"><spring:message code="label.email"/></form:label></td>
-		<td><form:input path="participant.email" /></td>
-		<td><form:label path="participant.home"><spring:message code="label.home"/></form:label></td>
-		<td><form:input path="participant.home" /></td>
-	</tr>
-	<tr>
-		<td><form:label path="participant.foundation"><spring:message code="label.foundation"/></form:label></td>
         <td>
-            <form:select path="participant.foundation">
-                <form:option value="" label="--- Select ---"/>
-                <form:options items="${allFoundations}" />
-            </form:select>
-        </td>
-    </tr>
-	<tr>
-		<td><form:label path="participant.vip"><spring:message code="label.vip"/></form:label></td>
-		<td><form:checkbox path="participant.vip"/></td>
-		<td><form:label path="participant.vipDesc"><spring:message code="label.vipDesc"/></form:label></td>
-		<td><form:input path="participant.vipDesc"/></td>
-	</tr>
-	<tr>
-		<td><form:label path="eventId"><spring:message code="label.eventId"/></form:label></td>
-		<td>
-            <form:select path="eventId">
-                <form:option value="NONE" label="--- Select ---"/>
-                <form:options items="${allEvents}" />
-            </form:select>
-        </td>
-        <td><form:label path="registration.review"><spring:message code="label.review"/></form:label></td>
-        <td><form:checkbox path="registration.review"/></td>
-	</tr>
-	<tr>
-		<td><form:label path="registration.level"><spring:message code="label.level"/></form:label></td>
-		<td>
-            <form:select path="registration.level">
-                <form:option value="NONE" label="--- Select ---"/>
-                <form:options items="${allParticipantLevels}" />
-            </form:select>
-        </td>
-		<td><form:label path="eventFeeId"><spring:message code="label.eventFeeId"/></form:label></td>
-		<td>
-            <form:select path="eventFeeId">
-                <form:option value="-1" label="--- Select ---"/>
-                <form:options items="${allEventFees}" itemValue="id" itemLabel="value"/>
-            </form:select>
-        </td>
-	</tr>
-    <tr>
-        <td><form:label path="registration.amountPayable"><spring:message code="label.amountPayable"/></form:label></td>
-        <td><form:input path="registration.amountPayable"/></td>
-        <td><form:label path="currentPayment.amountPaid"><spring:message code="label.amountPaid"/></form:label></td>
-        <td><form:input path="currentPayment.amountPaid"/></td>
-    </tr>
-    <tr>
-        <td><form:label path="currentPayment.receiptInfo"><spring:message code="label.receiptInfo"/></form:label></td>
-        <td><form:input path="currentPayment.receiptInfo"/></td>
-        <td><form:label path="currentPayment.mode"><spring:message code="label.mode"/></form:label></td>
-		<td>
-            <form:select path="currentPayment.mode">
-                <form:option value="NONE" label="--- Select ---"/>
-                <form:options items="${allPaymentModes}" />
-            </form:select>
-        </td>
-    </tr>
-    <tr>
-        <td><form:label path="currentPayment.receiptDate"><spring:message code="label.receiptDate"/></form:label></td>
-        <td><form:input path="currentPayment.receiptDate"/></td>
-        <td><form:label path="currentPayment.remarks"><spring:message code="label.remarks"/></form:label></td>
-        <td><form:textarea path="currentPayment.remarks" rows="3" cols="30"/></td>
-    </tr>
-    <tr>
-        <td><form:label path="registration.foodCoupon"><spring:message code="label.foodCoupon"/></form:label></td>
-        <td><form:checkbox path="registration.foodCoupon"/></td>
-        <td><form:label path="registration.eventKit"><spring:message code="label.eventKit"/></form:label></td>
-        <td><form:checkbox path="registration.eventKit"/></td>
-    </tr>
-    <tr>
-        <td><form:label path="registration.application"><spring:message code="label.application"/></form:label></td>
-        <td><form:checkbox path="registration.application"/></td>
-        <td><form:label path="registration.certificates"><spring:message code="label.certificates"/></form:label></td>
-        <td><form:checkbox path="registration.certificates"/></td>
-    </tr>
-    <tr>
-        <td><form:label path="currentSeat.seat"><spring:message code="label.seat"/></form:label></td>
-        <td><form:input path="currentSeat.seat"/></td>
-        <td><form:label path="currentHistoryRecord.comment"><spring:message code="label.comments"/></form:label></td>
-        <td><form:textarea path="currentHistoryRecord.comment" rows="3" cols="30"/></td>
-    </tr>
-    <tr><td>&nbsp;<BR></td></tr>
-	<tr colspan="4" align="center">
-		<td align="right">
-            <form:hidden path="action"/>
-			<input type="submit" value="<c:out value="${registeredParticipant.action}"/>"/>
-		</td>
-		<td align="left">
-			<input type="reset" value="Cancel"/>
-		</td>
-	</tr>
-    <tr><td>&nbsp;<BR></td></tr>
-    <c:if  test="${!empty registeredParticipant.registration.historyRecords}">
-        <tr align="left">
-            <td>
-                <b>Comments:</b>
-            </td>
-        </tr>
-        <tr>
-            <table class="data" border="1" cellpadding="1" cellspacing="1" width="100%">
-            <tr>
-                <td>Prepared By</td>
-                <td>Time Created</td>
-                <td>Comment</td>
-            </tr>
-            <c:forEach items="${registeredParticipant.registration.historyRecords}" var="historyRecord">
-                <tr>
-                    <td><c:out value="${historyRecord.preparedBy}"/> </td>
-                    <td><c:out value="${historyRecord.timeCreated}"/></td>
-                    <td><c:out value="${historyRecord.comment}"/></td>
+            <table width="100%" cellpadding="1" cellspacing="1">
+                <tr style="background-color:#E8E8E8;">
+                    <td align="left"><b>Contact Details:</b></td>
                 </tr>
-            </c:forEach>
             </table>
-        </tr>
-    </c:if>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <table width="100%" cellpadding="1" cellspacing="1">
+                <tr>
+                    <td width="60%">
+                        <table width="100%" cellpadding="1" cellspacing="1">
+                            <tr>
+                                <td width="30%"><form:label path="participant.name"><spring:message code="label.name"/></form:label></td>
+                                <td><form:input path="participant.name" size="50"/></td>
+                            </tr>
+                            <tr>
+                                <td width="30%"><form:label path="participant.email"><spring:message code="label.email"/></form:label></td>
+                                <td><form:input path="participant.email" /></td>
+                            </tr>
+                            <tr>
+                                <td width="30%"><form:label path="participant.foundation"><spring:message code="label.foundation"/></form:label></td>
+                                <td>
+                                    <form:select path="participant.foundation">
+                                        <form:option value="" label="--- Select ---"/>
+                                        <form:options items="${allFoundations}" />
+                                    </form:select>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <table width="100%" cellpadding="1" cellspacing="1">
+                            <tr>
+                                <td width="30%"><form:label path="participant.mobile"><spring:message code="label.mobile"/></form:label></td>
+                                <td><form:input path="participant.mobile" /></td>
+                            </tr>
+                            <tr>
+                                <td width="30%"><form:label path="participant.home"><spring:message code="label.home"/></form:label></td>
+                                <td><form:input path="participant.home" /></td>
+                            </tr>
+                            <tr>
+                                <td width="30%"><form:label path="participant.vip"><spring:message code="label.vip"/></form:label></td>
+                                <td><form:checkbox path="participant.vip"/></td>
+                            </tr>
+                            <tr>
+                                <td width="30%"><form:label path="participant.vipDesc"><spring:message code="label.vipDesc"/></form:label></td>
+                                <td><form:input path="participant.vipDesc"/></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <table width="100%" cellpadding="1" cellspacing="1">
+                <tr style="background-color:#E8E8E8;">
+                    <td align="left"><b>Event Details:</b></td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <table width="100%" cellpadding="1" cellspacing="1">
+                <tr>
+                    <td width="60%">
+                        <table width="100%" cellpadding="1" cellspacing="1">
+                            <tr>
+                                <td width="30%"><form:label path="eventId"><spring:message code="label.eventId"/></form:label></td>
+                                <td>
+                                    <form:select path="eventId">
+                                        <form:option value="NONE" label="--- Select ---"/>
+                                        <form:options items="${allEvents}" />
+                                    </form:select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="30%"><form:label path="registration.level"><spring:message code="label.level"/></form:label></td>
+                                <td>
+                                    <form:select path="registration.level">
+                                        <form:option value="NONE" label="--- Select ---"/>
+                                        <form:options items="${allParticipantLevels}" />
+                                    </form:select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="30%"><form:label path="registration.review"><spring:message code="label.review"/></form:label></td>
+                                <td><form:checkbox path="registration.review"/></td>
+                            </tr>
+                            <tr>
+                                <td width="30%"><form:label path="registration.application"><spring:message code="label.application"/></form:label></td>
+                                <td><form:checkbox path="registration.application"/></td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <table width="100%" cellpadding="1" cellspacing="1">
+                            <tr>
+                                <td width="30%"><form:label path="registration.reference"><spring:message code="label.reference"/></form:label></td>
+                                <td>
+                                    <form:select path="registration.reference">
+                                        <form:option value="" label="--- Select ---"/>
+                                        <form:options items="${allReferenceGroups}" />
+                                    </form:select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="30%"><form:label path="eventFeeId"><spring:message code="label.eventFeeId"/></form:label></td>
+                                <td>
+                                    <form:select path="eventFeeId">
+                                        <form:option value="-1" label="--- Select ---"/>
+                                        <form:options items="${allEventFees}" itemValue="id" itemLabel="value"/>
+                                    </form:select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="30%"><form:label path="registration.amountPayable"><spring:message code="label.amountPayable"/></form:label></td>
+                                <td><form:input path="registration.amountPayable"/></td>
+                            </tr>
+                            <tr>
+                                <td width="30%"><form:label path="registration.certificates"><spring:message code="label.certificates"/></form:label></td>
+                                <td><form:checkbox path="registration.certificates"/></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <table width="100%" cellpadding="1" cellspacing="1">
+                <tr style="background-color:#E8E8E8;">
+                    <td align="left"><b>Payment Details:</b></td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <table width="100%" cellpadding="1" cellspacing="1">
+                <tr>
+                    <td width="60%">
+                        <table width="100%" cellpadding="1" cellspacing="1">
+                            <tr>
+                                <td width="30%"><form:label path="currentPayment.amountPaid"><spring:message code="label.amountPaid"/></form:label></td>
+                                <td><form:input path="currentPayment.amountPaid"/></td>
+                            </tr>
+                            <tr>
+                                <td width="30%"><form:label path="currentPayment.mode"><spring:message code="label.mode"/></form:label></td>
+                                <td>
+                                    <form:select path="currentPayment.mode">
+                                        <form:option value="NONE" label="--- Select ---"/>
+                                        <form:options items="${allPaymentModes}" />
+                                    </form:select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="30%"><form:label path="currentPayment.receiptInfo"><spring:message code="label.receiptInfo"/></form:label></td>
+                                <td><form:input path="currentPayment.receiptInfo"/></td>
+                            </tr>
+                            <tr>
+                                <td width="30%"><form:label path="currentPayment.receiptDate"><spring:message code="label.receiptDate"/></form:label></td>
+                                <td><form:input path="currentPayment.receiptDate"/></td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <table width="100%" cellpadding="1" cellspacing="1">
+                            <tr>
+                                <td width="30%"><form:label path="currentPayment.remarks"><spring:message code="label.remarks"/></form:label></td>
+                                <td><form:textarea path="currentPayment.remarks" rows="3" cols="30"/></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <table width="100%" cellpadding="1" cellspacing="1">
+                <tr style="background-color:#E8E8E8;">
+                    <td align="left"><b>Attendance Details:</b></td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <table width="100%" cellpadding="1" cellspacing="1">
+                <tr>
+                    <td width="60%">
+                        <table width="100%" cellpadding="1" cellspacing="1">
+                            <tr>
+                                <td width="30%"><form:label path="registration.foodCoupon"><spring:message code="label.foodCoupon"/></form:label></td>
+                                <td><form:checkbox path="registration.foodCoupon"/></td>
+                            </tr>
+                            <tr>
+                                <td width="30%"><form:label path="registration.eventKit"><spring:message code="label.eventKit"/></form:label></td>
+                                <td><form:checkbox path="registration.eventKit"/></td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <table width="100%" cellpadding="1" cellspacing="1">
+                            <tr>
+                                <td width="30%"><form:label path="currentHistoryRecord.comment"><spring:message code="label.comments"/></form:label></td>
+                                <td><form:textarea path="currentHistoryRecord.comment" rows="3" cols="30"/></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr><td>&nbsp;</td></tr>
+	<tr align="center">
+	    <td>
+	        <table width="100%" cellpadding="2" cellspacing="2">
+                <tr style="background-color:#DFDFDF;">
+                    <td align="right">
+                        <form:hidden path="action"/>
+                        <input type="submit" value="<c:out value="${registeredParticipant.action}"/>"/>
+                    </td>
+                    <td align="left">
+                        <input type="reset" value="Cancel"/>
+                    </td>
+                </tr>
+            </table>
+        <td>
+	</tr>
 </table>
 </form:form>
 <mytags:footer/>

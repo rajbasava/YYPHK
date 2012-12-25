@@ -113,15 +113,17 @@
         <td><form:checkbox path="vip"/></td>
     </tr>
     <tr>
-        <td><form:label path="foodCoupon"><spring:message code="label.foodCoupon"/></form:label></td>
+        <td><form:label path="foodCoupon">Contacted</form:label></td>
         <td>
             <form:radiobutton path="foodCoupon" value="true"/>True &nbsp;
             <form:radiobutton path="foodCoupon" value="false"/>False &nbsp;
+            <form:radiobutton path="foodCoupon" value=""/>Both
         </td>
-        <td><form:label path="eventKit"><spring:message code="label.eventKit"/></form:label></td>
+        <td><form:label path="eventKit">Follow Up</form:label></td>
         <td>
             <form:radiobutton path="eventKit" value="true"/>True &nbsp;
             <form:radiobutton path="eventKit" value="false"/>False &nbsp;
+            <form:radiobutton path="eventKit" value=""/>Both
         </td>
     </tr>
     <tr>
@@ -136,12 +138,27 @@
                 </tr>
             </table>
         </td>
-        <td><form:label path="status"><spring:message code="label.status"/></form:label></td>
         <td>
-            <form:select path="status">
-                <form:option value="" label="--- Select ---"/>
-                <form:options items="${allStatuses}" />
-            </form:select>
+            <table width="100%" cellspacing="2" cellpadding="2">
+                <tr>
+                    <td><form:label path="status"><spring:message code="label.status"/></form:label></td>
+                    <td>
+                        <form:select path="status">
+                            <form:option value="" label="--- Select ---"/>
+                            <form:options items="${allStatuses}" />
+                        </form:select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><form:label path="reference"><spring:message code="label.reference"/></form:label></td>
+                    <td>
+                        <form:select path="reference">
+                            <form:option value="" label="--- Select ---"/>
+                            <form:options items="${allReferenceGroups}" />
+                        </form:select>
+                    </td>
+                </tr>
+            </table>
         </td>
     </tr>
     <tr>
@@ -176,8 +193,8 @@
                                 <td width="6%"><spring:message code="label.seat"/></th>
                                 <td width="9%"><spring:message code="label.totalAmountPaid"/></th>
                                 <td width="7.5%"><spring:message code="label.amountDue"/></th>
-                                <td width="7.5%"><spring:message code="label.foodCoupon"/></th>
-                                <td width="5%"><spring:message code="label.eventKit"/></th>
+                                <td width="7.5%">Contacted</th>
+                                <td width="5%">Follow Up</th>
                                 <td><spring:message code="label.status"/></th>
                             </tr>
                         </table>

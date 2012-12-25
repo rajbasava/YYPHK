@@ -61,15 +61,10 @@ public class AlphaNumericSeating implements SeatingService
                 break;
             }
             int seatCounter = 1;
-            boolean[] seatFlags = new boolean[rowMeta.getRowMax()];
-            Arrays.fill(seatFlags, false);
 
-            List<ParticipantSeat> allocatedSeats =
-                    participantDAO.getAllocatedSeats(event, rowMeta.getRowName(), null);
-            for (ParticipantSeat allocatedSeat : allocatedSeats) {
-                seatFlags[allocatedSeat.getSeat().intValue() - 1] = true;
-            }
+            boolean[] seatFlags = markAllocatedSeats(event, rowMeta);
 
+            boolean isRowFull = false;
             for (int i = 0; i < seatFlags.length; i++) {
 
                 if (regsCount >= regsSize) {
@@ -84,10 +79,32 @@ public class AlphaNumericSeating implements SeatingService
                     seatFlags[i] = true;
                     regsCount++;
                 }
+
+                if (seatFlags.length == seatCounter) {
+                    isRowFull = true;
+                }
+            }
+
+            if (isRowFull) {
+                rowMeta.setRowFull(true);
+                eventDAO.saveOrUpdate(rowMeta);
             }
         }
         event.setSeatAllocated(true);
         eventDAO.saveOrUpdate(event);
+    }
+
+    private boolean[] markAllocatedSeats (Event event, RowMeta rowMeta)
+    {
+        boolean[] seatFlags = new boolean[rowMeta.getRowMax()];
+        Arrays.fill(seatFlags, false);
+
+        List<ParticipantSeat> allocatedSeats =
+                participantDAO.getAllocatedSeats(event, rowMeta.getRowName(), null);
+        for (ParticipantSeat allocatedSeat : allocatedSeats) {
+            seatFlags[allocatedSeat.getSeat().intValue() - 1] = true;
+        }
+        return seatFlags;
     }
 
     private ParticipantSeat createSeat (EventRegistration registration,
@@ -105,8 +122,47 @@ public class AlphaNumericSeating implements SeatingService
     }
 
     @Transactional
-    public ParticipantSeat getNextSeat (Event event)
+    public ParticipantSeat nextSeat (Event event, EventRegistration registration)
     {
-        return null;
+        RowMeta rowMeta = eventDAO.getFirstEmptyRowMeta(event);
+
+        if (isRowMetaEmpty(event,rowMeta)) {
+            rowMeta = eventDAO.getFirstEmptyRowMeta(event);
+        }
+
+        boolean[] seatFlags = markAllocatedSeats(event, rowMeta);
+
+        int seatCounter = 1;
+        ParticipantSeat seat = null;
+        for (int i = 0; i < seatFlags.length; i++) {
+
+            seatCounter = seatCounter + i;
+
+            if (!seatFlags[i]) {
+                seat = createSeat(registration, rowMeta.getRowName(), seatCounter);
+                break;
+            }
+        }
+
+        return seat;
+    }
+
+    private boolean isRowMetaEmpty (Event event, RowMeta rowMeta)
+    {
+        boolean isRowMetaFull = true;
+        boolean[] seatFlags = markAllocatedSeats(event, rowMeta);
+
+        for (int i = 0; i < seatFlags.length; i++) {
+            if (!seatFlags[i]) {
+                isRowMetaFull = false;
+            }
+        }
+
+        if (isRowMetaFull) {
+            rowMeta.setRowFull(true);
+            eventDAO.saveOrUpdate(rowMeta);
+        }
+
+        return isRowMetaFull;
     }
 }

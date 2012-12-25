@@ -33,3 +33,60 @@ CREATE TABLE phk_foundation (
 	timeupdated TIMESTAMP null,
 	active VARCHAR(1)
 );
+
+insert into phk_foundation (name, city, state, country, preparedby, timecreated, timeupdated, active)
+values ('Yoga Vidya Pranic Healing Foundation Calicut', 'Calicut', 'Kerala', 'India', 'system', now(), now(), '1');
+
+insert into phk_foundation (name, city, state, country, preparedby, timecreated, timeupdated, active)
+values ('Yoga Vidya Pranic Healing Foundation Cochin', 'Cochin', 'Kerala', 'India', 'system', now(), now(), '1');
+
+insert into phk_foundation (name, city, state, country, preparedby, timecreated, timeupdated, active)
+values ('Yoga Vidya Pranic Healing Foundation Trust Mumbai', 'Mumbai', 'Maharashtra', 'India', 'system', now(), now(), '1');
+
+insert into phk_foundation (name, city, state, country, preparedby, timecreated, timeupdated, active)
+values ('Pranic Healing Gyan Prachar Kendra Maharashtra', 'Mumbai', 'Maharashtra', 'India', 'system', now(), now(), '1');
+
+insert into phk_foundation (name, city, state, country, preparedby, timecreated, timeupdated, active)
+values ('Pranic Healing Foundation Rajasthan', 'Jaipur', 'Rajasthan', 'India', 'system', now(), now(), '1');
+
+insert into phk_foundation (name, city, state, country, preparedby, timecreated, timeupdated, active)
+values ('Yoga Vidya Pranic Healing Foundation of Karnataka', 'Bangalore', 'Karnataka', 'India', 'system', now(), now(), '1');
+
+insert into phk_foundation (name, city, state, country, preparedby, timecreated, timeupdated, active)
+values ('Pranic Healing Trust Tamilnadu', 'Chennai','Tamilnadu', 'India', 'system', now(), now(), '1');
+
+insert into phk_foundation (name, city, state, country, preparedby, timecreated, timeupdated, active)
+values ('Pranic Healing Home Chennai', 'Chennai', 'Tamilnadu', 'India', 'system', now(), now(), '1');
+
+insert into phk_foundation (name, city, state, country, preparedby, timecreated, timeupdated, active)
+values ('MCKS Yoga Vidya Pranic Healing Trust of UP Lucknow', 'Lucknow', 'UttarPradesh', 'India', 'system', now(), now(), '1');
+
+insert into phk_foundation (name, city, state, country, preparedby, timecreated, timeupdated, active)
+values ('Yoga Vidya Pranic Healing Foundation Trust Uttar Pradesh Varanasi', 'Varanasi', 'UttarPradesh', 'India', 'system', now(), now(),'1');
+
+insert into phk_foundation (name, city, state, country, preparedby, timecreated, timeupdated, active)
+values ('Yoga Vidya Pranic Healing Foundation of West Bengal', 'Kolkota', 'WestBengal', 'India', 'system', now(), now(), '1');
+
+insert into phk_foundation (name, city, state, country, preparedby, timecreated, timeupdated, active)
+values ('MCKS Pranic Healing Trust West Bengal', 'Kolkota', 'WestBengal', 'India', 'system', now(), now(), '1');
+
+insert into phk_foundation (name, city, state, country, preparedby, timecreated, timeupdated, active)
+values ('Pranic Healing Foundation Secunderabad', 'Secunderabad', 'AndhraPradesh', 'India', 'system', now(), now(), '1');
+
+insert into phk_foundation (name, city, state, country, preparedby, timecreated, timeupdated, active)
+values ('MCKS Yoga Vidya Pranic Healing Trust Delhi', 'Delhi', 'Delhi', 'India', 'system', now(), now(), '1');
+
+insert into phk_foundation (name, city, state, country, preparedby, timecreated, timeupdated, active)
+values ('Pranic Healing Foundation Punjab', 'Punjab', 'Punjab', 'India', 'system', now(), now(), '1');
+
+insert into phk_foundation (name, city, state, country, preparedby, timecreated, timeupdated, active)
+values ('Pranic Healing Foundation Singapore', 'Singapore', 'Singapore', 'Singapore', 'system', now(), now(), '1');
+
+insert into phk_foundation (name, city, state, country, preparedby, timecreated, timeupdated, active)
+values ('Pranic Healing Foundation Kenya', 'Kenya', 'Kenya', 'Kenya', 'system', now(), now(), '1');
+
+insert into phk_foundation (name, city, state, country, preparedby, timecreated, timeupdated, active)
+values ('Pranic Healing Foundation Malaysia', 'Malaysia', 'Malaysia', 'Malaysia', 'system', now(), now(), '1');
+
+insert into phk_foundation (name, city, state, country, preparedby, timecreated, timeupdated, active)
+values ('Pranic Healing Foundation Mauritius', 'Mauritius', 'Mauritius', 'Mauritius', 'system', now(), now(), '1');

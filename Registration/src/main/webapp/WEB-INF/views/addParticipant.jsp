@@ -15,8 +15,8 @@
                 $("a#addParticipant").button();
                 $("a#addParticipant").css("font-size", "11px");
                 $("a#addParticipant" ).click(function() {
-                     $("#addParticipant").get(0).setAttribute('action', 'addParticipant.htm');
-                     $("#addParticipant").submit();
+                     $("#participant").get(0).setAttribute('action', 'addParticipant.htm');
+                     $("#participant").submit();
                 });
 
                 $("a#back").button();
@@ -69,7 +69,7 @@
                 <table width="100%" cellpadding="2" cellspacing="2">
                     <tr>
                         <td align="right">
-                            <a id="addParticipant" href="addParticipant.htm">Add Participant</a>
+                            <a id="addParticipant" href="">Add Participant</a>
                         </td>
                         <td align="left">
                             <a id="back" href="searchParticipants.htm">Back</a>

@@ -53,6 +53,7 @@ public class ParticipantController extends CommonController
         map.put("allPaymentModes", PaymentMode.allPaymentModes());
         map.put("allFoundations", allFoundations());
         map.put("allEvents", getAllEventMap(eventService.allEvents()));
+        map.put("allReferenceGroups", getAllReferenceGroups(participantService.listReferenceGroups()));
         return "register";
     }
 
@@ -64,6 +65,7 @@ public class ParticipantController extends CommonController
         map.put("allFoundations", allFoundations());
         map.put("allEvents", getAllEventMap(eventService.allEvents()));
         map.put("allStatuses", getRegistrationStatusMap());
+        map.put("allReferenceGroups", getAllReferenceGroups(participantService.listReferenceGroups()));
         return "search";
     }
 
@@ -78,6 +80,7 @@ public class ParticipantController extends CommonController
             map.put("allFoundations", allFoundations());
             map.put("allEvents", getAllEventMap(eventService.allEvents()));
             map.put("allStatuses", getRegistrationStatusMap());
+            map.put("allReferenceGroups", getAllReferenceGroups(participantService.listReferenceGroups()));
         }
         return "search";
     }
@@ -95,6 +98,11 @@ public class ParticipantController extends CommonController
 
         if (RegisteredParticipant.ActionRegister.equals(action)) {
             registeredParticipant.initialize(login.getEmail());
+            ParticipantSeat seat =
+                    eventService.nextSeat(
+                            registeredParticipant.getRegistration().getEvent(),
+                            registeredParticipant.getRegistration());
+            registeredParticipant.setCurrentSeat(seat);
         }
 
         if (RegisteredParticipant.ActionUpdate.equals(action)) {
@@ -124,6 +132,7 @@ public class ParticipantController extends CommonController
             map.put("allFoundations", allFoundations());
             map.put("allEvents", getAllEventMap(eventService.allEvents()));
             map.put("allEventFees", getAllEventFees(registeredParticipant.getEventId()));
+            map.put("allReferenceGroups", getAllReferenceGroups(participantService.listReferenceGroups()));
             return "registerTab";
         }
         return "null";

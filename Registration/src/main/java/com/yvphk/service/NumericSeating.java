@@ -5,17 +5,18 @@
 package com.yvphk.service;
 
 import com.yvphk.model.form.Event;
+import com.yvphk.model.form.EventRegistration;
 import com.yvphk.model.form.ParticipantSeat;
 
 public class NumericSeating implements SeatingService
 {
     public void allocateSeats (Event event)
     {
-        //To change body of implemented methods use File | Settings | File Templates.
+
     }
 
-    public ParticipantSeat getNextSeat (Event event)
+    public ParticipantSeat nextSeat (Event event, EventRegistration registration)
     {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return null;
     }
 }

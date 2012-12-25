@@ -102,7 +102,7 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
 
             ParticipantSeat participantSeat = registeredParticipant.getCurrentSeat();
             if (participantSeat !=  null) {
-                saveOrUpdate(participantSeat);
+                session.save(participantSeat);
             }
         }
         else if (RegisteredParticipant.ActionUpdate.equals(registeredParticipant.getAction())) {

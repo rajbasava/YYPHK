@@ -10,6 +10,8 @@ import com.yvphk.model.dao.EventDAO;
 import com.yvphk.model.dao.ParticipantDAO;
 import com.yvphk.model.form.Event;
 import com.yvphk.model.form.EventFee;
+import com.yvphk.model.form.EventRegistration;
+import com.yvphk.model.form.ParticipantSeat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -108,5 +110,23 @@ public class EventServiceImpl implements EventService
             SeatingService service = (SeatingService) obj;
             service.allocateSeats(event);
         }
+    }
+
+    @Override
+    @Transactional
+    public ParticipantSeat nextSeat (Event event, EventRegistration registration)
+    {
+        if (!event.isSeatAllocated()) {
+            return null;
+        }
+
+        ParticipantSeat seat = null;
+        String seatingType = event.getSeatingType();
+        Object obj = SeatingType.createService(seatingType);
+        if (obj != null && obj instanceof SeatingService) {
+            SeatingService service = (SeatingService) obj;
+            seat = service.nextSeat(event, registration);
+        }
+        return seat;
     }
 }

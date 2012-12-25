@@ -183,7 +183,7 @@
             </table>
         </div>
         <div id="tabs-2">
-			<table width="80%">
+			<table width="80%" cellspacing="1" cellpadding="1">
 				<tr>
 					<td>
                         <table>
@@ -230,16 +230,25 @@
                                 <td><spring:message code="label.amountDue"/></td>
                                 <td><c:out value="${registeredParticipant.registration.amountDue}"/></td>
                             </tr>
+                            <tr>
+                                <td><form:label path="registration.reference"><spring:message code="label.reference"/></form:label></td>
+                                <td>
+                                    <form:select path="registration.reference">
+                                        <form:option value="" label="--- Select ---"/>
+                                        <form:options items="${allReferenceGroups}" />
+                                    </form:select>
+                                </td>
+                            </tr>
 						</table>	
 					</td>
 					<td>	
 						<table>
                             <tr>
-                                <td><form:label path="registration.foodCoupon"><spring:message code="label.foodCoupon"/></form:label></td>
+                                <td><form:label path="registration.foodCoupon">Contacted</form:label></td>
                                 <td><form:checkbox path="registration.foodCoupon"/></td>
                             </tr>
                             <tr>
-                                <td><form:label path="registration.eventKit"><spring:message code="label.eventKit"/></form:label></td>
+                                <td><form:label path="registration.eventKit">Follow Up</form:label></td>
                                 <td><form:checkbox path="registration.eventKit"/></td>
                             </tr>
                             <tr>

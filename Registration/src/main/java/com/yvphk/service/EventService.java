@@ -7,6 +7,8 @@ package com.yvphk.service;
 
 import com.yvphk.model.form.Event;
 import com.yvphk.model.form.EventFee;
+import com.yvphk.model.form.EventRegistration;
+import com.yvphk.model.form.ParticipantSeat;
 
 import java.util.List;
 
@@ -33,5 +35,7 @@ public interface EventService
     public List<String> getAllFoundations ();
 
     public void allocateSeats (Event event);
+
+    public ParticipantSeat nextSeat (Event event, EventRegistration registration);
 
 }
