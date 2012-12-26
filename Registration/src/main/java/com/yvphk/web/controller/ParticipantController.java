@@ -108,6 +108,7 @@ public class ParticipantController extends CommonController
             map.put("allPaymentModes", PaymentMode.allPaymentModes());
             map.put("allFoundations", allFoundations());
             map.put("allEvents", getAllEventMap(eventService.allEvents()));
+            map.put("allReferenceGroups", getAllReferenceGroups(participantService.listReferenceGroups()));
         	return "register";
         }
         

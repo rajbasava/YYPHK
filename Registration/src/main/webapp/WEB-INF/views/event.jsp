@@ -70,7 +70,7 @@
         <td><form:label path="eligibilityLevel"><spring:message code="label.eligibilityLevel"/></form:label></td>
         <td>
             <form:select path="eligibilityLevel">
-                <form:option value="NONE" label="--- Select ---"/>
+                <form:option value="" label="--- Select ---"/>
                 <form:options items="${allParticipantLevels}" />
             </form:select>
         </td>
