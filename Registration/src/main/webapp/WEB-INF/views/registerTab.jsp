@@ -336,10 +336,12 @@
                 <td align="center">
                     <a id="submit" href="#"><c:out value="${registeredParticipant.action}"/></a>
                     <a id="showPayments" href="#">Payments</a>
-                    <a id="cancelRegistration" href="#">Cancel Registration</a>
-                    <a id="onHoldRegistration" href="#">On Hold</a>
-                    <a id="changeToRegistered" href="#">Change To Registered</a>
-                    <a id="replaceRegistration" href="#">Replace</a>
+                    <c:if test="${!user.access.spotRegVolunteer}" >
+	                    <a id="cancelRegistration" href="#">Cancel Registration</a>
+	                    <a id="onHoldRegistration" href="#">On Hold</a>
+	                    <a id="changeToRegistered" href="#">Change To Registered</a>
+	                    <a id="replaceRegistration" href="#">Replace</a>
+                    </c:if>
                     <a id="back" href="#">Back</a>
                 </td>
             </tr>
