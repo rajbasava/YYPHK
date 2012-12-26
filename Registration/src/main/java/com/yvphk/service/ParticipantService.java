@@ -6,6 +6,7 @@ package com.yvphk.service;
 
 import com.yvphk.model.form.EventPayment;
 import com.yvphk.model.form.EventRegistration;
+import com.yvphk.model.form.HistoryRecord;
 import com.yvphk.model.form.Participant;
 import com.yvphk.model.form.ParticipantCriteria;
 import com.yvphk.model.form.RegistrationCriteria;
@@ -37,13 +38,15 @@ public interface ParticipantService
 
     public void processPayment (EventPayment payment, Integer registrationId, boolean isAdd);
 
-    public void cancelRegistration (EventRegistration registration);
+    public void cancelRegistration (EventRegistration registration, HistoryRecord historyRecord);
 
-    public void onHoldRegistration (EventRegistration registration);
+    public void onHoldRegistration (EventRegistration registration, HistoryRecord historyRecord);
 
-    public void changeToRegistered (EventRegistration registration);
+    public void changeToRegistered (EventRegistration registration, HistoryRecord historyRecord);
 
-    public void replaceParticipant (EventRegistration registration, Participant participantToReplace);
+    public void replaceParticipant (EventRegistration registration,
+                                    Participant participantToReplace,
+                                    HistoryRecord record);
 
     public void addParticipant (Participant participant);
 

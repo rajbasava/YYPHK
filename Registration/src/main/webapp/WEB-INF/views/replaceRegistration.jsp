@@ -43,8 +43,9 @@
 <jsp:include page="searchParticipantsFilters.jsp" />
 <c:if  test="${!empty participantList}">
 <table width="100%" cellpadding="2" cellspacing="2">
+    <form id="replaceRegistration" method="post" action="replaceRegistration.htm">
     <tr style="background-color:#E8E8E8;">
-        <td>Select Participant to Replace</td>
+        <td><b>Select Participant to Replace</b></td>
     </tr>
     <tr>
         <td>
@@ -67,7 +68,6 @@
                     <td>
                         <div style="width:100%; height:200px; overflow-y:scroll; overflow-x:hidden; empty-cells:show; font-size:11px">
                             <table border="1" width="100%">
-                                <form id="replaceRegistration" method="post" action="replaceRegistration.htm">
                                 <input type="hidden" name="registrationId" value="<c:out value="${registeredParticipant.registration.id}"/>" />
                                 <c:forEach items="${participantList}" var="participant">
                                     <tr>
@@ -79,7 +79,6 @@
                                         <td><c:out value="${participant.foundation}"/></td>
                                     </tr>
                                 </c:forEach>
-                                </form>
                             </table>
                         </div>
                     </td>
@@ -87,6 +86,20 @@
             </table>
         </td>
     </tr>
+    <tr style="background-color:#E8E8E8;">
+        <td><b>Comments: </b></td>
+    </tr>
+    <tr>
+        <td>
+            <table width="100%">
+                <tr>
+                    <td width="25%" align="right">Enter the reason for Participant Replacement:</td>
+                    <td align="left"><textarea name="comments" rows="5" cols="60"></textarea></td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    </form>
     <tr style="background-color:#E8E8E8;">
         <td>
             <table width="100%" cellpadding="2" cellspacing="2">

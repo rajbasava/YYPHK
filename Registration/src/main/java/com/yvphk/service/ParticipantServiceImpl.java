@@ -7,6 +7,7 @@ package com.yvphk.service;
 import com.yvphk.model.dao.ParticipantDAO;
 import com.yvphk.model.form.EventPayment;
 import com.yvphk.model.form.EventRegistration;
+import com.yvphk.model.form.HistoryRecord;
 import com.yvphk.model.form.Participant;
 import com.yvphk.model.form.ParticipantCriteria;
 import com.yvphk.model.form.RegistrationCriteria;
@@ -86,27 +87,29 @@ public class ParticipantServiceImpl implements ParticipantService
     }
 
     @Transactional
-    public void cancelRegistration (EventRegistration registration)
+    public void cancelRegistration (EventRegistration registration, HistoryRecord historyRecord)
     {
-        participantDAO.cancelRegistration(registration);
+        participantDAO.cancelRegistration(registration, historyRecord);
     }
 
     @Transactional
-    public void onHoldRegistration (EventRegistration registration)
+    public void onHoldRegistration (EventRegistration registration, HistoryRecord historyRecord)
     {
-        participantDAO.onHoldRegistration(registration);
+        participantDAO.onHoldRegistration(registration, historyRecord);
     }
 
     @Transactional
-    public void changeToRegistered (EventRegistration registration)
+    public void changeToRegistered (EventRegistration registration, HistoryRecord historyRecord)
     {
-        participantDAO.changeToRegistered(registration);
+        participantDAO.changeToRegistered(registration, historyRecord);
     }
 
     @Transactional
-    public void replaceParticipant (EventRegistration registration, Participant participantToReplace)
+    public void replaceParticipant (EventRegistration registration,
+                                    Participant participantToReplace,
+                                    HistoryRecord record)
     {
-        participantDAO.replaceParticipant(registration, participantToReplace);
+        participantDAO.replaceParticipant(registration, participantToReplace, record);
     }
 
     @Transactional

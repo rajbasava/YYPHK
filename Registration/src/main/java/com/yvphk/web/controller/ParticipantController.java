@@ -88,9 +88,10 @@ public class ParticipantController extends CommonController
     }
 
     @RequestMapping(value = "/addRegistration", method = RequestMethod.POST)
-    public String addRegistration (RegisteredParticipant registeredParticipant,BindingResult errors,
-                                  Map<String, Object> map,
-                                  HttpServletRequest request)
+    public String addRegistration (RegisteredParticipant registeredParticipant,
+                                   BindingResult errors,
+                                   Map<String, Object> map,
+                                   HttpServletRequest request)
     {
         Login login = (Login) request.getSession().getAttribute(Login.ClassName);
         String action = registeredParticipant.getAction();
@@ -101,7 +102,7 @@ public class ParticipantController extends CommonController
         RegistrationValidator validator = new RegistrationValidator();
         validator.validate(registeredParticipant, errors);
         
-        if(errors.hasErrors()){
+        if (errors.hasErrors()) {
         	map.put("registeredParticipant", registeredParticipant);
             map.put("allParticipantLevels", ParticipantLevel.allParticipantLevels());
             map.put("allPaymentModes", PaymentMode.allPaymentModes());
@@ -312,39 +313,51 @@ public class ParticipantController extends CommonController
 
     @RequestMapping("/cancelRegistration")
     public String cancelRegistration (Map<String, Object> map,
+                                      RegisteredParticipant registeredParticipant,
                                       HttpServletRequest request)
     {
-        String strRegistrationId = request.getParameter("registration.id");
-        if (!Util.nullOrEmptyOrBlank(strRegistrationId)) {
-            Integer registrationId = Integer.parseInt(strRegistrationId);
-            EventRegistration registration = participantService.getEventRegistration(registrationId);
-            participantService.cancelRegistration(registration);
+        Login login = (Login) request.getSession().getAttribute(Login.ClassName);
+        if (registeredParticipant.getRegistration() != null) {
+            EventRegistration registration =
+                    participantService.getEventRegistration(
+                            registeredParticipant.getRegistration().getId());
+            registeredParticipant.initializeHistoryRecords(login.getEmail());
+            participantService.cancelRegistration(registration,
+                    registeredParticipant.getCurrentHistoryRecord());
         }
         return "redirect:/search.htm";
     }
 
     @RequestMapping("/onHoldRegistration")
     public String onHoldRegistration (Map<String, Object> map,
+                                      RegisteredParticipant registeredParticipant,
                                       HttpServletRequest request)
     {
-        String strRegistrationId = request.getParameter("registration.id");
-        if (!Util.nullOrEmptyOrBlank(strRegistrationId)) {
-            Integer registrationId = Integer.parseInt(strRegistrationId);
-            EventRegistration registration = participantService.getEventRegistration(registrationId);
-            participantService.onHoldRegistration(registration);
+        Login login = (Login) request.getSession().getAttribute(Login.ClassName);
+        if (registeredParticipant.getRegistration() != null) {
+            EventRegistration registration =
+                    participantService.getEventRegistration(
+                            registeredParticipant.getRegistration().getId());
+            registeredParticipant.initializeHistoryRecords(login.getEmail());
+            participantService.onHoldRegistration(registration,
+                    registeredParticipant.getCurrentHistoryRecord());
         }
         return "redirect:/search.htm";
     }
 
     @RequestMapping("/changeToRegistered")
     public String changeToRegistered (Map<String, Object> map,
+                                      RegisteredParticipant registeredParticipant,
                                       HttpServletRequest request)
     {
-        String strRegistrationId = request.getParameter("registration.id");
-        if (!Util.nullOrEmptyOrBlank(strRegistrationId)) {
-            Integer registrationId = Integer.parseInt(strRegistrationId);
-            EventRegistration registration = participantService.getEventRegistration(registrationId);
-            participantService.changeToRegistered(registration);
+        Login login = (Login) request.getSession().getAttribute(Login.ClassName);
+        if (registeredParticipant.getRegistration() != null) {
+            EventRegistration registration =
+                    participantService.getEventRegistration(
+                            registeredParticipant.getRegistration().getId());
+            registeredParticipant.initializeHistoryRecords(login.getEmail());
+            participantService.changeToRegistered(registration,
+                    registeredParticipant.getCurrentHistoryRecord());
         }
         return "redirect:/search.htm";
     }
@@ -374,6 +387,9 @@ public class ParticipantController extends CommonController
     {
         String strRegistrationId = request.getParameter("registrationId");
         String strParticipantId = request.getParameter("participantId");
+        String comment = request.getParameter("comments");
+        Login login = (Login) request.getSession().getAttribute(Login.ClassName);
+
         if (Util.nullOrEmptyOrBlank(strRegistrationId) || Util.nullOrEmptyOrBlank(strParticipantId) ) {
             return null;
         }
@@ -383,7 +399,14 @@ public class ParticipantController extends CommonController
         EventRegistration registration = participantService.getEventRegistration(registrationId);
         Participant participantToReplace = participantService.getParticipant(participantId);
 
-        participantService.replaceParticipant(registration, participantToReplace);
+        HistoryRecord record = null;
+        if (!Util.nullOrEmptyOrBlank(comment)) {
+            record = new HistoryRecord();
+            record.setComment(comment);
+            record.initialize(login.getEmail());
+        }
+
+        participantService.replaceParticipant(registration, participantToReplace, record);
 
         map.put("registrationId", strRegistrationId);
         return "forward:/updateRegistration.htm";
@@ -428,15 +451,15 @@ public class ParticipantController extends CommonController
     public String showAddParticipant (Map<String, Object> map,
                                       HttpServletRequest request)
     {
-        map.put("participant", new Participant());
+        map.put("newParticipant", new Participant());
         map.put("allFoundations", allFoundations());
         return "addParticipant";
     }
 
-    @RequestMapping("/addParticipant")
-    public String addParticipant (Map<String, Object> map,
-                                  Participant participant,
-                                  HttpServletRequest request)
+    @RequestMapping("/createParticipant")
+    public String createParticipant (Map<String, Object> map,
+                                     Participant participant,
+                                     HttpServletRequest request)
     {
         Login login = (Login) request.getSession().getAttribute(Login.ClassName);
         participant.initialize(login.getEmail());

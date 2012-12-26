@@ -20,8 +20,8 @@ public class RegistrationCriteria implements Serializable
     private Integer eventId;
     private boolean consolidated;
     private boolean vip;
-    private String foodCoupon = "false";
-    private String eventKit = "false";
+    private String foodCoupon = "";
+    private String eventKit = "";
     private Date fromRegistrationDate;
     private Date toRegistrationDate;
     private String status;

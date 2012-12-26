@@ -1,6 +1,7 @@
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="mytags"%>
 
 <html>
@@ -172,9 +173,10 @@
 </form:form>
 
 <c:if  test="${!empty registrationList}">
+<c:set var="registrationListSize" value="${fn:length(registrationList)}"/>
 <table width="100%" cellpadding="2" cellspacing="2">
     <tr style="background-color:#E8E8E8;">
-        <td>Participants</td>
+        <td>Search found <c:out value="${registrationListSize}"/> items.</td>
     </tr>
     <tr>
         <td>

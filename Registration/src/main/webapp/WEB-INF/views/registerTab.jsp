@@ -335,8 +335,10 @@
             <tr style="background-color:#DFDFDF;">
                 <td align="center">
                     <a id="submit" href="#"><c:out value="${registeredParticipant.action}"/></a>
-                    <a id="showPayments" href="#">Payments</a>
-                    <c:if test="${!user.access.spotRegVolunteer}" >
+                    <c:if test="${user.access.admin || user.access.spotRegVolunteer}" >
+                        <a id="showPayments" href="#">Payments</a>
+                    </c:if>
+                    <c:if test="${user.access.admin}" >
 	                    <a id="cancelRegistration" href="#">Cancel Registration</a>
 	                    <a id="onHoldRegistration" href="#">On Hold</a>
 	                    <a id="changeToRegistered" href="#">Change To Registered</a>

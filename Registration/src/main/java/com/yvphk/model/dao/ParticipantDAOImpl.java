@@ -216,7 +216,8 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
                                   BaseForm object,
                                   Session session)
     {
-        if (!Util.nullOrEmptyOrBlank(historyRecord.getComment())) {
+        if (historyRecord != null &&
+                !Util.nullOrEmptyOrBlank(historyRecord.getComment())) {
             historyRecord.setObject(object);
             session.save(historyRecord);
         }
@@ -312,7 +313,7 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
         return participant;
     }
 
-    public void cancelRegistration (EventRegistration registration)
+    public void cancelRegistration (EventRegistration registration, HistoryRecord historyRecord)
     {
         Session session = sessionFactory.openSession();
         registration.setStatus(EventRegistration.StatusCancelled);
@@ -324,27 +325,33 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
                         null),
                 Util.getCurrentUser().getEmail(),
                 registration, session);
+
+        addHistoryRecord(historyRecord, registration, session);
+
         session.flush();
         session.close();
     }
 
-    public void onHoldRegistration (EventRegistration registration)
+    public void onHoldRegistration (EventRegistration registration, HistoryRecord historyRecord)
     {
         Session session = sessionFactory.openSession();
         registration.setStatus(EventRegistration.StatusOnHold);
         session.update(registration);
         createAndAddHistoryRecord(
-                messageSource.getMessage("key.registrationCancelled",
+                messageSource.getMessage("key.registrationOnHold",
                         new Object[] {registration.getId(),
                                 registration.getParticipant().getName()},
                         null),
                 Util.getCurrentUser().getEmail(),
                 registration, session);
+
+        addHistoryRecord(historyRecord, registration, session);
+
         session.flush();
         session.close();
     }
 
-    public void changeToRegistered (EventRegistration registration)
+    public void changeToRegistered (EventRegistration registration, HistoryRecord historyRecord)
     {
         Session session = sessionFactory.openSession();
         registration.setStatus(EventRegistration.StatusRegistered);
@@ -357,6 +364,9 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
                         null),
                 Util.getCurrentUser().getEmail(),
                 registration, session);
+
+        addHistoryRecord(historyRecord, registration, session);
+
         session.flush();
         session.close();
     }
@@ -674,7 +684,9 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
         return results;
     }
 
-    public void replaceParticipant (EventRegistration registration, Participant participantToReplace)
+    public void replaceParticipant (EventRegistration registration,
+                                    Participant participantToReplace,
+                                    HistoryRecord record)
     {
         Session session = sessionFactory.openSession();
         session.refresh(registration);
@@ -690,6 +702,7 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
                 Util.getCurrentUser().getEmail(),
                 registration,
                 session);
+        addHistoryRecord(record, registration, session);
         session.update(registration);
         session.flush();
         session.close();

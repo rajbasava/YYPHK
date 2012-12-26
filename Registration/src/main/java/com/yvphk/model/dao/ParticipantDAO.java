@@ -7,6 +7,7 @@ package com.yvphk.model.dao;
 import com.yvphk.model.form.Event;
 import com.yvphk.model.form.EventPayment;
 import com.yvphk.model.form.EventRegistration;
+import com.yvphk.model.form.HistoryRecord;
 import com.yvphk.model.form.Participant;
 import com.yvphk.model.form.ParticipantCriteria;
 import com.yvphk.model.form.RegistrationCriteria;
@@ -45,13 +46,15 @@ public interface ParticipantDAO extends CommonDAO
 
     public List<ParticipantSeat> getAllSeats (Event event, String level);
 
-    public void cancelRegistration (EventRegistration registration);
+    public void cancelRegistration (EventRegistration registration, HistoryRecord historyRecord);
 
-    public void onHoldRegistration (EventRegistration registration);
+    public void onHoldRegistration (EventRegistration registration, HistoryRecord historyRecord);
 
-    public void changeToRegistered (EventRegistration registration);
+    public void changeToRegistered (EventRegistration registration, HistoryRecord historyRecord);
 
-    public void replaceParticipant (EventRegistration registration, Participant participantToReplace);
+    public void replaceParticipant (EventRegistration registration,
+                                    Participant participantToReplace,
+                                    HistoryRecord record);
 
     public List<ParticipantSeat> getAllocatedSeats (Event event, String alpha, String suffix);
 
