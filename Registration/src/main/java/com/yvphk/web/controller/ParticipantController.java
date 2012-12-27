@@ -103,10 +103,6 @@ public class ParticipantController extends CommonController
         validator.validate(registeredParticipant, errors);
         
         if (errors.hasErrors()) {
-            registeredParticipant =
-                    populateRegisteredParticipant(
-                            String.valueOf(registeredParticipant.getRegistration().getId()));
-        	map.put("registeredParticipant", registeredParticipant);
             map.put("allParticipantLevels", ParticipantLevel.allParticipantLevels());
             map.put("allPaymentModes", PaymentMode.allPaymentModes());
             map.put("allFoundations", allFoundations());
@@ -114,9 +110,17 @@ public class ParticipantController extends CommonController
             map.put("allReferenceGroups", getAllReferenceGroups(participantService.listReferenceGroups()));
 
             if (RegisteredParticipant.ActionRegister.equals(action)) {
+                map.put("registeredParticipant", registeredParticipant);
         	    return "register";
             }
             else if (RegisteredParticipant.ActionUpdate.equals(action)) {
+                EventRegistration registration =
+                        participantService.getEventRegistration(
+                                registeredParticipant.getRegistration().getId());
+                registeredParticipant.getRegistration().setTotalAmountPaid(registration.getTotalAmountPaid());
+                registeredParticipant.getRegistration().setAmountDue(registration.getAmountDue());
+                map.put("registeredParticipant", registeredParticipant);
+
                 return "registerTab";
             }
         }
