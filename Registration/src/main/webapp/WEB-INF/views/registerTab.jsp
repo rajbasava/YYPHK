@@ -119,11 +119,25 @@
             });
 	    });
     </script>
+    <style>
+	.error {
+		color: #ff0000;
+	}
+
+	.errorblock {
+		color: #000;
+		background-color: #ffEEEE;
+		border: 3px solid #ff0000;
+		padding: 8px;
+		margin: 16px;
+	}
+	</style>
 </head>
 <mytags:style/>
 <body>
 <mytags:menu/>
 <form:form method="post" action="addRegistration.htm" commandName="registeredParticipant">
+<form:errors path="*" cssClass="errorblock" element="div"/>
     <form:hidden path="action"/>
     <form:hidden path="participant.id"/>
     <form:hidden path="registration.id"/>

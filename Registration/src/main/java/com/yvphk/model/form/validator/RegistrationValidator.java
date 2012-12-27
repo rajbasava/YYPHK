@@ -34,7 +34,7 @@ public class RegistrationValidator implements Validator
 
         RegisteredParticipant participant = (RegisteredParticipant) target;
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "participant.name", "participant.name");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "participant.mobile", "participant.mobile");
+//        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "participant.mobile", "participant.mobile");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "participant.foundation", "participant.foundation");
 
         if (participant.getParticipant().isVip()) {
@@ -45,7 +45,8 @@ public class RegistrationValidator implements Validator
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "registration.level", "registration.level");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "registration.amountPayable", "registration.amountPayable");
 
-        if (participant.getCurrentPayment().getAmountPaid() != null) {
+        if (participant.getCurrentPayment() != null &&
+                participant.getCurrentPayment().getAmountPaid() != null) {
             ValidationUtils.rejectIfEmptyOrWhitespace(errors, "currentPayment.receiptInfo", "currentPayment.receiptInfo");
             ValidationUtils.rejectIfEmptyOrWhitespace(errors, "currentPayment.mode", "currentPayment.mode");
             ValidationUtils.rejectIfEmptyOrWhitespace(errors, "currentPayment.receiptDate", "currentPayment.receiptDate");
