@@ -11,7 +11,8 @@ import java.util.Set;
 
 public enum AmountPaidCategory
 {
-    APC0("0", "Full Payment", "{0} == {1}"),
+    APC_1("-1", "Undefined", "{1} == 0"),
+    APC0("0", "Full Payment", "{0} >= {1}"),
     APC1("1", "Zero Payment", "{0} == 0"),
     APC2("2", "Less than 1000", "{0} <= 1000"),
     APC3("3", "Between 1001 and 2000", "{0} > 1000 and {0} <= 2000"),
@@ -19,7 +20,7 @@ public enum AmountPaidCategory
     APC5("5", "Between 3001 and 4000", "{0} > 3000 and {0} <= 4000"),
     APC6("6", "Between 4001 and 5000", "{0} > 4000 and {0} <= 5000"),
     APC7("7", "Between 5001 and 10000", "{0} > 5000 and {0} <= 10000"),
-    APC8("8", "Above 10000", "{0} > 10000 and {0} != {1}" );
+    APC8("8", "Above 10000", "{0} > 10000 and {0} < {1}" );
 
     private String key;
     private String name;
@@ -55,6 +56,7 @@ public enum AmountPaidCategory
         if (allAmountPaidCategories == null) {
             allAmountPaidCategories = new LinkedHashMap<String, AmountPaidCategory>();
 
+            allAmountPaidCategories.put(AmountPaidCategory.APC_1.getKey(), AmountPaidCategory.APC_1);
             allAmountPaidCategories.put(AmountPaidCategory.APC0.getKey(), AmountPaidCategory.APC0);
             allAmountPaidCategories.put(AmountPaidCategory.APC1.getKey(), AmountPaidCategory.APC1);
             allAmountPaidCategories.put(AmountPaidCategory.APC2.getKey(), AmountPaidCategory.APC2);
