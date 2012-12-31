@@ -6,6 +6,19 @@
 <html>
 <head>
     <title>Arhatic Yoga Retreat - Search</title>
+    <style>
+	.error {
+		color: #ff0000;
+	}
+ 
+	.errorblock {
+		color: #000;
+		background-color: #ffEEEE;
+		border: 3px solid #ff0000;
+		padding: 8px;
+		margin: 16px;
+	}
+	</style>
     <script type="text/javascript" src="<c:url value="/resources/script/jquery-1.7.2.min.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/resources/script/jquery-ui-1.8.23.custom.min.js"/>"></script>
     <script type="text/javascript">
@@ -45,6 +58,7 @@
 <body>
 <mytags:menu/>
 <form:form method="post" action="processPayments.htm" commandName="registrationPayments">
+<form:errors path="*" cssClass="errorblock" element="div" />
 <h2 align="center">Payments: <c:out value="${registrationPayments.registration.event.name}"/> - <c:out value="${registrationPayments.registration.participant.name}"/></h2>
     <form:hidden path="action"/>
     <form:hidden path="registrationId"/>
@@ -66,7 +80,7 @@
             <td><form:label path="currentPayment.mode"><spring:message code="label.mode"/></form:label></td>
             <td>
                 <form:select path="currentPayment.mode">
-                    <form:option value="NONE" label="--- Select ---"/>
+                    <form:option value="" label="--- Select ---"/>
                     <form:options items="${allPaymentModes}" />
                 </form:select>
             </td>

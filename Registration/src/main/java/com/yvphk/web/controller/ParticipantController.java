@@ -4,6 +4,21 @@
 */
 package com.yvphk.web.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
 import com.yvphk.common.ParticipantLevel;
 import com.yvphk.common.PaymentMode;
 import com.yvphk.common.Util;
@@ -15,26 +30,15 @@ import com.yvphk.model.form.Login;
 import com.yvphk.model.form.Option;
 import com.yvphk.model.form.Participant;
 import com.yvphk.model.form.ParticipantCriteria;
-import com.yvphk.model.form.RegistrationCriteria;
 import com.yvphk.model.form.ParticipantSeat;
 import com.yvphk.model.form.ReferenceGroup;
 import com.yvphk.model.form.RegisteredParticipant;
+import com.yvphk.model.form.RegistrationCriteria;
 import com.yvphk.model.form.RegistrationPayments;
+import com.yvphk.model.form.validator.PaymentValidator;
 import com.yvphk.model.form.validator.RegistrationValidator;
 import com.yvphk.service.EventService;
 import com.yvphk.service.ParticipantService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import javax.servlet.http.HttpServletRequest;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 @Controller
 public class ParticipantController extends CommonController
@@ -270,8 +274,9 @@ public class ParticipantController extends CommonController
     }
 
     @RequestMapping("/processPayments")
-    public String processPayments (RegistrationPayments registrationPayments, HttpServletRequest request)
+    public ModelAndView processPayments (RegistrationPayments registrationPayments,BindingResult errors, HttpServletRequest request)
     {
+    	ModelAndView mv = null;
         Login login = (Login) request.getSession().getAttribute(Login.ClassName);
         EventPayment payment = registrationPayments.getCurrentPayment();
         boolean isAdd = RegistrationPayments.Add.equals(registrationPayments.getAction());
@@ -281,10 +286,24 @@ public class ParticipantController extends CommonController
         else {
             payment.initializeForUpdate(login.getEmail());
         }
-        participantService.processPayment(payment, registrationPayments.getRegistrationId(), isAdd);
-
+        PaymentValidator val = new PaymentValidator();
+    	val.validate(registrationPayments, errors);
+        if(errors.hasErrors()){
+        	/*String strRegistrationId = request.getParameter("registration.id");
+            String strPaymentId = request.getParameter("paymentId");*/
+            /*RegistrationPayments registrationPayments =
+                    populateRegistrationPayments(strRegistrationId, strPaymentId);*/
+        	mv = new ModelAndView("payments");
+        	mv.addObject("errors", errors);
+//        	mv.addObject("registrationPayments", registrationPayments);
+        	mv.addObject("allPaymentModes", PaymentMode.allPaymentModes());
+            return mv;
+        }else{
+        	participantService.processPayment(payment, registrationPayments.getRegistrationId(), isAdd);
+        }
+        mv = new ModelAndView("forward:/updateRegistration.htm");
         request.setAttribute("registrationId",registrationPayments.getRegistrationId());
-        return "forward:/updateRegistration.htm";
+        return mv;
     }
 
     private RegistrationPayments populateRegistrationPayments (String strRegistrationId, String strPaymentId)
