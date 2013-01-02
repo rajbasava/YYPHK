@@ -138,6 +138,14 @@
 <mytags:menu/>
 <form:form method="post" action="addRegistration.htm" commandName="registeredParticipant">
 <form:errors path="*" cssClass="errorblock" element="div"/>
+
+	<%-- Start : common variables that can be used to control access at field level.  Can be considered to be moved a level up. --%>
+	<c:if test="${user.access.regVolunteer}" var="isRegVolunteer"/>
+	<c:if test="${user.access.infoVolunteer}" var="isInfoVolunteer"/>
+	<c:if test="${user.access.spotRegVolunteer}" var="isSpotRegVolunteer"/>
+	<c:if test="${user.access.admin}" var="isAdmin"/>
+	<%-- End --%>
+
     <form:hidden path="action"/>
     <form:hidden path="participant.id"/>
     <form:hidden path="registration.id"/>
@@ -163,36 +171,46 @@
             <table>
                 <tr>
                     <td><form:label path="participant.name"><spring:message code="label.name"/></form:label></td>
-                    <td><form:input path="participant.name" size="50"/></td>
+                    <td><form:input path="participant.name" size="50" readonly="${isRegVolunteer}"/></td>
                 </tr>
                 <tr>
                     <td><form:label path="participant.mobile"><spring:message code="label.mobile"/></form:label></td>
-                    <td><form:input path="participant.mobile" /></td>
+                    <td><form:input path="participant.mobile" readonly="${isRegVolunteer}"/></td>
                 </tr>
                 <tr>
                     <td><form:label path="participant.home"><spring:message code="label.home"/></form:label></td>
-                    <td><form:input path="participant.home" /></td>
+                    <td><form:input path="participant.home" readonly="${isRegVolunteer}"/></td>
                 </tr>
                 <tr>
                     <td><form:label path="participant.email"><spring:message code="label.email"/></form:label></td>
-                    <td><form:input path="participant.email" /></td>
+                    <td><form:input path="participant.email" readonly="${isRegVolunteer}"/></td>
                 </tr>
                 <tr>
                     <td><form:label path="participant.foundation"><spring:message code="label.foundation"/></form:label></td>
                     <td>
-                        <form:select path="participant.foundation">
-                            <form:option value="" label="--- Select ---"/>
-                            <form:options items="${allFoundations}" />
-                        </form:select>
+                    	<c:choose>
+	   						<c:when test="${isRegVolunteer}">
+		   						<form:select path="participant.foundation" onfocus="this.defaultIndex=this.selectedIndex;" onchange="this.selectedIndex=this.defaultIndex;">
+		                            <form:option value="" label="--- Select ---"/>
+		                            <form:options items="${allFoundations}"/>
+		                        </form:select>
+	                        </c:when>
+	   						<c:otherwise>
+	   							<form:select path="participant.foundation">
+	                            	<form:option value="" label="--- Select ---"/>
+	                            	<form:options items="${allFoundations}"/>
+	                        	</form:select>
+	   						</c:otherwise>
+   						</c:choose>
                     </td>
                 </tr>
                 <tr>
                     <td><form:label path="participant.vip"><spring:message code="label.vip"/></form:label></td>
-                    <td><form:checkbox path="participant.vip"/></td>
+                    <td><form:checkbox path="participant.vip" readonly="${isRegVolunteer}"/></td>
                 </tr>
                 <tr>
                     <td><form:label path="participant.vipDesc"><spring:message code="label.vipDesc"/></form:label></td>
-                    <td><form:input path="participant.vipDesc"/></td>
+                    <td><form:input path="participant.vipDesc" readonly="${isRegVolunteer}"/></td>
                 </tr>
             </table>
         </div>
@@ -204,37 +222,68 @@
                             <tr>
                                 <td><form:label path="eventId"><spring:message code="label.eventId"/></form:label></td>
                                 <td>
-                                    <form:select path="eventId">
-                                        <form:option value="NONE" label="--- Select ---"/>
-                                        <form:options items="${allEvents}" />
-                                    </form:select>
+                                	<c:choose>
+										<c:when test="${isInfoVolunteer}">
+											<form:select path="eventId" onfocus="this.defaultIndex=this.selectedIndex;" onchange="this.selectedIndex=this.defaultIndex;">
+		                                        <form:option value="NONE" label="--- Select ---"/>
+		                                        <form:options items="${allEvents}" />
+		                                    </form:select>
+										</c:when>
+										<c:otherwise>
+											<form:select path="eventId">
+		                                        <form:option value="NONE" label="--- Select ---"/>
+		                                        <form:options items="${allEvents}" />
+		                                    </form:select>										
+										</c:otherwise>
+									</c:choose>
                                 </td>
                             </tr>
                             <tr>
                                 <td><form:label path="registration.review"><spring:message code="label.review"/></form:label></td>
-                                <td><form:checkbox path="registration.review"/></td>
+                                <td><form:checkbox path="registration.review" readonly="${isInfoVolunteer}"/></td>
                             </tr>
                             <tr>
                                 <td><form:label path="registration.level"><spring:message code="label.level"/></form:label></td>
                                 <td>
-                                    <form:select path="registration.level">
-                                        <form:option value="NONE" label="--- Select ---"/>
-                                        <form:options items="${allParticipantLevels}" />
-                                    </form:select>
+                                	<c:choose>
+										<c:when test="${isInfoVolunteer}">
+		                                    <form:select path="registration.level" onfocus="this.defaultIndex=this.selectedIndex;" onchange="this.selectedIndex=this.defaultIndex;">
+		                                        <form:option value="NONE" label="--- Select ---"/>
+		                                        <form:options items="${allParticipantLevels}" />
+		                                    </form:select>										
+										</c:when>
+										<c:otherwise>
+		                                    <form:select path="registration.level">
+		                                        <form:option value="NONE" label="--- Select ---"/>
+		                                        <form:options items="${allParticipantLevels}" />
+		                                    </form:select>										
+										</c:otherwise>
+									</c:choose>
+
                                 </td>
                             </tr>
                             <tr>
                                 <td><form:label path="eventFeeId"><spring:message code="label.eventFeeId"/></form:label></td>
                                 <td>
-                                    <form:select path="eventFeeId">
-                                        <form:option value="-1" label="--- Select ---"/>
-                                        <form:options items="${allEventFees}" itemValue="id" itemLabel="value"/>
-                                    </form:select>
+									<c:choose>
+										<c:when test="${isInfoVolunteer}">
+		                                    <form:select path="eventFeeId" onfocus="this.defaultIndex=this.selectedIndex;" onchange="this.selectedIndex=this.defaultIndex;">
+		                                        <form:option value="-1" label="--- Select ---"/>
+		                                        <form:options items="${allEventFees}" itemValue="id" itemLabel="value"/>
+		                                    </form:select>										
+										</c:when>
+										<c:otherwise>
+		                                    <form:select path="eventFeeId">
+		                                        <form:option value="-1" label="--- Select ---"/>
+		                                        <form:options items="${allEventFees}" itemValue="id" itemLabel="value"/>
+		                                    </form:select>										
+										</c:otherwise>
+									</c:choose>                                
                                 </td>
                             </tr>
                             <tr>
                                 <td><form:label path="registration.amountPayable"><spring:message code="label.amountPayable"/></form:label></td>
-                                <td><form:input path="registration.amountPayable"/></td>
+                                <td><form:input path="registration.amountPayable" readonly="${isInfoVolunteer}"/></td>
                             </tr>
                             <tr>
                                 <td><spring:message code="label.totalAmountPaid"/></td>
@@ -247,10 +296,21 @@
                             <tr>
                                 <td><form:label path="registration.reference"><spring:message code="label.reference"/></form:label></td>
                                 <td>
-                                    <form:select path="registration.reference">
-                                        <form:option value="" label="--- Select ---"/>
-                                        <form:options items="${allReferenceGroups}" />
-                                    </form:select>
+									<c:choose>
+										<c:when test="${isInfoVolunteer}">
+		                                    <form:select path="registration.reference" onfocus="this.defaultIndex=this.selectedIndex;" onchange="this.selectedIndex=this.defaultIndex;">
+		                                        <form:option value="" label="--- Select ---"/>
+		                                        <form:options items="${allReferenceGroups}" />
+		                                    </form:select>
+										</c:when>
+										<c:otherwise>
+		                                    <form:select path="registration.reference">
+		                                        <form:option value="" label="--- Select ---"/>
+		                                        <form:options items="${allReferenceGroups}" />
+		                                    </form:select>										
+										</c:otherwise>
+									</c:choose>                                
+
                                 </td>
                             </tr>
 						</table>	
@@ -259,19 +319,19 @@
 						<table>
                             <tr>
                                 <td><form:label path="registration.foodCoupon">Contacted</form:label></td>
-                                <td><form:checkbox path="registration.foodCoupon"/></td>
+                                <td><form:checkbox path="registration.foodCoupon" readonly="${isInfoVolunteer}"/></td>
                             </tr>
                             <tr>
                                 <td><form:label path="registration.eventKit">Follow Up</form:label></td>
-                                <td><form:checkbox path="registration.eventKit"/></td>
+                                <td><form:checkbox path="registration.eventKit" readonly="${isInfoVolunteer}"/></td>
                             </tr>
                             <tr>
                                 <td><form:label path="registration.application"><spring:message code="label.application"/></form:label></td>
-                                <td><form:checkbox path="registration.application"/></td>
+                                <td><form:checkbox path="registration.application" readonly="${isInfoVolunteer}"/></td>
                             </tr>
                             <tr>
                                 <td><form:label path="registration.certificates"><spring:message code="label.certificates"/></form:label></td>
-                                <td><form:checkbox path="registration.certificates"/></td>
+                                <td><form:checkbox path="registration.certificates" readonly="${isInfoVolunteer}"/></td>
                             </tr>
                             <tr>
                                 <td><form:label path="currentHistoryRecord.comment"><spring:message code="label.comments"/></form:label></td>
@@ -349,10 +409,10 @@
             <tr style="background-color:#DFDFDF;">
                 <td align="center">
                     <a id="submit" href="#"><c:out value="${registeredParticipant.action}"/></a>
-                    <c:if test="${user.access.admin || user.access.spotRegVolunteer}" >
+                    <c:if test="${isAdmin || isSpotRegVolunteer}" >
                         <a id="showPayments" href="#">Payments</a>
                     </c:if>
-                    <c:if test="${user.access.admin}" >
+                    <c:if test="${isAdmin}" >
 	                    <a id="cancelRegistration" href="#">Cancel Registration</a>
 	                    <a id="onHoldRegistration" href="#">On Hold</a>
 	                    <a id="changeToRegistered" href="#">Change To Registered</a>
