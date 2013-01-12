@@ -171,25 +171,25 @@
             <table>
                 <tr>
                     <td><form:label path="participant.name"><spring:message code="label.name"/></form:label></td>
-                    <td><form:input path="participant.name" size="50" readonly="${isRegVolunteer}"/></td>
+                    <td><form:input path="participant.name" size="50" readonly="${isRegVolunteer || isInfoVolunteer}"/></td>
                 </tr>
                 <tr>
                     <td><form:label path="participant.mobile"><spring:message code="label.mobile"/></form:label></td>
-                    <td><form:input path="participant.mobile" readonly="${isRegVolunteer}"/></td>
+                    <td><form:input path="participant.mobile" readonly="${isRegVolunteer || isInfoVolunteer}"/></td>
                 </tr>
                 <tr>
                     <td><form:label path="participant.home"><spring:message code="label.home"/></form:label></td>
-                    <td><form:input path="participant.home" readonly="${isRegVolunteer}"/></td>
+                    <td><form:input path="participant.home" readonly="${isRegVolunteer || isInfoVolunteer}"/></td>
                 </tr>
                 <tr>
                     <td><form:label path="participant.email"><spring:message code="label.email"/></form:label></td>
-                    <td><form:input path="participant.email" readonly="${isRegVolunteer}"/></td>
+                    <td><form:input path="participant.email" readonly="${isRegVolunteer || isInfoVolunteer}"/></td>
                 </tr>
                 <tr>
                     <td><form:label path="participant.foundation"><spring:message code="label.foundation"/></form:label></td>
                     <td>
                     	<c:choose>
-	   						<c:when test="${isRegVolunteer}">
+	   						<c:when test="${isRegVolunteer || isInfoVolunteer}">
 		   						<form:select path="participant.foundation" onfocus="this.defaultIndex=this.selectedIndex;" onchange="this.selectedIndex=this.defaultIndex;">
 		                            <form:option value="" label="--- Select ---"/>
 		                            <form:options items="${allFoundations}"/>
@@ -206,11 +206,11 @@
                 </tr>
                 <tr>
                     <td><form:label path="participant.vip"><spring:message code="label.vip"/></form:label></td>
-                    <td><form:checkbox path="participant.vip" readonly="${isRegVolunteer}"/></td>
+                    <td><form:checkbox path="participant.vip" readonly="${isRegVolunteer || isInfoVolunteer}" onclick="return ${isSpotRegVolunteer || isAdmin}"/></td>
                 </tr>
                 <tr>
                     <td><form:label path="participant.vipDesc"><spring:message code="label.vipDesc"/></form:label></td>
-                    <td><form:input path="participant.vipDesc" readonly="${isRegVolunteer}"/></td>
+                    <td><form:input path="participant.vipDesc" readonly="${isRegVolunteer || isInfoVolunteer}"/></td>
                 </tr>
             </table>
         </div>
@@ -223,7 +223,7 @@
                                 <td><form:label path="eventId"><spring:message code="label.eventId"/></form:label></td>
                                 <td>
                                 	<c:choose>
-										<c:when test="${isInfoVolunteer}">
+										<c:when test="${isInfoVolunteer || isRegVolunteer}">
 											<form:select path="eventId" onfocus="this.defaultIndex=this.selectedIndex;" onchange="this.selectedIndex=this.defaultIndex;">
 		                                        <form:option value="NONE" label="--- Select ---"/>
 		                                        <form:options items="${allEvents}" />
@@ -240,13 +240,13 @@
                             </tr>
                             <tr>
                                 <td><form:label path="registration.review"><spring:message code="label.review"/></form:label></td>
-                                <td><form:checkbox path="registration.review" readonly="${isInfoVolunteer}"/></td>
+                                <td><form:checkbox path="registration.review" onclick="return ${isSpotRegVolunteer || isAdmin}"/></td>
                             </tr>
                             <tr>
                                 <td><form:label path="registration.level"><spring:message code="label.level"/></form:label></td>
                                 <td>
                                 	<c:choose>
-										<c:when test="${isInfoVolunteer}">
+										<c:when test="${isInfoVolunteer || isRegVolunteer}">
 		                                    <form:select path="registration.level" onfocus="this.defaultIndex=this.selectedIndex;" onchange="this.selectedIndex=this.defaultIndex;">
 		                                        <form:option value="NONE" label="--- Select ---"/>
 		                                        <form:options items="${allParticipantLevels}" />
@@ -266,7 +266,7 @@
                                 <td><form:label path="eventFeeId"><spring:message code="label.eventFeeId"/></form:label></td>
                                 <td>
 									<c:choose>
-										<c:when test="${isInfoVolunteer}">
+										<c:when test="${isInfoVolunteer || isRegVolunteer}">
 		                                    <form:select path="eventFeeId" onfocus="this.defaultIndex=this.selectedIndex;" onchange="this.selectedIndex=this.defaultIndex;">
 		                                        <form:option value="-1" label="--- Select ---"/>
 		                                        <form:options items="${allEventFees}" itemValue="id" itemLabel="value"/>
@@ -283,7 +283,7 @@
                             </tr>
                             <tr>
                                 <td><form:label path="registration.amountPayable"><spring:message code="label.amountPayable"/></form:label></td>
-                                <td><form:input path="registration.amountPayable" readonly="${isInfoVolunteer}"/></td>
+                                <td><form:input path="registration.amountPayable" readonly="${isInfoVolunteer || isRegVolunteer}"/></td>
                             </tr>
                             <tr>
                                 <td><spring:message code="label.totalAmountPaid"/></td>
@@ -297,7 +297,7 @@
                                 <td><form:label path="registration.reference"><spring:message code="label.reference"/></form:label></td>
                                 <td>
 									<c:choose>
-										<c:when test="${isInfoVolunteer}">
+										<c:when test="${isInfoVolunteer || isRegVolunteer}">
 		                                    <form:select path="registration.reference" onfocus="this.defaultIndex=this.selectedIndex;" onchange="this.selectedIndex=this.defaultIndex;">
 		                                        <form:option value="" label="--- Select ---"/>
 		                                        <form:options items="${allReferenceGroups}" />
@@ -319,19 +319,19 @@
 						<table>
                             <tr>
                                 <td><form:label path="registration.foodCoupon">Contacted</form:label></td>
-                                <td><form:checkbox path="registration.foodCoupon" readonly="${isInfoVolunteer}"/></td>
+                                <td><form:checkbox path="registration.foodCoupon" onclick="return ${!isInfoVolunteer}"/></td>
                             </tr>
                             <tr>
                                 <td><form:label path="registration.eventKit">Follow Up</form:label></td>
-                                <td><form:checkbox path="registration.eventKit" readonly="${isInfoVolunteer}"/></td>
+                                <td><form:checkbox path="registration.eventKit" onclick="return ${!isInfoVolunteer}"/></td>
                             </tr>
                             <tr>
                                 <td><form:label path="registration.application"><spring:message code="label.application"/></form:label></td>
-                                <td><form:checkbox path="registration.application" readonly="${isInfoVolunteer}"/></td>
+                                <td><form:checkbox path="registration.application" onclick="return ${isSpotRegVolunteer || isAdmin || isInfoVolunteer}"/></td>
                             </tr>
                             <tr>
                                 <td><form:label path="registration.certificates"><spring:message code="label.certificates"/></form:label></td>
-                                <td><form:checkbox path="registration.certificates" readonly="${isInfoVolunteer}"/></td>
+                                <td><form:checkbox path="registration.certificates" onclick="return ${isSpotRegVolunteer || isAdmin || isInfoVolunteer}"/></td>
                             </tr>
                             <tr>
                                 <td><form:label path="currentHistoryRecord.comment"><spring:message code="label.comments"/></form:label></td>
