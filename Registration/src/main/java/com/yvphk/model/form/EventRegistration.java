@@ -112,6 +112,8 @@ public class EventRegistration extends BaseForm
     @OneToMany(mappedBy = "registration", fetch = FetchType.EAGER)
     private Set<ParticipantSeat> seats;
 
+    @Transient
+    private boolean localEventKitStatus = false;
 
     public Integer getId ()
     {
@@ -374,5 +376,13 @@ public class EventRegistration extends BaseForm
         }
 
         return null;
+    }
+
+    public boolean isLocalEventKitStatus() {
+        return localEventKitStatus;
+    }
+
+    public void setLocalEventKitStatus(boolean localEventKitStatus) {
+        this.localEventKitStatus = localEventKitStatus;
     }
 }

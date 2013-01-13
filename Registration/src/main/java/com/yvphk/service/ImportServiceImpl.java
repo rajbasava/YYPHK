@@ -120,7 +120,7 @@ public class ImportServiceImpl implements ImportService
             registeredParticipant.initialize(login.getEmail());
             registeredParticipant.setAction(RegisteredParticipant.ActionRegister);
             registeredParticipant.getRegistration().setEvent(event);
-            participantDAO.registerParticipant(registeredParticipant);
+            participantDAO.registerParticipant(registeredParticipant, null);
         }
         return null;
     }

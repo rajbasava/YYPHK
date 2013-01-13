@@ -8,10 +8,7 @@ package com.yvphk.service;
 import com.yvphk.common.SeatingType;
 import com.yvphk.model.dao.EventDAO;
 import com.yvphk.model.dao.ParticipantDAO;
-import com.yvphk.model.form.Event;
-import com.yvphk.model.form.EventFee;
-import com.yvphk.model.form.EventRegistration;
-import com.yvphk.model.form.ParticipantSeat;
+import com.yvphk.model.form.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -84,6 +81,41 @@ public class EventServiceImpl implements EventService
     public EventFee getEventFee (Integer eventFeeId)
     {
         return eventDAO.getEventFee(eventFeeId);
+    }
+
+    @Override
+    @Transactional
+    public Kit getEventKit (Integer eventId)
+    {
+        return eventDAO.getEventKit(eventId);
+    }
+
+    @Override
+    @Transactional
+    public void manageEventKit(Kit kit)
+    {
+        eventDAO.manageEventKit(kit);
+    }
+
+    @Override
+    @Transactional
+    public List<VolunteerKit> getVolunteerKits (Integer kitId)
+    {
+        return eventDAO.getVolunteerKits(kitId);
+    }
+
+    @Override
+    @Transactional
+    public VolunteerKit getVolunteerKit (Integer voldKitId)
+    {
+        return eventDAO.getVolunteerKit(voldKitId);
+    }
+
+    @Override
+    @Transactional
+    public void allotVolunteerKits(VolunteerKit volunteerKit)
+    {
+        eventDAO.allotVolunteerKits(volunteerKit);
     }
 
     @Override

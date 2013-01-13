@@ -5,14 +5,8 @@
 
 package com.yvphk.model.dao;
 
-import com.yvphk.model.form.Event;
-import com.yvphk.model.form.EventFee;
-import com.yvphk.model.form.RowMeta;
-import org.hibernate.Criteria;
-import org.hibernate.FetchMode;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import com.yvphk.model.form.*;
+import org.hibernate.*;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -189,6 +183,91 @@ public class EventDAOImpl extends CommonDAOImpl implements EventDAO
         else {
             session.delete(fee);
         }
+    }
+
+    @Override
+    public Kit getEventKit (Integer eventId)
+    {
+        if (eventId == null) {
+            return null;
+        }
+
+        Event event = (Event) sessionFactory.getCurrentSession().load(
+                Event.class, eventId);
+
+        Session session = sessionFactory.openSession();
+        Criteria criteria = session.createCriteria(Kit.class);
+        criteria.add(Restrictions.eq("event", event));
+        criteria.add(Restrictions.eq("active", true));
+        Kit kit = (Kit) criteria.uniqueResult();
+        session.close();
+
+        return kit;
+    }
+
+    @Override
+    public void manageEventKit(Kit kit)
+    {
+        Session session = sessionFactory.openSession();
+
+        Event event = (Event) session.load(Event.class, kit.getEventId());
+
+        if (event == null) {
+            return;
+        }
+
+        kit.setEvent(event);
+        session.saveOrUpdate(kit);
+
+        session.flush();
+        session.close();
+    }
+
+    @Override
+    public List<VolunteerKit> getVolunteerKits(Integer kitId)
+    {
+        if (kitId == null) {
+            return null;
+        }
+
+        Kit kit = (Kit) sessionFactory.getCurrentSession().load(Kit.class, kitId);
+
+        Session session = sessionFactory.openSession();
+        Criteria criteria = session.createCriteria(VolunteerKit.class);
+        criteria.add(Restrictions.eq("kit", kit));
+        criteria.add(Restrictions.eq("active", true));
+        criteria.addOrder(Order.desc("timeCreated"));
+        List<VolunteerKit> volunteerKits = criteria.list();
+        session.close();
+
+        return volunteerKits;
+    }
+
+    @Override
+    public VolunteerKit getVolunteerKit (Integer voldKitId)
+    {
+        if (voldKitId == null) {
+            return null;
+        }
+
+        Session session = sessionFactory.openSession();
+        Criteria criteria = session.createCriteria(VolunteerKit.class);
+        criteria.add(Restrictions.eq("id", voldKitId));
+        criteria.add(Restrictions.eq("active", true));
+        VolunteerKit volunteerKit = (VolunteerKit) criteria.uniqueResult();
+        session.close();
+
+        return volunteerKit;
+    }
+
+    public void allotVolunteerKits(VolunteerKit volunteerKit)
+    {
+        volunteerKit.setKitCount(volunteerKit.getKitCount()+volunteerKit.getAllotKits());
+        Session session = sessionFactory.openSession();
+        session.saveOrUpdate(volunteerKit);
+
+        session.flush();
+        session.close();
     }
 
     public RowMeta getFirstEmptyRowMeta (Event event)

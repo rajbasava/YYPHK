@@ -4,17 +4,7 @@
 */
 package com.yvphk.model.dao;
 
-import com.yvphk.model.form.Event;
-import com.yvphk.model.form.EventPayment;
-import com.yvphk.model.form.EventRegistration;
-import com.yvphk.model.form.HistoryRecord;
-import com.yvphk.model.form.Participant;
-import com.yvphk.model.form.ParticipantCriteria;
-import com.yvphk.model.form.RegistrationCriteria;
-import com.yvphk.model.form.ParticipantSeat;
-import com.yvphk.model.form.PaymentCriteria;
-import com.yvphk.model.form.ReferenceGroup;
-import com.yvphk.model.form.RegisteredParticipant;
+import com.yvphk.model.form.*;
 
 import java.util.List;
 
@@ -22,7 +12,7 @@ public interface ParticipantDAO extends CommonDAO
 {
     public Participant addParticipant (Participant Participant);
 
-    public EventRegistration registerParticipant (RegisteredParticipant registeredParticipant);
+    public EventRegistration registerParticipant (RegisteredParticipant registeredParticipant, Login login);
 
     public Participant getParticipant (Integer userId);
 

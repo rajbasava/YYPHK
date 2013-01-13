@@ -7,23 +7,8 @@ package com.yvphk.model.dao;
 import com.yvphk.common.AmountPaidCategory;
 import com.yvphk.common.ParticipantLevel;
 import com.yvphk.common.Util;
-import com.yvphk.model.form.BaseForm;
-import com.yvphk.model.form.Event;
-import com.yvphk.model.form.HistoryRecord;
-import com.yvphk.model.form.EventPayment;
-import com.yvphk.model.form.EventRegistration;
-import com.yvphk.model.form.Participant;
-import com.yvphk.model.form.ParticipantCriteria;
-import com.yvphk.model.form.RegistrationCriteria;
-import com.yvphk.model.form.ParticipantSeat;
-import com.yvphk.model.form.PaymentCriteria;
-import com.yvphk.model.form.ReferenceGroup;
-import com.yvphk.model.form.RegisteredParticipant;
-import org.hibernate.Criteria;
-import org.hibernate.FetchMode;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
+import com.yvphk.model.form.*;
+import org.hibernate.*;
 import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
@@ -67,7 +52,7 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
         return participant;
     }
 
-    public EventRegistration registerParticipant (RegisteredParticipant registeredParticipant)
+    public EventRegistration registerParticipant (RegisteredParticipant registeredParticipant, Login login)
     {
         Participant participant = registeredParticipant.getParticipant();
 
@@ -120,6 +105,26 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
                     session);
             session.update(registration);
         }
+        // local = false and eventKit = true update else event kit dont do anything
+        // local = true and eventKit = false update event kit else dont do anything
+        if(login!=null && (registration.isEventKit() ^ registration.isLocalEventKitStatus())) {
+            VolunteerKit volunteerKit =
+                        getVolunteerKit(session, login.getEmail(), String.valueOf(registration.getEvent().getId()));
+            if(volunteerKit != null) {
+                if(registration.isEventKit()) {
+                    if(volunteerKit != null) {
+                        volunteerKit.setKitsGiven(volunteerKit.getKitsGiven()+1);
+                    }
+                } else {
+                    if(volunteerKit != null) {
+                        volunteerKit.setKitsGiven(volunteerKit.getKitsGiven()-1);
+                    }
+                }
+                session.update(volunteerKit);
+            } else {
+                throw new NullPointerException("Contact Administrator to allocate kits");
+            }
+        }
 
         List<HistoryRecord> records = registeredParticipant.getAllHistoryRecords();
         for (HistoryRecord record: records) {
@@ -142,6 +147,34 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
         }
 
         return registration;
+    }
+
+    private VolunteerKit getVolunteerKit (Session session, String email, String eventId)
+    {
+        VolunteerKit volunteerKit = null;
+
+        String queryStr = "SELECT VK.id  " +
+                       "FROM PHK_VOLKIT VK " +
+                       "WHERE VK.VOLLOGINID = (SELECT VL.ID  " +
+                                              "FROM PHK_VOLUNTEER V, PHK_VOLLOGIN VL  " +
+                                              "WHERE VL.VOLUNTEERID = V.ID AND V.EMAIL = '"+email+"' ) " +
+                       "AND VK.KITID = (SELECT K.ID  " +
+                                       "FROM PHK_KIT K  " +
+                                       "WHERE K.EVENTID = '"+eventId+"')";
+        Query query = session.createSQLQuery(queryStr);
+        List resultList = query.list();
+
+        if(resultList != null & !resultList.isEmpty()) {
+            Criteria criteria = session.createCriteria(VolunteerKit.class);
+
+            criteria.add(Restrictions.eq("id", resultList.get(0)));
+            List<VolunteerKit> volunteerKits = criteria.list();
+
+            if (volunteerKits != null && !volunteerKits.isEmpty()) {
+                volunteerKit = volunteerKits.get(0);
+            }
+        }
+        return volunteerKit;
     }
 
     private void addParticipantSeats (ParticipantSeat participantSeat,
@@ -389,6 +422,7 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
         registration.setHistoryRecords(
                 getHistoryRecords(registration.getId(), registration.getType(), session));
         session.close();
+        registration.setLocalEventKitStatus(registration.isEventKit());
         return registration;
     }
 

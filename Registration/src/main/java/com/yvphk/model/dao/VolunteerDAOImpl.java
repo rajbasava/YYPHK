@@ -5,10 +5,9 @@
 package com.yvphk.model.dao;
 
 import com.yvphk.common.Util;
-import com.yvphk.model.form.LoggedInVolunteer;
-import com.yvphk.model.form.Login;
-import com.yvphk.model.form.Volunteer;
+import com.yvphk.model.form.*;
 import org.hibernate.Criteria;
+import org.hibernate.FetchMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
@@ -16,7 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Repository
@@ -30,10 +31,36 @@ public class VolunteerDAOImpl extends CommonDAOImpl implements VolunteerDAO
         sessionFactory.getCurrentSession().save(volunteer);
     }
 
+    public void addVolunteerKit (VolunteerKit volunteerKit)
+    {
+        Session session = sessionFactory.openSession();
+        session.save(volunteerKit);
+        session.flush();
+        session.close();
+    }
+
     public List<Volunteer> listVolunteer ()
     {
         return sessionFactory.getCurrentSession().createQuery("from Volunteer")
                 .list();
+    }
+
+    public Map<String, String> listVolunteerWithoutKits ()
+    {
+        String query =  "SELECT V.ID, V.NAME " +
+                        "FROM PHK_VOLLOGIN VL, PHK_VOLUNTEER V " +
+                        "WHERE VL.VOLUNTEERID = V.ID " +
+                            "AND VL.ID NOT IN " +
+                                "(SELECT VOLLOGINID FROM PHK_VOLKIT)";
+        List resultList = sessionFactory.getCurrentSession().createSQLQuery(query).list();
+        Map<String, String> volunteerMap = new LinkedHashMap<String, String>();
+        if(resultList != null && !resultList.isEmpty()) {
+            for(int i=0; i < resultList.size(); i++) {
+                Object[] array = (Object[]) resultList.get(i);
+                volunteerMap.put(String.valueOf(array[0]), String.valueOf(array[1]));
+            }
+        }
+        return volunteerMap;
     }
 
     public void removeVolunteer (Integer id)
@@ -110,5 +137,19 @@ public class VolunteerDAOImpl extends CommonDAOImpl implements VolunteerDAO
 
         return volunteers.get(0);
     }
+
+    @Override
+    public Volunteer getVolunteer (Integer volunteerId)
+    {
+        Session session = sessionFactory.openSession();
+        Criteria criteria = session.createCriteria(Volunteer.class);
+
+        criteria.add(Restrictions.eq("id", volunteerId));
+        Volunteer volunteer = (Volunteer) criteria.uniqueResult();
+        session.flush();
+        session.close();
+        return volunteer;
+    }
+
 
 }

@@ -5,10 +5,7 @@
 
 package com.yvphk.service;
 
-import com.yvphk.model.form.Event;
-import com.yvphk.model.form.EventFee;
-import com.yvphk.model.form.EventRegistration;
-import com.yvphk.model.form.ParticipantSeat;
+import com.yvphk.model.form.*;
 
 import java.util.List;
 
@@ -29,6 +26,16 @@ public interface EventService
     public void removeEventFee (Integer eventFeeId);
 
     public EventFee getEventFee (Integer eventFeeId);
+
+    public Kit getEventKit (Integer eventId);
+
+    public void manageEventKit(Kit kit);
+
+    public List<VolunteerKit> getVolunteerKits (Integer kitId);
+
+    public VolunteerKit getVolunteerKit (Integer voldKitId);
+
+    public void allotVolunteerKits(VolunteerKit volunteerKit);
 
     public List<String> getAllRowMetaNames ();
 

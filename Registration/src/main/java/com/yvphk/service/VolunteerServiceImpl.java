@@ -7,11 +7,13 @@ package com.yvphk.service;
 import com.yvphk.model.dao.VolunteerDAO;
 import com.yvphk.model.form.Login;
 import com.yvphk.model.form.Volunteer;
+import com.yvphk.model.form.VolunteerKit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class VolunteerServiceImpl implements VolunteerService
@@ -26,9 +28,21 @@ public class VolunteerServiceImpl implements VolunteerService
     }
 
     @Transactional
+    public void addVolunteerKit (VolunteerKit volunteerKit)
+    {
+        volunteerDAO.addVolunteerKit(volunteerKit);
+    }
+
+    @Transactional
     public List<Volunteer> listVolunteer ()
     {
         return volunteerDAO.listVolunteer();
+    }
+
+    @Transactional
+    public Map<String, String> listVolunteerWithoutKits ()
+    {
+        return volunteerDAO.listVolunteerWithoutKits();
     }
 
     @Transactional
@@ -47,5 +61,11 @@ public class VolunteerServiceImpl implements VolunteerService
     public void processLogout (Login login)
     {
         volunteerDAO.processLogout(login);
+    }
+
+    @Transactional
+    public Volunteer getVolunteer (Integer volunteerId)
+    {
+        return volunteerDAO.getVolunteer(volunteerId);
     }
 }

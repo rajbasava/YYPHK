@@ -27,6 +27,20 @@
                  $("#modifyEvent").submit();
             });
 
+            $("a#showKits").button();
+            $("a#showKits").css("font-size", "11px");
+            $("a#showKits").click(function() {
+                 $("#modifyEvent").get(0).setAttribute('action', 'showKitsUI.htm');
+                 $("#modifyEvent").submit();
+            });
+
+            $("a#showEventDetail").button();
+            $("a#showEventDetail").css("font-size", "11px");
+            $("a#showEventDetail").click(function() {
+                 $("#modifyEvent").get(0).setAttribute('action', 'showEventDetailUI.htm');
+                 $("#modifyEvent").submit();
+            });
+
             $("a#deleteEvent").button();
             $("a#deleteEvent").css("font-size", "11px");
             $("a#deleteEvent").click(function() {
@@ -70,7 +84,7 @@
         <td><form:label path="eligibilityLevel"><spring:message code="label.eligibilityLevel"/></form:label></td>
         <td>
             <form:select path="eligibilityLevel">
-                <form:option value="" label="--- Select ---"/>
+                <form:option value="NONE" label="--- Select ---"/>
                 <form:options items="${allParticipantLevels}" />
             </form:select>
         </td>
@@ -172,6 +186,8 @@
                 <tr>
                     <td align="left">
                         <a id="addEventFee" href="#">Add Event Fee</a>
+                        <a id="showKits" href="#">Kits</a>
+                        <a id="showEventDetail" href="#">Event Details</a>
                         <a id="allocateSeats" href="#">Allocate Seats</a>
                         <a id="deleteEvent" href="#">Deactivate</a>
                     </td>

@@ -150,6 +150,7 @@
     <form:hidden path="participant.id"/>
     <form:hidden path="registration.id"/>
     <form:hidden path="registration.status"/>
+    <form:hidden path="registration.localEventKitStatus"/>
     <table width="100%" cellpadding="1" cellspacing="1">
         <tr>
             <td align="left" style="font-size:18px">

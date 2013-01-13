@@ -63,3 +63,14 @@
 	color:#336699;
 	text-decoration:none;
 }
+
+.Kits {
+    font:16px Verdana,Arial,Helvetica,sans-serif;
+    text-align:right;
+}
+
+.KitsBold {
+    font:18px Verdana,Arial,Helvetica,sans-serif;
+    font-weight: bold;
+    text-align:left;
+}

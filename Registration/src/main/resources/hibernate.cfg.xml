@@ -16,5 +16,7 @@
         <mapping class="com.yvphk.model.form.ReferenceGroup"/>
         <mapping class="com.yvphk.model.form.RowMeta"/>
         <mapping class="com.yvphk.model.form.PHFoundation"/>
+        <mapping class="com.yvphk.model.form.Kit"/>
+        <mapping class="com.yvphk.model.form.VolunteerKit"/>
     </session-factory>
 </hibernate-configuration>

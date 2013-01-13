@@ -30,6 +30,7 @@ import com.yvphk.model.form.Login;
 import com.yvphk.model.form.Option;
 import com.yvphk.model.form.Participant;
 import com.yvphk.model.form.ParticipantCriteria;
+import com.yvphk.model.form.RegistrationCriteria;
 import com.yvphk.model.form.ParticipantSeat;
 import com.yvphk.model.form.ReferenceGroup;
 import com.yvphk.model.form.RegisteredParticipant;
@@ -39,6 +40,17 @@ import com.yvphk.model.form.validator.PaymentValidator;
 import com.yvphk.model.form.validator.RegistrationValidator;
 import com.yvphk.service.EventService;
 import com.yvphk.service.ParticipantService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 public class ParticipantController extends CommonController
@@ -142,7 +154,7 @@ public class ParticipantController extends CommonController
             registeredParticipant.initializeForUpdate(login.getEmail());
         }
 
-        EventRegistration registration = participantService.registerParticipant(registeredParticipant);
+        EventRegistration registration = participantService.registerParticipant(registeredParticipant, login);
 
         if (RegisteredParticipant.ActionUpdate.equals(action)) {
             return "redirect:/search.htm";
