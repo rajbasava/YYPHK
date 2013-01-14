@@ -200,7 +200,7 @@ public class EventController extends CommonController
                 map.put("unallotedKitsCount", unallotedKitsCount);
             }
             map.put("volunteerKit", volunteerKit);
-            map.put("volunteerList", volunteerService.listVolunteerWithoutKits());
+            map.put("volunteerList", volunteerService.listVolunteerWithoutKits(kit.getId()));
             return "addVolKitsUI";
         }
         return "redirect:/event.htm";

@@ -40,9 +40,9 @@ public class VolunteerServiceImpl implements VolunteerService
     }
 
     @Transactional
-    public Map<String, String> listVolunteerWithoutKits ()
+    public Map<String, String> listVolunteerWithoutKits (Integer eventKitId)
     {
-        return volunteerDAO.listVolunteerWithoutKits();
+        return volunteerDAO.listVolunteerWithoutKits(eventKitId);
     }
 
     @Transactional

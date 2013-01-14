@@ -20,7 +20,7 @@ public interface VolunteerService
 
     public List<Volunteer> listVolunteer ();
 
-    public Map<String, String> listVolunteerWithoutKits ();
+    public Map<String, String> listVolunteerWithoutKits (Integer eventKitId);
 
     public void removeVolunteer (Integer id);
 

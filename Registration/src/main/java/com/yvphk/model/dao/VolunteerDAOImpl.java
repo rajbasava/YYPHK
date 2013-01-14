@@ -45,13 +45,13 @@ public class VolunteerDAOImpl extends CommonDAOImpl implements VolunteerDAO
                 .list();
     }
 
-    public Map<String, String> listVolunteerWithoutKits ()
+    public Map<String, String> listVolunteerWithoutKits (Integer eventKitId)
     {
         String query =  "SELECT V.ID, V.NAME " +
                         "FROM PHK_VOLLOGIN VL, PHK_VOLUNTEER V " +
                         "WHERE VL.VOLUNTEERID = V.ID " +
                             "AND VL.ID NOT IN " +
-                                "(SELECT VOLLOGINID FROM PHK_VOLKIT)";
+                                "(SELECT VOLLOGINID FROM PHK_VOLKIT WHERE KITID = "+ eventKitId +")";
         List resultList = sessionFactory.getCurrentSession().createSQLQuery(query).list();
         Map<String, String> volunteerMap = new LinkedHashMap<String, String>();
         if(resultList != null && !resultList.isEmpty()) {
