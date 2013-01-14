@@ -9,7 +9,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-public abstract class BaseForm implements Serializable
+public abstract class BaseForm implements Serializable, Importable
 {
 
     public void initialize (String email)
@@ -50,4 +50,13 @@ public abstract class BaseForm implements Serializable
 
     }
 
+    public void initializeForImport (String email)
+    {
+
+    }
+
+    public void applyEvent (Event event)
+    {
+
+    }
 }

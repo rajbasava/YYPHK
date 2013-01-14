@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.io.Serializable;
 
 @Entity
@@ -50,6 +51,9 @@ public class ParticipantSeat extends BaseForm
 
     @Column(name = "CUSTOM")
     private boolean custom;
+
+    @Transient
+    private Integer registrationId;
 
     public Integer getId ()
     {
@@ -144,5 +148,15 @@ public class ParticipantSeat extends BaseForm
     public void setCustom (boolean custom)
     {
         this.custom = custom;
+    }
+
+    public Integer getRegistrationId ()
+    {
+        return registrationId;
+    }
+
+    public void setRegistrationId (Integer registrationId)
+    {
+        this.registrationId = registrationId;
     }
 }

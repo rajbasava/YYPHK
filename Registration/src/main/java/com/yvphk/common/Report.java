@@ -15,8 +15,14 @@ public class Report
     public static Report ConsolidatedRegistrations =
             new Report("ConsolidatedRegistrations", "com.yvphk.model.form.EventRegistration");
 
+    public static Report RegistrationsForImport =
+            new Report("RegistrationsForImport", "com.yvphk.model.form.EventRegistration");
+
     public static Report Payments =
             new Report("Payments", "com.yvphk.model.form.EventPayment");
+
+    public static Report Seats =
+            new Report("Seats", "com.yvphk.model.form.ParticipantSeat");
 
     private String reportName;
     private String classType;
@@ -36,45 +42,81 @@ public class Report
             ReportSheet registrationSheet = getRegistrationSheet();
             this.addSheet(registrationSheet);
         }
-        else if ("ConsolidatedRegistrations".equals(this.getReportName())) {
+
+        if ("ConsolidatedRegistrations".equals(this.getReportName())) {
             ReportSheet registrationSheet = getRegistrationSheet();
             this.addSheet(registrationSheet);
 
-            List<String> registrationPMTFieldPaths = new ArrayList<String>();
-            registrationPMTFieldPaths.add("registration.id");
-            registrationPMTFieldPaths.add("amountPaid");
-            registrationPMTFieldPaths.add("mode");
-            registrationPMTFieldPaths.add("receiptInfo");
-            registrationPMTFieldPaths.add("receiptDate");
-            registrationPMTFieldPaths.add("pdcNotClear");
-            registrationPMTFieldPaths.add("pdc");
-            registrationPMTFieldPaths.add("pdcDate");
-            registrationPMTFieldPaths.add("timeCreated");
-            ReportSheet registrationPMTSheet =
-                    new ReportSheet("Payments", registrationPMTFieldPaths,
-                            "payments", "com.yvphk.model.form.EventPayment");
+            ReportSheet registrationPMTSheet = getRegistrationPaymentsSheet();
             this.addSheet(registrationPMTSheet);
         }
-        else if ("Payments".equals(this.getReportName())) {
-            List<String> paymentFieldPaths = new ArrayList<String>();
-            paymentFieldPaths.add("registration.id");
-            paymentFieldPaths.add("registration.participant.name");
-            paymentFieldPaths.add("registration.participant.email");
-            paymentFieldPaths.add("registration.participant.mobile");
-            paymentFieldPaths.add("registration.event.name");
-            paymentFieldPaths.add("registration.amountPayable");
-            paymentFieldPaths.add("amountPaid");
-            paymentFieldPaths.add("mode");
-            paymentFieldPaths.add("receiptInfo");
-            paymentFieldPaths.add("receiptDate");
-            paymentFieldPaths.add("pdcNotClear");
-            paymentFieldPaths.add("pdc");
-            paymentFieldPaths.add("pdcDate");
-            paymentFieldPaths.add("timeCreated");
-            ReportSheet paymentSheet =
-                    new ReportSheet("Payments", paymentFieldPaths);
+
+        if ("RegistrationsForImport".equals(this.getReportName())) {
+            ReportSheet registrationSheet = getRegistrationSheetForImport();
+            this.addSheet(registrationSheet);
+
+            ReportSheet registrationPMTSheet = getRegistrationPaymentsSheetForImport();
+            this.addSheet(registrationPMTSheet);
+        }
+
+        if ("Payments".equals(this.getReportName())) {
+            ReportSheet paymentSheet = getPaymentsSheet();
             this.addSheet(paymentSheet);
         }
+
+        if ("Seats".equals(this.getReportName())) {
+            ReportSheet seatsSheet = getSeatsSheet();
+            this.addSheet(seatsSheet);
+        }
+    }
+
+    private ReportSheet getSeatsSheet ()
+    {
+        List<String> paymentFieldPaths = new ArrayList<String>();
+        paymentFieldPaths.add("registration.id");
+        paymentFieldPaths.add("registration.participant.name");
+        paymentFieldPaths.add("registration.level");
+        paymentFieldPaths.add("event.name");
+        paymentFieldPaths.add("alpha");
+        paymentFieldPaths.add("seat");
+        paymentFieldPaths.add("custom");
+        return new ReportSheet("Seats", paymentFieldPaths);
+    }
+
+    private ReportSheet getPaymentsSheet ()
+    {
+        List<String> paymentFieldPaths = new ArrayList<String>();
+        paymentFieldPaths.add("registration.id");
+        paymentFieldPaths.add("registration.participant.name");
+        paymentFieldPaths.add("registration.participant.email");
+        paymentFieldPaths.add("registration.participant.mobile");
+        paymentFieldPaths.add("registration.event.name");
+        paymentFieldPaths.add("registration.amountPayable");
+        paymentFieldPaths.add("amountPaid");
+        paymentFieldPaths.add("mode");
+        paymentFieldPaths.add("receiptInfo");
+        paymentFieldPaths.add("receiptDate");
+        paymentFieldPaths.add("pdcNotClear");
+        paymentFieldPaths.add("pdc");
+        paymentFieldPaths.add("pdcDate");
+        paymentFieldPaths.add("timeCreated");
+        return new ReportSheet("Payments", paymentFieldPaths);
+    }
+
+    private ReportSheet getRegistrationPaymentsSheet ()
+    {
+        List<String> registrationPMTFieldPaths = new ArrayList<String>();
+        registrationPMTFieldPaths.add("registration.id");
+        registrationPMTFieldPaths.add("amountPaid");
+        registrationPMTFieldPaths.add("mode");
+        registrationPMTFieldPaths.add("receiptInfo");
+        registrationPMTFieldPaths.add("receiptDate");
+        registrationPMTFieldPaths.add("pdcNotClear");
+        registrationPMTFieldPaths.add("pdc");
+        registrationPMTFieldPaths.add("pdcDate");
+        registrationPMTFieldPaths.add("timeCreated");
+        return new ReportSheet("Payments", registrationPMTFieldPaths,
+                "payments", "com.yvphk.model.form.EventPayment");
     }
 
     private ReportSheet getRegistrationSheet ()
@@ -104,6 +146,45 @@ public class Report
         registrationFieldPaths.add("status");
         registrationFieldPaths.add("Category");
         return new ReportSheet("Registrations", registrationFieldPaths);
+    }
+
+    private ReportSheet getRegistrationSheetForImport ()
+    {
+        List<String> registrationFieldPaths = new ArrayList<String>();
+        registrationFieldPaths.add("id");
+        registrationFieldPaths.add("participant.name");
+        registrationFieldPaths.add("participant.email");
+        registrationFieldPaths.add("participant.mobile");
+        registrationFieldPaths.add("participant.home");
+        registrationFieldPaths.add("participant.foundation");
+        registrationFieldPaths.add("participant.vip");
+        registrationFieldPaths.add("participant.vipDesc");
+        registrationFieldPaths.add("amountPayable");
+        registrationFieldPaths.add("review");
+        registrationFieldPaths.add("level");
+        registrationFieldPaths.add("reference");
+        registrationFieldPaths.add("refOrder");
+        registrationFieldPaths.add("application");
+        registrationFieldPaths.add("certificates");
+        registrationFieldPaths.add("registrationDate");
+        registrationFieldPaths.add("status");
+        return new ReportSheet("Registrations", registrationFieldPaths);
+    }
+
+    private ReportSheet getRegistrationPaymentsSheetForImport ()
+    {
+        List<String> registrationPMTFieldPaths = new ArrayList<String>();
+        registrationPMTFieldPaths.add("registration.id");
+        registrationPMTFieldPaths.add("amountPaid");
+        registrationPMTFieldPaths.add("mode");
+        registrationPMTFieldPaths.add("receiptInfo");
+        registrationPMTFieldPaths.add("receiptDate");
+        registrationPMTFieldPaths.add("pdcNotClear");
+        registrationPMTFieldPaths.add("pdc");
+        registrationPMTFieldPaths.add("pdcDate");
+        registrationPMTFieldPaths.add("remarks");
+        return new ReportSheet("Payments", registrationPMTFieldPaths,
+                "payments", "com.yvphk.model.form.EventPayment");
     }
 
 

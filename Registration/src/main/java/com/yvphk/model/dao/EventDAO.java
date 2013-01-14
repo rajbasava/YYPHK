@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface EventDAO extends CommonDAO
 {
-    public void addEvent (Event event);
+    public void saveOrUpdateEvent (Event event);
 
     public Event getEvent (Integer eventId);
 
@@ -43,4 +43,6 @@ public interface EventDAO extends CommonDAO
     public List<String> getAllRowMetaNames ();
 
     public List<String> getAllFoundations ();
+
+    public void addRowMeta (RowMeta rowMeta);
 }

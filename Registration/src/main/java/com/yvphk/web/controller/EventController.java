@@ -50,25 +50,48 @@ public class EventController extends CommonController
         return "event";
     }
 
-    @RequestMapping(value = "/addEvent", method = RequestMethod.POST)
-    public ModelAndView addEvent (@ModelAttribute("event") Event event, BindingResult errors,
-                            HttpServletRequest request)
+    @RequestMapping("/showUpdateEvent")
+    public String showUpdateEvent (Map<String, Object> map, HttpServletRequest request)
     {
-    	ModelAndView mv = null;
-    	EventValidator val = new EventValidator();
-    	val.validate(event, errors);
-    	if(errors.hasErrors()){
-    		mv = new ModelAndView("event");
-    		mv.addObject("errors", errors);
-    		mv.addObject("eventList", eventService.allEvents());
-    		mv.addObject("allParticipantLevels", ParticipantLevel.allParticipantLevels());
-    		mv.addObject("allSeatingTypes", SeatingType.allSeatingTypes());
-    		mv.addObject("allRowMetaNames", eventService.getAllRowMetaNames());
-    		return mv;
-    	}
-    	Login login = (Login) request.getSession().getAttribute(Login.ClassName);
-        event.initialize(login.getEmail());
-        eventService.addEvent(event);
+        String strEventId = request.getParameter("eventId");
+        if (Util.nullOrEmptyOrBlank(strEventId)) {
+            return null;
+        }
+        Integer eventId = Integer.parseInt(strEventId);
+
+        map.put("event", eventService.getEvent(eventId));
+        map.put("eventList", eventService.allEvents());
+        map.put("allParticipantLevels", ParticipantLevel.allParticipantLevels());
+        map.put("allSeatingTypes", SeatingType.allSeatingTypes());
+        map.put("allRowMetaNames", eventService.getAllRowMetaNames());
+        return "event";
+    }
+
+    @RequestMapping(value = "/saveOrUpdateEvent", method = RequestMethod.POST)
+    public ModelAndView saveOrUpdateEvent (@ModelAttribute("event") Event event,
+                                           BindingResult errors,
+                                           HttpServletRequest request)
+    {
+        ModelAndView mv = null;
+        EventValidator val = new EventValidator();
+        val.validate(event, errors);
+        if (errors.hasErrors()) {
+            mv = new ModelAndView("event");
+            mv.addObject("errors", errors);
+            mv.addObject("eventList", eventService.allEvents());
+            mv.addObject("allParticipantLevels", ParticipantLevel.allParticipantLevels());
+            mv.addObject("allSeatingTypes", SeatingType.allSeatingTypes());
+            mv.addObject("allRowMetaNames", eventService.getAllRowMetaNames());
+            return mv;
+        }
+        Login login = (Login) request.getSession().getAttribute(Login.ClassName);
+        if (event.getId() == null) {
+            event.initialize(login.getEmail());
+        }
+        else {
+            event.initializeForUpdate(login.getEmail());
+        }
+        eventService.saveOrUpdateEvent(event);
         mv = new ModelAndView("redirect:/event.htm");
         return mv;
     }
@@ -306,7 +329,7 @@ public class EventController extends CommonController
     public String removeEvent (HttpServletRequest request)
     {
         String strEventId = request.getParameter("eventId");
-        if (!Util.nullOrEmptyOrBlank(strEventId)) {
+        if (! Util.nullOrEmptyOrBlank(strEventId)) {
             Integer eventId = Integer.parseInt(strEventId);
             eventService.removeEvent(eventId);
         }
@@ -318,7 +341,7 @@ public class EventController extends CommonController
     {
         String strEventFeeId = request.getParameter("eventFeeId");
         String strEventId = request.getParameter("eventId");
-        if (!Util.nullOrEmptyOrBlank(strEventFeeId)) {
+        if (! Util.nullOrEmptyOrBlank(strEventFeeId)) {
             Integer eventFeeId = Integer.parseInt(strEventFeeId);
             eventService.removeEventFee(eventFeeId);
         }

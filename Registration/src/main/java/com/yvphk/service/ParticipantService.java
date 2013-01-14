@@ -4,7 +4,13 @@
 */
 package com.yvphk.service;
 
-import com.yvphk.model.form.*;
+import com.yvphk.model.form.Event;
+import com.yvphk.model.form.EventPayment;
+import com.yvphk.model.form.EventRegistration;
+import com.yvphk.model.form.HistoryRecord;
+import com.yvphk.model.form.Participant;
+import com.yvphk.model.form.ParticipantCriteria;
+import com.yvphk.model.form.ParticipantSeat;
 
 import java.util.List;
 
@@ -41,5 +47,9 @@ public interface ParticipantService
                                     HistoryRecord record);
 
     public void addParticipant (Participant participant);
+
+    public List<ParticipantSeat> getAllSeats (Event event);
+
+    public void addParticipantSeat (ParticipantSeat participantSeat);
 
 }

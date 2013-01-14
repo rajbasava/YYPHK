@@ -5,7 +5,17 @@
 package com.yvphk.service;
 
 import com.yvphk.model.dao.ParticipantDAO;
-import com.yvphk.model.form.*;
+import com.yvphk.model.form.Event;
+import com.yvphk.model.form.EventPayment;
+import com.yvphk.model.form.EventRegistration;
+import com.yvphk.model.form.HistoryRecord;
+import com.yvphk.model.form.Participant;
+import com.yvphk.model.form.ParticipantCriteria;
+import com.yvphk.model.form.ParticipantSeat;
+import com.yvphk.model.form.RegistrationCriteria;
+import com.yvphk.model.form.PaymentCriteria;
+import com.yvphk.model.form.ReferenceGroup;
+import com.yvphk.model.form.RegisteredParticipant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -108,6 +118,18 @@ public class ParticipantServiceImpl implements ParticipantService
     public void addParticipant (Participant participant)
     {
         participantDAO.addParticipant(participant);
+    }
+
+    @Transactional
+    public List<ParticipantSeat> getAllSeats (Event event)
+    {
+        return participantDAO.getAllSeats(event);
+    }
+
+    @Transactional
+    public void addParticipantSeat (ParticipantSeat participantSeat)
+    {
+        participantDAO.addParticipantSeat(participantSeat);
     }
 
 }

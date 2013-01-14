@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class RegisteredParticipant implements Serializable
+public class RegisteredParticipant implements Serializable, Importable
 {
     public static final String ActionRegister = "Register";
     public static final String ActionUpdate = "Update";
@@ -26,6 +26,7 @@ public class RegisteredParticipant implements Serializable
     private Integer eventId;
     private Integer eventFeeId;
     private String status;
+    private EventPayment impPayment;  // need to merge currentPayment, impPayment, payment,allpayments
 
 
     public void initialize (String email)
@@ -189,5 +190,26 @@ public class RegisteredParticipant implements Serializable
     public void setStatus (String status)
     {
         this.status = status;
+    }
+
+    public void initializeForImport (String email)
+    {
+        initialize(email);
+        setAction(RegisteredParticipant.ActionRegister);
+    }
+
+    public void applyEvent (Event event)
+    {
+        getRegistration().setEvent(event);
+    }
+
+    public EventPayment getImpPayment ()
+    {
+        return impPayment;
+    }
+
+    public void setImpPayment (EventPayment impPayment)
+    {
+        this.impPayment = impPayment;
     }
 }

@@ -80,6 +80,9 @@ public class EventRegistration extends BaseForm
     @Column(name = "STATUS")
     private String status;
 
+    @Column(name = "REFORDER", columnDefinition = "default 1")
+    private Integer refOrder;
+
     @Column(name = "REGISTRATIONDATE", updatable=false)
     private Date registrationDate;
 
@@ -103,13 +106,13 @@ public class EventRegistration extends BaseForm
     @JoinColumn(name = "PARTICIPANTID")
     private Participant participant;
 
-    @OneToMany(mappedBy = "registration", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "registration")
     private Set<EventPayment> payments;
 
     @Transient
     private List<HistoryRecord> historyRecords;
 
-    @OneToMany(mappedBy = "registration", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "registration")
     private Set<ParticipantSeat> seats;
 
     @Transient
@@ -357,6 +360,16 @@ public class EventRegistration extends BaseForm
     public void setReference (String reference)
     {
         this.reference = reference;
+    }
+
+    public Integer getRefOrder ()
+    {
+        return refOrder;
+    }
+
+    public void setRefOrder (Integer refOrder)
+    {
+        this.refOrder = refOrder;
     }
 
     public String getCategory ()

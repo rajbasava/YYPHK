@@ -5,17 +5,16 @@
 
 package com.yvphk.service;
 
+import com.yvphk.common.ApplicationContextUtils;
+import com.yvphk.common.ImportObjectMeta;
 import com.yvphk.common.Util;
 import com.yvphk.model.dao.EventDAO;
 import com.yvphk.model.dao.ParticipantDAO;
 import com.yvphk.model.form.Event;
-import com.yvphk.model.form.EventPayment;
-import com.yvphk.model.form.EventRegistration;
 import com.yvphk.model.form.HistoryRecord;
 import com.yvphk.model.form.ImportFile;
+import com.yvphk.model.form.Importable;
 import com.yvphk.model.form.Login;
-import com.yvphk.model.form.Participant;
-import com.yvphk.model.form.RegisteredParticipant;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -23,6 +22,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
@@ -31,7 +31,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -41,17 +41,10 @@ import java.util.Set;
 @Service
 public class ImportServiceImpl implements ImportService
 {
-    public static final String ContentTypeXLSX= "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-    public static final String ContentTypeXLS= "application/vnd.ms-excel";
-    public static final String Registrations= "Registrations";
-    public static final String Payments= "Payments";
-
-    private static final String[] ParticipantImportFields =
-            new String[] {"Name","Email","Mobile","Home","Foundation","Vip","VipDesc"};
-    private static final String[] RegistrationImportFields =
-            new String[] {"AmountPayable","Review","Level","Reference","Application","Certificates","RegistrationDate","Comments"};
-    private static final String[] PaymentImportFields =
-            new String[] {"AmountPaid","Mode","ReceiptInfo","ReceiptDate","PdcNotClear","Pdc","PdcDate","Remarks"};
+    public static final String ContentTypeXLSX =
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+    public static final String ContentTypeXLS =
+            "application/vnd.ms-excel";
 
     @Autowired
     private ParticipantDAO participantDAO;
@@ -77,19 +70,28 @@ public class ImportServiceImpl implements ImportService
                 workBook = new HSSFWorkbook(file.getInputStream());
             }
 
-            Sheet registrationsSheet = workBook.getSheet(Registrations);
-            Sheet paymentsSheet = workBook.getSheet(Payments);
+            Sheet sheet = null;
+            int sheetCount = workBook.getNumberOfSheets();
+            int sheetMetaCount = importFile.getMeta().getSheets().size();
 
-            if (registrationsSheet == null || paymentsSheet == null) {
+            if (sheetCount  != sheetMetaCount) {
                 return;
             }
 
-            Map registrationsMap =  processSheet(registrationsSheet, Registrations);
-            Map paymentsMap =  processSheet(paymentsSheet, Payments);
+            Map mapsToMerge = new HashMap();
+            for (int i = 0; i < sheetCount; i++) {
+                String sheetName = workBook.getSheetName(i);
+                sheet = workBook.getSheet(sheetName);
+                if (sheet != null) {
+                    ImportObjectMeta.ImportObjectSheet sheetMeta = importFile.getMeta().getSheets().get(i);
+                    Map processedSheetMap = processSheet(sheet, sheetMeta.getSheetName());
+                    mapsToMerge.put(i, processedSheetMap);
+                }
+            }
 
-            Map mergedMap = mergeMaps(registrationsMap, paymentsMap);
+            Map mergedMap = mergeMaps(mapsToMerge);
 
-            processRegistrations(mergedMap, login, importFile.getEventId());
+            processMergedMap(mergedMap, login, importFile);
 
         }
         catch (IOException e) {
@@ -98,50 +100,81 @@ public class ImportServiceImpl implements ImportService
     }
 
     /**
-        Map Structure:
-        Key - Map
+     * Map Structure:
+     * Key - Map
      */
-    private Integer processRegistrations (Map mergedMap, Login login, Integer eventId)
+    private Integer processMergedMap (Map mergedMap,
+                                      Login login,
+                                      ImportFile importFile)
     {
-        Event event = eventDAO.getEvent(eventId);
+        Event event = null;
+        if (importFile.getEventId() != null) {
+            event = eventDAO.getEvent(importFile.getEventId());
+        }
+        ImportObjectMeta meta = importFile.getMeta();
         Set keys = mergedMap.keySet();
         Iterator itr = keys.iterator();
+        int sheetMetaCount = meta.getSheets().size();
+        ImportObjectMeta.ImportObjectSheet sheet1Meta = meta.getSheets().get(0);
+
+        ImportObjectMeta.ImportObjectSheet sheet2Meta = null;
+        if (sheetMetaCount > 1) {
+            sheet2Meta = meta.getSheets().get(1);
+        }
+        int i = 0;
         while (itr.hasNext()) {
             Integer key = (Integer) itr.next();
             ArrayList list = (ArrayList) mergedMap.get(key);
-            List regData = (List)((Map)list.get(0)).get(Registrations);
-            Map tmpMap = (Map) list.get(1);
-            List paymentData = new ArrayList();
-            if (tmpMap != null) {
-                paymentData = (List)tmpMap.get(Payments);
+            Map map = new HashMap();
+
+            List sheet1Data = (List) ((Map) list.get(0)).get(sheet1Meta.getSheetName());
+            map.put(sheet1Meta.getSheetName(), sheet1Data);
+            if (sheetMetaCount > 1 ) {
+                Map tmpMap = (Map) list.get(1);
+                List sheet2Data = new ArrayList();
+                if (tmpMap != null) {
+                    sheet2Data = (List) tmpMap.get(sheet2Meta.getSheetName());
+                    map.put(sheet2Meta.getSheetName(), sheet2Data);
+                }
             }
-            RegisteredParticipant registeredParticipant = new RegisteredParticipant();
-            processEventRegistration(regData, paymentData, registeredParticipant);
-            registeredParticipant.initialize(login.getEmail());
-            registeredParticipant.setAction(RegisteredParticipant.ActionRegister);
-            registeredParticipant.getRegistration().setEvent(event);
-            participantDAO.registerParticipant(registeredParticipant, null);
+
+            Importable importable =
+                    (Importable) Util.createInstance(meta.getBaseClass());
+            processImportableData(map, importable, meta);
+            importable.initializeForImport(login.getEmail());
+            if (event != null) {
+                importable.applyEvent(event);
+            }
+            ApplicationContext context = ApplicationContextUtils.getApplicationContext();
+            Object daoObj = context.getBean(ImportableService.class);
+            try {
+                Method method = daoObj.getClass().getDeclaredMethod(meta.getMethodName(), importable.getClass());
+                method.invoke(daoObj, importable);
+            }
+            catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            }
+            catch (InvocationTargetException e) {
+                e.printStackTrace();
+            }
+            catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+
         }
         return null;
     }
 
 
-    private void processEventRegistration (List regData, List paymentData,
-                                           RegisteredParticipant registeredParticipant)
+    private void processImportableData (Map map,
+                                        Importable importable,
+                                        ImportObjectMeta meta)
     {
-        int count = 1;
-
         try {
-            processFields(regData, registeredParticipant, "Participant",
-                    Participant.class, ParticipantImportFields, count);
-
-            processFields(regData, registeredParticipant, "Registration",
-                    EventRegistration.class, RegistrationImportFields,
-                    count + ParticipantImportFields.length);
-
-            processFields(paymentData, registeredParticipant, "Payment",
-                    EventPayment.class, PaymentImportFields, count);
-
+            List<ImportObjectMeta.ImportObjectSheet>  sheets = meta.getSheets();
+            for (ImportObjectMeta.ImportObjectSheet sheet: sheets) {
+                processFields((List) map.get(sheet.getSheetName()), importable, sheet);
+            }
         }
         catch (InvocationTargetException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
@@ -156,66 +189,73 @@ public class ImportServiceImpl implements ImportService
 
 
     private void processFields (List data,
-                                RegisteredParticipant registeredParticipant,
-                                String methodName,
-                                Class clazz,
-                                String[] fields,
-                                int count)
+                                Importable importable,
+                                ImportObjectMeta.ImportObjectSheet sheet)
             throws InvocationTargetException, IllegalAccessException, InstantiationException
     {
-        for (int i=0; i < data.size(); i++ ) {
-            List row  = (List) data.get(i);
-            Object obj = clazz.newInstance();
-            for (int j=0; j<fields.length; j++) {
-                Cell cell = (Cell) row.get(count+j);
-                String fieldName = fields[j];
+        List<String> fields = sheet.getFieldPaths();
+        for (int i = 0; i < data.size(); i++) {
+            List row = (List) data.get(i);
+            for (int j = 0; j < fields.size(); j++) {
+                Cell cell = (Cell) row.get(j+1); // to avoid the look up id field
+                String fieldName = fields.get(j);
                 if (fieldName.indexOf("Date") >= 0) {
-                    Method method = Util.getDeclaredSetter(clazz, fieldName, Date.class);
-                    method.invoke(obj, cell.getDateCellValue());
+                    Util.setDottedFieldValue(fields.get(j), importable, cell.getDateCellValue());
                 }
-                else if (fieldName.indexOf("Amount") >= 0) {
-                    Method method = Util.getDeclaredSetter(clazz, fieldName, Long.class);
-                    method.invoke(obj, new Long((long)cell.getNumericCellValue()));
+                else if (fieldName.indexOf("amount") >= 0) {
+                    Util.setDottedFieldValue(fields.get(j), importable, new Long((long) cell.getNumericCellValue()));
                 }
-                else if (fieldName.equals("Review")||
-                        fieldName.equals("Vip") ||
-                        fieldName.equals("Application") ||
-                        fieldName.equals("Certificates") ||
-                        fieldName.equals("PdcNotClear")) {
-                    Method method = Util.getDeclaredSetter(clazz, fieldName, boolean.class);
+                else if (fieldName.indexOf("review") >= 0 ||
+                        fieldName.indexOf("vip") >= 0 ||
+                        fieldName.indexOf("application") >= 0 ||
+                        fieldName.indexOf("certificates") >= 0 ||
+                        fieldName.indexOf("pdcNotClear") >= 0) {
                     cell.setCellType(Cell.CELL_TYPE_BOOLEAN);
-                    method.invoke(obj, cell.getBooleanCellValue());
+                    Util.setDottedFieldValue(fields.get(j), importable, cell.getBooleanCellValue());
                 }
-                else if (fieldName.equals("Comments")) {
+                else if (fieldName.indexOf("historyRecord") >= 0) {
                     cell.setCellType(Cell.CELL_TYPE_STRING);
                     String comment = cell.getStringCellValue();
-                    if (!Util.nullOrEmptyOrBlank(comment)) {
+                    if (! Util.nullOrEmptyOrBlank(comment)) {
                         HistoryRecord record = new HistoryRecord();
                         record.setComment(comment);
-                        registeredParticipant.setHistoryRecord(record);
+                        Util.setDottedFieldValue(fields.get(j), importable, record);
                     }
                 }
                 else {
-                    Method method = Util.getDeclaredSetter(clazz, fieldName, String.class);
                     cell.setCellType(Cell.CELL_TYPE_STRING);
-                    method.invoke(obj, cell.getStringCellValue());
+                    Util.setDottedFieldValue(fields.get(j), importable, cell.getStringCellValue());
                 }
             }
-            Method method = Util.getDeclaredSetter(RegisteredParticipant.class, methodName, clazz);
-            method.invoke(registeredParticipant, obj);
+
+            if (!Util.nullOrEmptyOrBlank(sheet.getFieldPathGetter())) {
+                Object obj = Util.getDottedFieldValue(sheet.getFieldPathGetter(), importable);
+                Util.setDottedFieldValue(sheet.getFieldPathSetter(), importable, obj, false);
+                Util.setDottedFieldValue(sheet.getFieldPathGetter(), importable, null, false);
+            }
         }
     }
 
-    private Map mergeMaps (Map registrationsMap, Map paymentsMap)
+    private Map mergeMaps (Map mapsToMerge)
     {
+        boolean availableMapsToMerge = mapsToMerge.size() > 1;
         Map mergedMap = new LinkedHashMap();
-        Set registrationKeys = registrationsMap.keySet();
-        Iterator registrationItr = registrationKeys.iterator();
-        while (registrationItr.hasNext()) {
-            Integer key = (Integer) registrationItr.next();
+        Map firstMap = (Map) mapsToMerge.get(0);
+
+        Map secondMap = null;
+        if (availableMapsToMerge) {
+            secondMap = (Map) mapsToMerge.get(1);
+        }
+
+        Set firstMapKeys = firstMap.keySet();
+        Iterator firstMapItr = firstMapKeys.iterator();
+        while (firstMapItr.hasNext()) {
+            Integer key = (Integer) firstMapItr.next();
             ArrayList list = new ArrayList();
-            list.add(registrationsMap.get(key));
-            list.add(paymentsMap.get(key));
+            list.add(firstMap.get(key));
+            if (availableMapsToMerge) {
+                list.add(secondMap.get(key));
+            }
             mergedMap.put(key, list);
         }
         return mergedMap;
@@ -231,28 +271,29 @@ public class ImportServiceImpl implements ImportService
             Row row = (Row) regisSheetRowItr.next();
             Iterator cellIter = row.cellIterator();
             ArrayList singleRow = new ArrayList();
-            for(int cn=0; cn < row.getLastCellNum(); cn++) {
+            for (int cn = 0; cn < row.getLastCellNum(); cn++) {
                 Cell cell = row.getCell(cn, Row.CREATE_NULL_AS_BLANK);
                 singleRow.add(cell);
             }
             Map data = new LinkedHashMap();
             Cell cell = (Cell) singleRow.get(0);
 
-
             if (!first) {
                 Integer key = new Integer((int) cell.getNumericCellValue());
-                if (dataMap.containsKey(key)) {
-                    LinkedHashMap tempMap = (LinkedHashMap) dataMap.get(key);
-                    ArrayList listRows = (ArrayList) tempMap.get(keyStr);
-                    listRows.add(singleRow);
-                    data.put(keyStr, listRows);
+                if (key.intValue() > 0) {
+                    if (dataMap.containsKey(key)) {
+                        LinkedHashMap tempMap = (LinkedHashMap) dataMap.get(key);
+                        ArrayList listRows = (ArrayList) tempMap.get(keyStr);
+                        listRows.add(singleRow);
+                        data.put(keyStr, listRows);
+                    }
+                    else {
+                        ArrayList lst = new ArrayList();
+                        lst.add(singleRow);
+                        data.put(keyStr, lst);
+                    }
+                    dataMap.put(key, data);
                 }
-                else {
-                    ArrayList lst = new ArrayList();
-                    lst.add(singleRow);
-                    data.put(keyStr, lst);
-                }
-                dataMap.put(key, data);
             }
             first = false;
         }

@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface EventService
 {
-    public void addEvent (Event event);
+    public void saveOrUpdateEvent (Event event);
 
     public Event getEvent (Integer eventId);
 

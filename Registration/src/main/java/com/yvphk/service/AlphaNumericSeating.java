@@ -60,7 +60,7 @@ public class AlphaNumericSeating implements SeatingService
             if (regsCount >= regsSize) {
                 break;
             }
-            int seatCounter = 1;
+            int seatCounter = 0;
 
             boolean[] seatFlags = markAllocatedSeats(event, rowMeta);
 
@@ -70,7 +70,7 @@ public class AlphaNumericSeating implements SeatingService
                 if (regsCount >= regsSize) {
                     break;
                 }
-                seatCounter = seatCounter + i;
+                seatCounter = seatCounter + 1;
 
                 if (!seatFlags[i]) {
                     EventRegistration registration = allUnallocatedRegistrations.get(regsCount);
@@ -132,11 +132,11 @@ public class AlphaNumericSeating implements SeatingService
 
         boolean[] seatFlags = markAllocatedSeats(event, rowMeta);
 
-        int seatCounter = 1;
+        int seatCounter = 0;
         ParticipantSeat seat = null;
         for (int i = 0; i < seatFlags.length; i++) {
 
-            seatCounter = seatCounter + i;
+            seatCounter = seatCounter + 1;
 
             if (!seatFlags[i]) {
                 seat = createSeat(registration, rowMeta.getRowName(), seatCounter);

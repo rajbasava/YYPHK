@@ -20,26 +20,6 @@
                  $("#registrationCriteria").submit();
             });
 
-            $(".popup").click(function(e) {
-                var divId = $(this).attr('id');
-                $("div#"+divId).show()
-                    .css('top', e.pageY - moveDown)
-                    .css('left', e.pageX - moveLeft)
-                    .css('position','absolute')
-                    .css('overflow','auto')
-                    .css({"background-color":"#FFFFFF","font-size":"15px"})
-                    .css({"border":"2px solid #B8B8B8","padding":"15px"})
-                    .css({"z-index":"100","box-shadow":"0 0 5px #C4C4C4"})
-                    .height("150px")
-                    .width("300px")
-                    .appendTo('body');
-            });
-
-            $(".popupBoxClose").click(function() {
-                var divId = $(this).attr('id');
-                $("div#"+divId).hide();
-            });
-
             $(document).ready(function() {
 
                 $("#registrationCriteria input[name='fromRegistrationDate']").datepicker({
@@ -114,13 +94,13 @@
         <td><form:checkbox path="vip"/></td>
     </tr>
     <tr>
-        <td><form:label path="foodCoupon">Contacted</form:label></td>
+        <td><form:label path="foodCoupon"><spring:message code="label.foodCoupon"/></form:label></td>
         <td>
             <form:radiobutton path="foodCoupon" value="true"/>True &nbsp;
             <form:radiobutton path="foodCoupon" value="false"/>False &nbsp;
             <form:radiobutton path="foodCoupon" value=""/>Both
         </td>
-        <td><form:label path="eventKit">Follow Up</form:label></td>
+        <td><form:label path="eventKit"><spring:message code="label.eventKit"/></form:label></td>
         <td>
             <form:radiobutton path="eventKit" value="true"/>True &nbsp;
             <form:radiobutton path="eventKit" value="false"/>False &nbsp;
@@ -186,17 +166,16 @@
                         <table border="1" width="100%">
                             <tr>
                                 <td width="3%"><spring:message code="label.id"/></th>
-                                <td width="7.5%"><spring:message code="label.name"/></th>
-                                <td width="10%"><spring:message code="label.email"/></th>
+                                <td width="9.75%"><spring:message code="label.name"/></th>
+                                <td width="11%"><spring:message code="label.email"/></th>
                                 <td width="8%"><spring:message code="label.mobile"/></th>
-                                <td width="14.5%"><spring:message code="label.foundation"/></th>
+                                <td width="15%"><spring:message code="label.foundation"/></th>
                                 <td width="8.5%"><spring:message code="label.event"/></th>
                                 <td width="7.5%"><spring:message code="label.level"/></th>
-                                <td width="6%"><spring:message code="label.seat"/></th>
                                 <td width="9%"><spring:message code="label.totalAmountPaid"/></th>
                                 <td width="7.5%"><spring:message code="label.amountDue"/></th>
-                                <td width="7.5%">Contacted</th>
-                                <td width="5%">Follow Up</th>
+                                <td width="7%"><spring:message code="label.foodCoupon"/></th>
+                                <td width="6%"><spring:message code="label.eventKit"/></th>
                                 <td><spring:message code="label.status"/></th>
                             </tr>
                         </table>
@@ -209,7 +188,7 @@
                                 <c:forEach items="${registrationList}" var="registration">
                                     <tr>
                                         <td width="3%"><c:out value="${registration.id}"/></td>
-                                        <td width="8%" class="YLink">
+                                        <td width="10%" class="YLink">
                                             <form id="updatePart<c:out value="${registration.id}"/>" method="post" action="updateRegistration.htm">
                                                 <input type="hidden" name="registrationId" value="<c:out value="${registration.id}"/>" />
                                                 <a href="#" onclick="document.getElementById('updatePart<c:out value="${registration.id}"/>').submit();">
@@ -217,40 +196,23 @@
                                                 </a>
                                             </form>
                                         </td>
-                                        <td width="10%"><c:out value="${registration.participant.email}"/></td>
-                                        <td width="8%"><c:out value="${registration.participant.mobile}"/></td>
+                                        <td width="11%"><c:out value="${registration.participant.email}"/></td>
+                                        <td width="8.25%"><c:out value="${registration.participant.mobile}"/></td>
                                         <td width="15%"><c:out value="${registration.participant.foundation}"/></td>
-                                        <td width="9%"><c:out value="${registration.event.name}"/></td>
-                                        <td width="8%"><c:out value="${registration.levelName}"/></td>
-                                        <div style="display:none;" id="seatsDisplay<c:out value="${registration.id}"/>">
-                                            <c:if  test="${!empty registration.seats}">
-                                                <c:forEach items="${registration.seats}" var="seat">
-                                                    <c:if  test="${seat.seat != null}">
-                                                        <ul class="tooltipBullet">
-                                                            <li><c:out value="${seat.levelName}"/>&nbsp;-&nbsp;<c:out value="${seat.seat}"/></li>
-                                                        </ul>
-                                                    </c:if>
-                                                </c:forEach>
-                                            </c:if>
-                                            <p align="center"></p><a class="popupBoxClose" href="#" id="seatsDisplay<c:out value="${registration.id}"/>">Close</a></p>
-                                        </div>
-                                        <td width="6%">
-                                            <a class="popup" href="#" id="seatsDisplay<c:out value="${registration.id}"/>">
-                                                <spring:message code="label.seat"/>
-                                            </a>
-                                        </td>
-                                        <td width="10.5%">
+                                        <td width="8.75%"><c:out value="${registration.event.name}"/></td>
+                                        <td width="7.75%"><c:out value="${registration.levelName}"/></td>
+                                        <td width="9%">
                                             <c:out value="${registration.totalAmountPaid}"/>
                                         </td>
-                                        <td width="8%"><c:out value="${registration.amountDue}"/></td>
-                                        <td width="8%"><c:out value="${registration.foodCoupon}"/></td>
+                                        <td width="7.75%"><c:out value="${registration.amountDue}"/></td>
+                                        <td width="7%"><c:out value="${registration.foodCoupon}"/></td>
                                         <c:if  test="${registration.eventKit}">
                                             <td width="5%" style="font-weight:bold; color:green; font-size:20px;">
                                                 <c:out value="${registration.eventKit}"/>
                                             </td>
                                         </c:if>
                                         <c:if  test="${!registration.eventKit}">
-                                            <td width="5%">
+                                            <td width="6%">
                                                 <c:out value="${registration.eventKit}"/>
                                             </td>
                                         </c:if>

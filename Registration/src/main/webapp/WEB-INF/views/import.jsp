@@ -8,25 +8,56 @@
 </head>
 <body>
 <mytags:menu />
-<form:form method="post" action="processImportFile.htm" commandName="importFile" enctype="multipart/form-data">
-<table align="center" cellspacing="2">
+
+<table width="80%" align="center">
+	<form:form method="post" action="importRegistrations.htm" commandName="importFile" enctype="multipart/form-data">
 	<tr>
-		<td><form:label path="eventId"><spring:message code="label.eventId"/></form:label></td>
+		<td>Select <form:label path="eventId"><spring:message code="label.eventId"/></form:label></td>
 		<td>
             <form:select path="eventId">
                 <form:option value="NONE" label="--- Select ---"/>
                 <form:options items="${allEvents}" />
             </form:select>
         </td>
-    </tr>
-    <tr>
-        <td>Please select a file to upload :<form:input type="file" path="file"/></td>
-	</tr>
-    <tr>
+        <td>Select a file to <b>Import Participants</b> :<form:input type="file" path="file"/></td>
         <td><input type="submit" value="Upload"/></td>
 	</tr>
+	</form:form>
+    <tr height="3px" style="background-color:#E8E8E8;">
+        <td colspan="4"></td>
+    </tr>
+	<form:form method="post" action="importRowMeta.htm" commandName="importFile" enctype="multipart/form-data">
+	<tr>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+        <td>Select a file to <b>Import Row Meta</b> :<form:input type="file" path="file"/></td>
+        <td><input type="submit" value="Upload"/></td>
+	</tr>
+	</form:form>
+    <tr height="3px" style="background-color:#E8E8E8;">
+        <td colspan="4"></td>
+    </tr>
+	<form:form method="post" action="importCustomSeats.htm" commandName="importFile" enctype="multipart/form-data">
+	<tr>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+        <td>Select a file to <b>Import Custom Seats</b> :<form:input type="file" path="file"/></td>
+        <td><input type="submit" value="Upload"/></td>
+	</tr>
+	</form:form>
+    <tr height="3px" style="background-color:#E8E8E8;">
+        <td colspan="4"></td>
+    </tr>
+	<form:form method="post" action="importUpdateRegistration.htm" commandName="importFile" enctype="multipart/form-data">
+	<tr>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+        <td>Select a file to <b>Import Update Registrations</b> :<form:input type="file" path="file"/></td>
+        <td><input type="submit" value="Upload"/></td>
+	</tr>
+	</form:form>
 </table>
-</form:form>
+
 <mytags:footer/>
 </body>
 </html>

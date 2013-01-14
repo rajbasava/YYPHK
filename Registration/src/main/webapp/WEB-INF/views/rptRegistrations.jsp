@@ -10,12 +10,27 @@
     <script type="text/javascript" src="<c:url value="/resources/script/jquery-ui-1.8.23.custom.min.js"/>"></script>
     <script type="text/javascript">
         $(function() {
-            $("a#excel").button();
-            $("a#excel").css("font-size", "11px");
-            $( "a#excel" ).click(function() {
+            $("a#exportRegistrations").button();
+            $("a#exportRegistrations").css("font-size", "11px");
+            $("a#exportRegistrations" ).click(function() {
                  $("#registrationCriteria").get(0).setAttribute('action', 'exportRegistrations.htm');
                  $("#registrationCriteria").submit();
             });
+
+            $("a#exportConsolRegistrations").button();
+            $("a#exportConsolRegistrations").css("font-size", "11px");
+            $("a#exportConsolRegistrations" ).click(function() {
+                 $("#registrationCriteria").get(0).setAttribute('action', 'exportConsolRegistrations.htm');
+                 $("#registrationCriteria").submit();
+            });
+
+            $("a#exportRegistrationsForImp").button();
+            $("a#exportRegistrationsForImp").css("font-size", "11px");
+            $("a#exportRegistrationsForImp" ).click(function() {
+                 $("#registrationCriteria").get(0).setAttribute('action', 'exportRegistrationsForImp.htm');
+                 $("#registrationCriteria").submit();
+            });
+
 
             $(document).ready(function() {
                 $("#registrationCriteria input[name='fromRegistrationDate']").datepicker({
@@ -114,12 +129,6 @@
         </td>
     </tr>
     <tr>
-        <td><form:label path="consolidated"><spring:message code="label.consolidated"/></form:label></td>
-        <td><form:checkbox path="consolidated"/></td>
-        <td><spring:message code="label.registrationDate"/></td>
-        <td>From: <form:input path="fromRegistrationDate"/> To: <form:input path="toRegistrationDate"/></td>
-    </tr>
-    <tr>
         <td><form:label path="status"><spring:message code="label.status"/></form:label></td>
         <td>
             <form:select path="status">
@@ -127,11 +136,15 @@
                 <form:options items="${allStatuses}" />
             </form:select>
         </td>
+        <td><spring:message code="label.registrationDate"/></td>
+        <td>From: <form:input path="fromRegistrationDate"/> To: <form:input path="toRegistrationDate"/></td>
     </tr>
     <tr>
         <td colspan="4" align="center">
             <div id="button">
-                <a id="excel" href="#"><spring:message code="label.report"/></a>
+                <a id="exportRegistrations" href="#"><spring:message code="label.report"/></a>
+                <a id="exportConsolRegistrations" href="#"><spring:message code="label.exportConsolRegistrations"/></a>
+                <a id="exportRegistrationsForImp" href="#"><spring:message code="label.exportRegistrationsForImp"/></a>
             </div>
         </td>
     </tr>

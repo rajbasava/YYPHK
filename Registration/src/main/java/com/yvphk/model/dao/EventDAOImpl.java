@@ -24,9 +24,9 @@ public class EventDAOImpl extends CommonDAOImpl implements EventDAO
     private SessionFactory sessionFactory;
 
     @Override
-    public void addEvent (Event event)
+    public void saveOrUpdateEvent (Event event)
     {
-        sessionFactory.getCurrentSession().save(event);
+        saveOrUpdate(event);
     }
 
     @Override
@@ -329,5 +329,10 @@ public class EventDAOImpl extends CommonDAOImpl implements EventDAO
         session.close();
 
         return foundations;
+    }
+
+    public void addRowMeta (RowMeta rowMeta)
+    {
+        saveOrUpdate(rowMeta);
     }
 }

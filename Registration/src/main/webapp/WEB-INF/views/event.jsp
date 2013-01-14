@@ -48,6 +48,20 @@
                  $("#modifyEvent").submit();
             });
 
+            $("a#exportSeats").button();
+            $("a#exportSeats").css("font-size", "11px");
+            $("a#exportSeats").click(function() {
+                 $("#modifyEvent").get(0).setAttribute('action', 'exportSeats.htm');
+                 $("#modifyEvent").submit();
+            });
+
+            $("a#editEvent").button();
+            $("a#editEvent").css("font-size", "11px");
+            $("a#editEvent").click(function() {
+                 $("#modifyEvent").get(0).setAttribute('action', 'showUpdateEvent.htm');
+                 $("#modifyEvent").submit();
+            });
+
         });
     </script>
     <style>
@@ -75,8 +89,9 @@
     </tr>
     <tr><td>&nbsp;</td></tr>
 </table>
-<form:form method="post" action="addEvent.htm" commandName="event">
+<form:form method="post" action="saveOrUpdateEvent.htm" commandName="event">
 <form:errors path="*" cssClass="errorblock" element="div" />
+<form:hidden path="id"/>
 <table align="center" cellspacing="2">
     <tr>
 		<td><form:label path="name"><spring:message code="label.name"/></form:label></td>
@@ -125,7 +140,7 @@
 	</tr>
 	<tr>
 		<td colspan="4" align="center">
-			<input type="submit" value="<spring:message code="label.addEvent"/>"/>
+			<input type="submit" value="Save Or Update Event"/>
 		</td>
 	</tr>
 </table>
@@ -144,13 +159,15 @@
                         <table border="1" width="100%">
                             <tr>
                                 <td width="3%">&nbsp;&nbsp;</td>
-                                <td width="20%"><spring:message code="label.name"/></td>
+                                <td width="15%"><spring:message code="label.name"/></td>
                                 <td width="10%"><spring:message code="label.venue"/></td>
                                 <td width="8%"><spring:message code="label.city"/></td>
                                 <td width="10%"><spring:message code="label.eligibilityLevel"/></td>
                                 <td width="12%"><spring:message code="label.startDate"/></td>
                                 <td width="12%"><spring:message code="label.endDate"/></td>
-                                <td><spring:message code="label.seatPerLevel"/></td>
+                                <td width="8%"><spring:message code="label.seatingType"/></td>
+                                <td width="8%"><spring:message code="label.rowMetaName"/></td>
+                                <td><spring:message code="label.seatAllocated"/></td>
                             </tr>
                         </table>
                     </td>
@@ -163,13 +180,15 @@
                                     <c:forEach items="${eventList}" var="event">
                                         <tr>
                                             <td width="3%"><input type="radio" name="eventId" value="<c:out value="${event.id}"/>"></td>
-                                            <td width="20.5%"><c:out value="${event.name}"/></td>
+                                            <td width="15%"><c:out value="${event.name}"/></td>
                                             <td width="10%"><c:out value="${event.venue}"/></td>
                                             <td width="8%"><c:out value="${event.city}"/> </td>
                                             <td width="10%"><c:out value="${event.eligibilityLevel}"/></td>
                                             <td width="12%"><c:out value="${event.startDate}"/> </td>
                                             <td width="12%"><c:out value="${event.endDate}"/></td>
-                                            <td><c:out value="${event.seatPerLevel}"/></td>
+                                            <td width="8%"><c:out value="${event.seatingTypeName}"/></td>
+                                            <td width="8%"><c:out value="${event.rowMetaName}"/></td>
+                                            <td><c:out value="${event.seatAllocated}"/></td>
                                         </tr>
                                     </c:forEach>
                                 </form>
@@ -185,11 +204,13 @@
             <table width="100%" cellpadding="2" cellspacing="2">
                 <tr>
                     <td align="left">
-                        <a id="addEventFee" href="#">Add Event Fee</a>
+                        <a id="addEventFee" href="#">Manage Event Fees</a>
                         <a id="showKits" href="#">Kits</a>
                         <a id="showEventDetail" href="#">Event Details</a>
                         <a id="allocateSeats" href="#">Allocate Seats</a>
+                        <a id="exportSeats" href="#">Export Allocated Seats</a>
                         <a id="deleteEvent" href="#">Deactivate</a>
+                        <a id="editEvent" href="#">Edit</a>
                     </td>
                 </tr>
             </table>

@@ -6,9 +6,11 @@ package com.yvphk.model.dao;
 
 import com.yvphk.common.AmountPaidCategory;
 import com.yvphk.common.ParticipantLevel;
+import com.yvphk.common.SeatingType;
 import com.yvphk.common.Util;
 import com.yvphk.model.form.*;
 import org.hibernate.*;
+import com.yvphk.model.form.RegistrationForm;
 import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
@@ -70,7 +72,11 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
             //todo check the uniqueness of the participant before adding.
             addParticipant(participant);
             registration.setParticipant(participant);
-            registration.setStatus(EventRegistration.StatusRegistered);
+
+            if (Util.nullOrEmptyOrBlank(registration.getStatus())) {
+                registration.setStatus(EventRegistration.StatusRegistered);
+            }
+
             if (registration.getRegistrationDate() == null) {
                 registration.setRegistrationDate(new Date());
             }
@@ -177,30 +183,41 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
         return volunteerKit;
     }
 
-    private void addParticipantSeats (ParticipantSeat participantSeat,
-                                      EventRegistration registration,
-                                      Session session)
+    public void addParticipantSeat (ParticipantSeat participantSeat)
     {
-        Event event = registration.getEvent();
-        populateSeatNo(participantSeat, registration, event.getEligibilityLevel());
-        session.save(participantSeat);
-        if (!registration.getEvent().getEligibilityLevel().equals(registration.getLevel())) {
-            if (!registration.getEvent().isSeatPerLevel()) {
-                return;
-            }
-
-            List<String> lessLevels =
-                    ParticipantLevel.getAllLessLevels(
-                            registration.getEvent().getEligibilityLevel(),
-                            registration.getLevel());
-
-            for (String level: lessLevels) {
-                ParticipantSeat seat = new ParticipantSeat();
-                populateSeatNo(seat, registration, level);
-                session.save(seat);
-            }
+        EventRegistration registration = getEventRegistration(participantSeat.getRegistrationId());
+        participantSeat.setRegistration(registration);
+        participantSeat.setEvent(registration.getEvent());
+        if (Util.nullOrEmptyOrBlank(participantSeat.getLevel())) {
+            participantSeat.setLevel(registration.getEvent().getEligibilityLevel());
         }
+        saveOrUpdate(participantSeat);
     }
+
+//    private void addParticipantSeats (ParticipantSeat participantSeat,
+//                                      EventRegistration registration,
+//                                      Session session)
+//    {
+//        Event event = registration.getEvent();
+//        populateSeatNo(participantSeat, registration, event.getEligibilityLevel());
+//        session.save(participantSeat);
+//        if (!registration.getEvent().getEligibilityLevel().equals(registration.getLevel())) {
+//            if (!registration.getEvent().isSeatPerLevel()) {
+//                return;
+//            }
+//
+//            List<String> lessLevels =
+//                    ParticipantLevel.getAllLessLevels(
+//                            registration.getEvent().getEligibilityLevel(),
+//                            registration.getLevel());
+//
+//            for (String level: lessLevels) {
+//                ParticipantSeat seat = new ParticipantSeat();
+//                populateSeatNo(seat, registration, level);
+//                session.save(seat);
+//            }
+//        }
+//    }
 
     private void populateSeatNo (ParticipantSeat participantSeat,
                                  EventRegistration registration, String level)
@@ -474,10 +491,14 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
         Session session = sessionFactory.openSession();
         Criteria criteria = session.createCriteria(EventRegistration.class);
         criteria.createAlias("event", "event");
-        criteria.setFetchMode("payments", FetchMode.EAGER);
+
         criteria.createAlias("participant", "participant");
         criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
         criteria.add(Restrictions.eq("active", true));
+
+        if (registrationCriteria.isConsolidated()) {
+            criteria.setFetchMode("payments", FetchMode.EAGER);
+        }
 
         if (registrationCriteria.getSeat() != null) {
             criteria.createAlias("seats", "seats");
@@ -571,6 +592,8 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
 
         criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
         criteria.addOrder(Order.asc("registrationDate"));
+        criteria.addOrder(Order.asc("refOrder"));
+        criteria.addOrder(Order.asc("id"));
 
         criteria.add(Restrictions.eq("event.id", event.getId()));
         criteria.add(Restrictions.isNull("seats.seat"));
@@ -782,6 +805,45 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
         session.flush();
         session.close();
         return results;
+    }
+
+    public List<ParticipantSeat> getAllSeats (Event event)
+    {
+        if (event == null) {
+            return null;
+        }
+
+        Session session = sessionFactory.openSession();
+        Criteria criteria = session.createCriteria(ParticipantSeat.class);
+        criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+
+        if (SeatingType.AlphaNumerical.getKey().equals(event.getSeatingType())) {
+            criteria.addOrder(Order.asc("alpha"));
+        }
+        criteria.addOrder(Order.asc("seat"));
+
+        criteria.add(Restrictions.eq("event", event));
+
+        List<ParticipantSeat> results = criteria.list();
+        session.flush();
+        session.close();
+        return results;
+    }
+
+    public void updateRegistration (RegistrationForm registrationForm)
+    {
+        EventRegistration registration = getEventRegistration(registrationForm.getRegistrationId());
+
+        Session session = sessionFactory.openSession();
+
+        registration.setRefOrder(registrationForm.getRefOrder());
+        if (registrationForm.getRegistrationDate() != null) {
+            registration.setRegistrationDate(registrationForm.getRegistrationDate());
+        }
+        registration.initializeForImport(Util.getCurrentUser().getEmail());
+        session.update(registration);
+        session.flush();
+        session.close();
     }
 
 }

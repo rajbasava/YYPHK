@@ -5,6 +5,7 @@
 
 package com.yvphk.service;
 
+import com.yvphk.model.form.Event;
 import com.yvphk.model.form.RegistrationCriteria;
 import com.yvphk.model.form.PaymentCriteria;
 
@@ -14,5 +15,9 @@ public interface DownloadService
 {
     public void downloadRegistrationsReport (HttpServletResponse response, RegistrationCriteria criteria);
 
+    public void downloadRegistrationsReportForImport (HttpServletResponse response, RegistrationCriteria criteria);
+
     public void downloadPaymentsReport (HttpServletResponse response, PaymentCriteria criteria);
+
+    public void downloadSeats (HttpServletResponse response, Event event);
 }

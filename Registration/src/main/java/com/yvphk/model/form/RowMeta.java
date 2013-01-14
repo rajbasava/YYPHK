@@ -161,4 +161,9 @@ public class RowMeta extends BaseForm
         this.active = active;
     }
 
+    public void initializeForImport (String email)
+    {
+        initialize(email);
+    }
+
 }

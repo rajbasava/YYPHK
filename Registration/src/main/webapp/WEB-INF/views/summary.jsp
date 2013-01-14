@@ -73,15 +73,21 @@
         <tr>
             <table class="data" border="1" cellpadding="1" cellspacing="1" width="100%">
             <tr>
-                <td>Level</td>
                 <td>Seat No</td>
             </tr>
             <c:forEach items="${registeredParticipant.registration.seats}" var="seat">
                 <c:if  test="${seat.level != null}">
-                <tr>
-                    <td><c:out value="${seat.level}"/> </td>
-                    <td><c:out value="${seat.seat}"/></td>
-                </tr>
+                    <tr style="font-size:20px;color:#ff0000;">
+                        <td>
+                            <c:if  test="${!empty registeredParticipant.registration.seats}">
+                                <c:forEach items="${registeredParticipant.registration.seats}" var="seat">
+                                    <c:if  test="${seat.seat != null}">
+                                        <c:out value="${seat.levelName}"/>&nbsp;-&nbsp;<c:out value="${seat.alpha}"/>&nbsp;<c:out value="${seat.seat}"/>
+                                    </c:if>
+                                </c:forEach>
+                            </c:if>
+                        </td>
+                    </tr>
                 </c:if>
             </c:forEach>
             </table>

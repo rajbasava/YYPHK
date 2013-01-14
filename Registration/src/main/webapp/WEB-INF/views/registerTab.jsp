@@ -116,6 +116,25 @@
                 });
 
                 $('#tabs').tabs({ selected: 1 });
+
+                $("#registeredParticipant input[name='registration.foodCoupon']").click(function () {
+                     if ($("#registeredParticipant input[name='registration.foodCoupon']").prop('checked') &&
+                        $("#registeredParticipant input[name='registration.eventKit']").prop('checked')) {
+                            $("div#seatsDisplay").show();
+                    }
+                });
+
+                $("#registeredParticipant input[name='registration.eventKit']").click(function () {
+                     if ($("#registeredParticipant input[name='registration.foodCoupon']").prop('checked') &&
+                        $("#registeredParticipant input[name='registration.eventKit']").prop('checked')) {
+                            $("div#seatsDisplay").show();
+                    }
+                });
+
+                if ($("#registeredParticipant input[name='registration.foodCoupon']").prop('checked') &&
+                        $("#registeredParticipant input[name='registration.eventKit']").prop('checked')) {
+                    $("div#seatsDisplay").show();
+                }
             });
 	    });
     </script>
@@ -151,6 +170,8 @@
     <form:hidden path="registration.id"/>
     <form:hidden path="registration.status"/>
     <form:hidden path="registration.localEventKitStatus"/>
+    <form:hidden path="registration.refOrder"/>
+    <form:hidden path="registration.totalAmountPaid"/>
     <table width="100%" cellpadding="1" cellspacing="1">
         <tr>
             <td align="left" style="font-size:18px">
@@ -319,13 +340,28 @@
 					<td>	
 						<table>
                             <tr>
-                                <td><form:label path="registration.foodCoupon">Contacted</form:label></td>
+                                <td><form:label path="registration.foodCoupon"><spring:message code="label.foodCoupon"/></form:label></td>
                                 <td><form:checkbox path="registration.foodCoupon" onclick="return ${!isInfoVolunteer}"/></td>
                             </tr>
                             <tr>
-                                <td><form:label path="registration.eventKit">Follow Up</form:label></td>
+                                <td><form:label path="registration.eventKit"><spring:message code="label.eventKit"/></form:label></td>
                                 <td><form:checkbox path="registration.eventKit" onclick="return ${!isInfoVolunteer}"/></td>
                             </tr>
+							<tr style="font-size:18px;color:#ff0000;">
+							    <td>
+                                    <div id="seatsDisplay" style="display:none;">
+                                        <c:if  test="${!empty registeredParticipant.registration.seats}">
+                                            <c:forEach items="${registeredParticipant.registration.seats}" var="seat">
+                                                <c:if  test="${seat.seat != null}">
+                                                    <ul class="tooltipBullet">
+                                                         <li><c:out value="${seat.levelName}"/>&nbsp;-&nbsp;<c:out value="${seat.alpha}"/>&nbsp;<c:out value="${seat.seat}"/></li>
+                                                    </ul>
+                                                </c:if>
+                                            </c:forEach>
+                                        </c:if>
+                                    </div>
+							    </td>
+							</tr>
                             <tr>
                                 <td><form:label path="registration.application"><spring:message code="label.application"/></form:label></td>
                                 <td><form:checkbox path="registration.application" onclick="return ${isSpotRegVolunteer || isAdmin || isInfoVolunteer}"/></td>
@@ -409,8 +445,15 @@
         <table width="100%" cellpadding="2" cellspacing="2">
             <tr style="background-color:#DFDFDF;">
                 <td align="center">
-                    <a id="submit" href="#"><c:out value="${registeredParticipant.action}"/></a>
-                    <c:if test="${isAdmin || isSpotRegVolunteer}" >
+                    <c:choose>
+                        <c:when test="${user.access.admin}" >
+                            <a id="submit" href="#"><c:out value="${registeredParticipant.action}"/></a>
+                        </c:when>
+                        <c:when test="${!registeredParticipant.registration.eventKit}" >
+                        `    <a id="submit" href="#"><c:out value="${registeredParticipant.action}"/></a>`
+                        </c:when>
+                    </c:choose>
+		    <c:if test="${isAdmin || isSpotRegVolunteer}" >
                         <a id="showPayments" href="#">Payments</a>
                     </c:if>
                     <c:if test="${isAdmin}" >

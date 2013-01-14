@@ -5,6 +5,7 @@
 package com.yvphk.model.dao;
 
 import com.yvphk.model.form.*;
+import com.yvphk.model.form.RegistrationForm;
 
 import java.util.List;
 
@@ -15,6 +16,8 @@ public interface ParticipantDAO extends CommonDAO
     public EventRegistration registerParticipant (RegisteredParticipant registeredParticipant, Login login);
 
     public Participant getParticipant (Integer userId);
+
+    public void addParticipantSeat (ParticipantSeat participantSeat);
 
     public EventRegistration getEventRegistration (Integer registrationId);
 
@@ -49,5 +52,9 @@ public interface ParticipantDAO extends CommonDAO
     public List<ParticipantSeat> getAllocatedSeats (Event event, String alpha, String suffix);
 
     public void removeEventRegistrations (Integer id);
+
+    public List<ParticipantSeat> getAllSeats (Event event);
+
+    public void updateRegistration (RegistrationForm registrationForm);
 
 }

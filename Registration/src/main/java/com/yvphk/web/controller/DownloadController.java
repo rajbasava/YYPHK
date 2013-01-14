@@ -8,6 +8,7 @@ package com.yvphk.web.controller;
 import com.yvphk.common.AmountPaidCategory;
 import com.yvphk.common.ParticipantLevel;
 import com.yvphk.common.PaymentMode;
+import com.yvphk.model.form.Event;
 import com.yvphk.model.form.RegistrationCriteria;
 import com.yvphk.model.form.PaymentCriteria;
 import com.yvphk.service.DownloadService;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
@@ -33,11 +35,28 @@ public class DownloadController extends CommonController
     private EventService eventService;
 
     @RequestMapping(value = "/exportRegistrations")
-    public void getXLS (HttpServletResponse response,
-                        Map<String, Object> map,
-                        RegistrationCriteria registrationCriteria)
+    public void exportRegistrations (HttpServletResponse response,
+                                     Map<String, Object> map,
+                                     RegistrationCriteria registrationCriteria)
     {
         downloadService.downloadRegistrationsReport(response, registrationCriteria);
+    }
+
+    @RequestMapping(value = "/exportConsolRegistrations")
+    public void exportConsolRegistrations (HttpServletResponse response,
+                                           Map<String, Object> map,
+                                           RegistrationCriteria registrationCriteria)
+    {
+        registrationCriteria.setConsolidated(true);
+        downloadService.downloadRegistrationsReport(response, registrationCriteria);
+    }
+
+    @RequestMapping(value = "/exportRegistrationsForImp")
+    public void exportRegistrationsForImp (HttpServletResponse response,
+                                           Map<String, Object> map,
+                                           RegistrationCriteria registrationCriteria)
+    {
+        downloadService.downloadRegistrationsReportForImport(response, registrationCriteria);
     }
 
     @RequestMapping(value = "/rptRegistrations")
@@ -60,6 +79,18 @@ public class DownloadController extends CommonController
     {
         downloadService.downloadPaymentsReport(response, paymentCriteria);
     }
+
+    @RequestMapping(value = "/exportSeats")
+    public void exportSeats (HttpServletResponse response,
+                             HttpServletRequest request)
+    {
+        String strEventId = request.getParameter("eventId");
+        Integer eventId = Integer.parseInt(strEventId);
+        Event event = eventService.getEvent(eventId);
+
+        downloadService.downloadSeats(response, event);
+    }
+
     @RequestMapping(value = "/rptPayments")
     public String rptPayments (Map<String, Object> map)
     {

@@ -11,8 +11,7 @@ CREATE TABLE phk_rowmeta (
 	preparedby VARCHAR(50),
 	timecreated TIMESTAMP null,
 	timeupdated TIMESTAMP null,
-	active VARCHAR(1),
-	CONSTRAINT rowname UNIQUE (rowname)
+	active VARCHAR(1)
 );
 
 ALTER TABLE phk_event ADD COLUMN seatingtype VARCHAR(5);
@@ -21,6 +20,8 @@ ALTER TABLE phk_event ADD COLUMN rowmetaname varchar(50);
 ALTER TABLE phk_seat ADD COLUMN alpha VARCHAR(5);
 ALTER TABLE phk_seat ADD COLUMN suffix VARCHAR(5);
 ALTER TABLE phk_seat ADD COLUMN custom VARCHAR(1);
+ALTER TABLE phk_eventregstrn ADD COLUMN reforder int DEFAULT 1;
+ALTER TABLE phk_rowmeta ADD unique (name, rowname);
 
 CREATE TABLE phk_foundation (
 	id INT PRIMARY KEY auto_increment,
@@ -90,3 +91,31 @@ values ('Pranic Healing Foundation Malaysia', 'Malaysia', 'Malaysia', 'Malaysia'
 
 insert into phk_foundation (name, city, state, country, preparedby, timecreated, timeupdated, active)
 values ('Pranic Healing Foundation Mauritius', 'Mauritius', 'Mauritius', 'Mauritius', 'system', now(), now(), '1');
+
+insert into phk_foundation (name, city, state, country, preparedby, timecreated, timeupdated, active)
+values ('Pranic Healing Foundation HongKong', 'HongKong', 'HongKong', 'HongKong', 'system', now(), now(), '1');
+
+insert into phk_foundation (name, city, state, country, preparedby, timecreated, timeupdated, active)
+values ('Pranic Healing Foundation Macau', 'Macau', 'Macau', 'Macau', 'system', now(), now(), '1');
+
+insert into phk_foundation (name, city, state, country, preparedby, timecreated, timeupdated, active)
+values ('Pranic Healing Foundation Dubai', 'Dubai', 'Dubai', 'Dubai', 'system', now(), now(), '1');
+
+insert into phk_foundation (name, city, state, country, preparedby, timecreated, timeupdated, active)
+values ('Pranic Healing Foundation Oman', 'Muscat', 'Muscat', 'Muscat', 'system', now(), now(), '1');
+
+insert into phk_foundation (name, city, state, country, preparedby, timecreated, timeupdated, active)
+values ('Pranic Healing Foundation Uruguay', 'Uruguay', 'Uruguay', 'Uruguay', 'system', now(), now(), '1');
+
+insert into phk_foundation (name, city, state, country, preparedby, timecreated, timeupdated, active)
+values ('Pranic Healing Foundation Thailand', 'Bangkok', 'Bangkok', 'Thailand', 'system', now(), now(), '1');
+
+insert into phk_foundation (name, city, state, country, preparedby, timecreated, timeupdated, active)
+values ('Pranic Healing Foundation USA', 'USA', 'USA', 'USA', 'system', now(), now(), '1');
+
+insert into phk_foundation (name, city, state, country, preparedby, timecreated, timeupdated, active)
+values ('Pranic Healing Foundation Sri Lanka', 'Colombo', 'Colombo', 'Sri Lanka', 'system', now(), now(), '1');
+
+insert into phk_foundation (name, city, state, country, preparedby, timecreated, timeupdated, active)
+values ('Pranic Healing Foundation Australia', 'Melbourne', 'Melbourne', 'Australia', 'system', now(), now(), '1');
+

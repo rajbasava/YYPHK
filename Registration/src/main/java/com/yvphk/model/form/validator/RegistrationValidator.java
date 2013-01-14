@@ -4,6 +4,8 @@
 */
 package com.yvphk.model.form.validator;
 
+import com.yvphk.common.Util;
+import com.yvphk.model.form.Login;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
@@ -44,6 +46,12 @@ public class RegistrationValidator implements Validator
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "eventId", "eventId");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "registration.level", "registration.level");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "registration.amountPayable", "registration.amountPayable");
+
+        Login login = Util.getCurrentUser();
+        if (login.getAccess().isRegVolunteer() &&
+                !(participant.getRegistration().getTotalAmountPaid() >= participant.getRegistration().getAmountPayable())) {
+            errors.reject("registration.noAccess", "registration.noAccess");
+        }
 
         if (participant.getCurrentPayment() != null &&
                 participant.getCurrentPayment().getAmountPaid() != null) {

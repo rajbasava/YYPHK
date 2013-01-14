@@ -5,6 +5,8 @@
 
 package com.yvphk.model.form;
 
+import com.yvphk.common.SeatingType;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -234,6 +236,11 @@ public class Event extends BaseForm
     public String getSeatingType ()
     {
         return seatingType;
+    }
+
+    public String getSeatingTypeName ()
+    {
+        return SeatingType.getName(getSeatingType());
     }
 
     public void setSeatingType (String seatingType)

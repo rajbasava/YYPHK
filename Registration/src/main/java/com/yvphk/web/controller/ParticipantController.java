@@ -142,6 +142,7 @@ public class ParticipantController extends CommonController
         }
         
         if (RegisteredParticipant.ActionRegister.equals(action)) {
+            registeredParticipant.getRegistration().setRefOrder(1);
             registeredParticipant.initialize(login.getEmail());
             ParticipantSeat seat =
                     eventService.nextSeat(
@@ -401,6 +402,14 @@ public class ParticipantController extends CommonController
                     participantService.getEventRegistration(
                             registeredParticipant.getRegistration().getId());
             registeredParticipant.initializeHistoryRecords(login.getEmail());
+            if (registration.getSeats().size() == 0) {
+                ParticipantSeat seat =
+                        eventService.nextSeat(
+                                registration.getEvent(),
+                                registration);
+                seat.setRegistrationId(registration.getId());
+                participantService.addParticipantSeat(seat);
+            }
             participantService.changeToRegistered(registration,
                     registeredParticipant.getCurrentHistoryRecord());
         }

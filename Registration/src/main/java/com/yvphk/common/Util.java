@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.StringTokenizer;
 
 public class Util
 {
@@ -112,6 +113,49 @@ public class Util
         }
         return result;
     }
+    // set only values for one level participant.name
+    public static Object setDottedFieldValue (String dottedFieldPath,
+                                              Object obj,
+                                              Object value)
+    {
+        return setDottedFieldValue(dottedFieldPath, obj, value, true);
+    }
+
+    public static Object setDottedFieldValue (String dottedFieldPath,
+                                              Object obj,
+                                              Object value,
+                                              boolean create)
+    {
+        Object result = null;
+        try {
+            if (create && dottedFieldPath.contains(".")) {
+                StringTokenizer tokenizer = new StringTokenizer(dottedFieldPath, ".");
+                int tokenCount = tokenizer.countTokens();
+
+                Object tmp = null;
+                int i = 0;
+                while (tokenizer.hasMoreTokens() && i < tokenCount-1) {
+                    String path = tokenizer.nextToken();
+                    tmp = Ognl.getValue(path, obj);
+                    if (tmp == null) {
+                        Method method = obj.getClass().getDeclaredMethod("get"+getCapitalizedFieldName(path));
+                        Class clazz = method.getReturnType();
+                        Ognl.setValue(path, obj, createInstance(clazz.getName()));
+                    }
+                    i++;
+                }
+            }
+
+            Ognl.setValue(dottedFieldPath, obj, value);
+        }
+        catch (OgnlException e) {
+            e.printStackTrace();
+        }
+        catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
 
     public static String getCapitalizedFieldName (String dottedFieldPath)
     {
@@ -120,7 +164,7 @@ public class Util
         }
 
         String lastField = dottedFieldPath.substring(dottedFieldPath.lastIndexOf(".")+1);
-        lastField = lastField.substring(0,1).toUpperCase() + lastField.substring(1).toLowerCase();
+        lastField = lastField.substring(0,1).toUpperCase() + lastField.substring(1);
         return lastField;
     }
 

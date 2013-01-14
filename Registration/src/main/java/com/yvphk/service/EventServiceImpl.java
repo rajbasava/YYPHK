@@ -28,9 +28,9 @@ public class EventServiceImpl implements EventService
 
     @Override
     @Transactional
-    public void addEvent (Event event)
+    public void saveOrUpdateEvent (Event event)
     {
-        eventDAO.addEvent(event);
+        eventDAO.saveOrUpdateEvent(event);
     }
 
     @Override
@@ -145,8 +145,7 @@ public class EventServiceImpl implements EventService
     }
 
     @Override
-    @Transactional
-    public ParticipantSeat nextSeat (Event event, EventRegistration registration)
+    public synchronized ParticipantSeat nextSeat (Event event, EventRegistration registration)
     {
         if (!event.isSeatAllocated()) {
             return null;

@@ -5,12 +5,14 @@
 
 package com.yvphk.model.form;
 
+import com.yvphk.common.ImportObjectMeta;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 public class ImportFile
 {
     private CommonsMultipartFile file;
     private Integer eventId;
+    private ImportObjectMeta meta;
 
     public CommonsMultipartFile getFile ()
     {
@@ -30,5 +32,15 @@ public class ImportFile
     public void setEventId (Integer eventId)
     {
         this.eventId = eventId;
+    }
+
+    public ImportObjectMeta getMeta ()
+    {
+        return meta;
+    }
+
+    public void setMeta (ImportObjectMeta meta)
+    {
+        this.meta = meta;
     }
 }
