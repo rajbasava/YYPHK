@@ -156,20 +156,26 @@ public class EventController extends CommonController
         int allotedKitsCount = 0;
         int kitsGivenCount = 0;
         int kitsLeftCount = 0;
-        for(VolunteerKit volunteerKit: volunteerKitList) {
-            allotedKitsCount += volunteerKit.getKitCount();
-            kitsGivenCount += volunteerKit.getKitsGiven();
-            kitsLeftCount += volunteerKit.getKitCount() - volunteerKit.getKitsGiven();
+        if (volunteerKitList != null) {
+            for(VolunteerKit volunteerKit: volunteerKitList) {
+                allotedKitsCount += volunteerKit.getKitCount();
+                kitsGivenCount += volunteerKit.getKitsGiven();
+                kitsLeftCount += volunteerKit.getKitCount() - volunteerKit.getKitsGiven();
+            }
+            unallotedKitsCount = kit.getStock() - allotedKitsCount;
+            map.put("unallotedKitsCount", unallotedKitsCount);
+            map.put("allotedKitsCount", allotedKitsCount);
+            map.put("kitsGivenCount", kitsGivenCount);
+            map.put("kitsLeftCount", kitsLeftCount);
+            map.put("eventKit", kit);
+            map.put("volunteerKits", volunteerKitList);
+            map.put("event", eventService.getEvent(eventId));
+            return "kitsUI";
         }
-        unallotedKitsCount = kit.getStock() - allotedKitsCount;
-        map.put("unallotedKitsCount", unallotedKitsCount);
-        map.put("allotedKitsCount", allotedKitsCount);
-        map.put("kitsGivenCount", kitsGivenCount);
-        map.put("kitsLeftCount", kitsLeftCount);
-        map.put("eventKit", kit);
-        map.put("volunteerKits", volunteerKitList);
-        map.put("event", eventService.getEvent(eventId));
-        return "kitsUI";
+        else {
+            // todo need to provide message when no kits were allocated
+            return "redirect:/event.htm";
+        }
     }
 
     @RequestMapping("/showEventKitsUI")

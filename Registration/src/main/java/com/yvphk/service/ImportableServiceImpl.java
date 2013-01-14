@@ -5,9 +5,11 @@
 
 package com.yvphk.service;
 
+import com.yvphk.common.Util;
 import com.yvphk.model.dao.EventDAO;
 import com.yvphk.model.dao.ParticipantDAO;
 import com.yvphk.model.form.EventRegistration;
+import com.yvphk.model.form.Login;
 import com.yvphk.model.form.ParticipantSeat;
 import com.yvphk.model.form.RegisteredParticipant;
 import com.yvphk.model.form.RegistrationForm;
@@ -26,7 +28,8 @@ public class ImportableServiceImpl implements ImportableService
 
     public EventRegistration registerParticipant (RegisteredParticipant registeredParticipant)
     {
-        return participantDAO.registerParticipant(registeredParticipant);
+        Login login = Util.getCurrentUser();
+        return participantDAO.registerParticipant(registeredParticipant, login);
     }
 
     public void addRowMeta (RowMeta rowMeta)

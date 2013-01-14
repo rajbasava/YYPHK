@@ -45,7 +45,10 @@ public class RegistrationValidator implements Validator
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "eventId", "eventId");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "registration.level", "registration.level");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "registration.amountPayable", "registration.amountPayable");
+
+        if (participant.getRegistration().getAmountPayable() == null || participant.getRegistration().getAmountPayable() <= 0) {
+            errors.reject("registration.amountPayable", "registration.amountPayable");
+        }
 
         Login login = Util.getCurrentUser();
         if (login.getAccess().isRegVolunteer() &&
