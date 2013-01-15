@@ -71,8 +71,12 @@
             <td class="KitsBold"><c:out value="${eventKit.stock}"/></td>
         </tr>
         <tr>
-            <th class="Kits">Current Stock:</th>
+            <th class="Kits">Current Stock with Administrator:</th>
             <td class="KitsBold"><c:out value="${unallotedKitsCount}"/></td>
+        </tr>
+        <tr>
+            <th class="Kits">Total Attended Participants:</th>
+            <td class="KitsBold"><c:out value="${kitsGivenCount}"/></td>
         </tr>
     </table>
 </div>

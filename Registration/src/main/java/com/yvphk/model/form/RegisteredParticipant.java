@@ -6,6 +6,8 @@ package com.yvphk.model.form;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -211,5 +213,14 @@ public class RegisteredParticipant implements Serializable, Importable
     public void setImpPayment (EventPayment impPayment)
     {
         this.impPayment = impPayment;
+    }
+
+    public boolean isDisplaySeat ()
+    {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(Calendar.DATE, 2);
+        Date validToShow = calendar.getTime();
+        return validToShow.after(getRegistration().getEvent().getStartDate());
     }
 }

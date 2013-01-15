@@ -205,8 +205,8 @@
                 <tr>
                     <td align="left">
                         <a id="addEventFee" href="#">Manage Event Fees</a>
-                        <a id="showKits" href="#">Kits</a>
-                        <a id="showEventDetail" href="#">Event Details</a>
+                        <a id="showKits" href="#">Volunteer Kits and Status</a>
+                        <a id="showEventDetail" href="#">Kits For Event</a>
                         <a id="allocateSeats" href="#">Allocate Seats</a>
                         <a id="exportSeats" href="#">Export Allocated Seats</a>
                         <a id="deleteEvent" href="#">Deactivate</a>

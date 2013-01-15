@@ -347,6 +347,7 @@
                                 <td><form:label path="registration.eventKit"><spring:message code="label.eventKit"/></form:label></td>
                                 <td><form:checkbox path="registration.eventKit" onclick="return ${!isInfoVolunteer}"/></td>
                             </tr>
+                            <c:if test="${registeredParticipant.displaySeat}" >
 							<tr style="font-size:18px;color:#ff0000;">
 							    <td>
                                     <div id="seatsDisplay" style="display:none;">
@@ -362,13 +363,14 @@
                                     </div>
 							    </td>
 							</tr>
+							</c:if>
                             <tr>
                                 <td><form:label path="registration.application"><spring:message code="label.application"/></form:label></td>
-                                <td><form:checkbox path="registration.application" onclick="return ${isSpotRegVolunteer || isAdmin || isInfoVolunteer}"/></td>
+                                <td><form:checkbox path="registration.application" onclick="return ${isSpotRegVolunteer || isAdmin }"/></td>
                             </tr>
                             <tr>
                                 <td><form:label path="registration.certificates"><spring:message code="label.certificates"/></form:label></td>
-                                <td><form:checkbox path="registration.certificates" onclick="return ${isSpotRegVolunteer || isAdmin || isInfoVolunteer}"/></td>
+                                <td><form:checkbox path="registration.certificates" onclick="return ${isSpotRegVolunteer || isAdmin }"/></td>
                             </tr>
                             <tr>
                                 <td><form:label path="currentHistoryRecord.comment"><spring:message code="label.comments"/></form:label></td>
@@ -450,10 +452,10 @@
                             <a id="submit" href="#"><c:out value="${registeredParticipant.action}"/></a>
                         </c:when>
                         <c:when test="${!registeredParticipant.registration.eventKit}" >
-                        `    <a id="submit" href="#"><c:out value="${registeredParticipant.action}"/></a>`
+                            <a id="submit" href="#"><c:out value="${registeredParticipant.action}"/></a>
                         </c:when>
                     </c:choose>
-		    <c:if test="${isAdmin || isSpotRegVolunteer}" >
+		            <c:if test="${isAdmin || isSpotRegVolunteer}" >
                         <a id="showPayments" href="#">Payments</a>
                     </c:if>
                     <c:if test="${isAdmin}" >

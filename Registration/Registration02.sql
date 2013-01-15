@@ -1,5 +1,5 @@
-DROP TABLE phk_kit;
-DROP TABLE phk_volkit;
+DROP TABLE IF EXISTS phk_kit;
+DROP TABLE IF EXISTS phk_volkit;
 
 CREATE TABLE phk_kit (
 	id INT PRIMARY KEY auto_increment,
