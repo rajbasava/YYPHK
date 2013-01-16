@@ -70,7 +70,8 @@
                 <b>Seats:</b>
             </td>
         </tr>
-        <tr>
+        <tr> <td>
+            <c:if test="${registeredParticipant.displaySeat}" >
             <table class="data" border="1" cellpadding="1" cellspacing="1" width="100%">
             <tr>
                 <td>Seat No</td>
@@ -91,6 +92,8 @@
                 </c:if>
             </c:forEach>
             </table>
+            </c:if>
+            </td>
         </tr>
     </c:if>
     <tr><td>&nbsp;<BR></td></tr>
