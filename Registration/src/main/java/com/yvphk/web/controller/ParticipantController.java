@@ -406,8 +406,10 @@ public class ParticipantController extends CommonController
                         eventService.nextSeat(
                                 registration.getEvent(),
                                 registration);
-                seat.setRegistrationId(registration.getId());
-                participantService.addParticipantSeat(seat);
+                if (seat != null) {
+                    seat.setRegistrationId(registration.getId());
+                    participantService.addParticipantSeat(seat);
+                }
             }
             participantService.changeToRegistered(registration,
                     registeredParticipant.getCurrentHistoryRecord());

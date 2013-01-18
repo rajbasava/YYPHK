@@ -92,6 +92,7 @@
 <form:form method="post" action="saveOrUpdateEvent.htm" commandName="event">
 <form:errors path="*" cssClass="errorblock" element="div" />
 <form:hidden path="id"/>
+<form:hidden path="seatAllocated"/>
 <table align="center" cellspacing="2">
     <tr>
 		<td><form:label path="name"><spring:message code="label.name"/></form:label></td>

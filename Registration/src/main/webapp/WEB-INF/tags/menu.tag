@@ -88,7 +88,7 @@
                            <th width="125px" class="ManuPad"><a href="volunteer.htm">Manage Volunteers</a></th>
                            <th width="125px" class="ManuPad"><a href="event.htm">Manage Events</a></th>
                            <th width="125px" class="ManuPad"><a href="referenceGroup.htm">Manage&nbsp;Reference&nbsp;Groups</a></th>
-                           <th width="125px" class="ManuPad"><a href="import.htm">Import Participants</a></th>
+                           <th width="125px" class="ManuPad"><a href="import.htm">Import</a></th>
                            <th width="125px" class="ManuPad"><a href="rptRegistrations.htm">Export Registrations</a></th>
                            <th width="125px" class="ManuPad"><a href="rptPayments.htm">Export Payments</a></th>
                         </c:if>
