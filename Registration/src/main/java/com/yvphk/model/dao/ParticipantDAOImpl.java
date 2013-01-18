@@ -159,14 +159,14 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
     {
         VolunteerKit volunteerKit = null;
 
-        String queryStr = "SELECT VK.id  " +
-                       "FROM PHK_VOLKIT VK " +
-                       "WHERE VK.VOLLOGINID = (SELECT VL.ID  " +
-                                              "FROM PHK_VOLUNTEER V, PHK_VOLLOGIN VL  " +
-                                              "WHERE VL.VOLUNTEERID = V.ID AND V.EMAIL = '"+email+"' ) " +
-                       "AND VK.KITID = (SELECT K.ID  " +
-                                       "FROM PHK_KIT K  " +
-                                       "WHERE K.EVENTID = '"+eventId+"')";
+        String queryStr = "select vk.id  " +
+                       "from phk_volkit vk " +
+                       "where vk.volloginid = (select vl.id  " +
+                                              "from phk_volunteer v, phk_vollogin vl  " +
+                                              "where vl.volunteerid = v.id and v.email = '"+email+"' ) " +
+                       "and vk.kitid = (select k.id  " +
+                                       "from phk_kit k  " +
+                                       "where k.eventid = '"+eventId+"')";
         Query query = session.createSQLQuery(queryStr);
         List resultList = query.list();
 
