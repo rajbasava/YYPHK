@@ -90,7 +90,10 @@
             }
 
             function populateEventFee(){
-                if ($("select#eventFeeId").val() == '-1'){
+				if ($("#registeredParticipant input[name='access']").val() == 'true'){
+
+				}
+                else if ($("select#eventFeeId").val() == '-1'){
                    $("#registeredParticipant input[name='registration.amountPayable']").val('0');
                 }
                 else {
@@ -172,6 +175,7 @@
     <form:hidden path="registration.localEventKitStatus"/>
     <form:hidden path="registration.refOrder"/>
     <form:hidden path="registration.totalAmountPaid"/>
+    <input id="access" name="access" type="hidden" value="<c:out value="${isInfoVolunteer || isRegVolunteer}"/>"/>
     <table width="100%" cellpadding="1" cellspacing="1">
         <tr>
             <td align="left" style="font-size:18px">

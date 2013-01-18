@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.Set;
 
 @Entity
-@Table(name = "PHK_KIT")
+@Table(name = "phk_kit")
 @org.hibernate.annotations.Entity(dynamicUpdate = true)
 public class Kit extends BaseForm {
     public static final String ClassName = "com.yvphk.model.form.Kit";

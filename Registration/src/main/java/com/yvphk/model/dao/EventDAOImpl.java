@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -125,6 +126,7 @@ public class EventDAOImpl extends CommonDAOImpl implements EventDAO
         Criteria criteria = session.createCriteria(EventFee.class);
         criteria.add(Restrictions.eq("event", event));
         criteria.add(Restrictions.eq("active", true));
+        criteria.add(Restrictions.ge("cutOffDate", new Date()));
         criteria.addOrder(Order.asc("timeCreated"));
         List<EventFee> eventFees = criteria.list();
         session.close();
@@ -200,6 +202,7 @@ public class EventDAOImpl extends CommonDAOImpl implements EventDAO
         criteria.add(Restrictions.eq("event", event));
         criteria.add(Restrictions.eq("active", true));
         Kit kit = (Kit) criteria.uniqueResult();
+        session.flush();
         session.close();
 
         return kit;
@@ -238,6 +241,7 @@ public class EventDAOImpl extends CommonDAOImpl implements EventDAO
         criteria.add(Restrictions.eq("active", true));
         criteria.addOrder(Order.desc("timeCreated"));
         List<VolunteerKit> volunteerKits = criteria.list();
+        session.flush();
         session.close();
 
         return volunteerKits;
@@ -255,6 +259,7 @@ public class EventDAOImpl extends CommonDAOImpl implements EventDAO
         criteria.add(Restrictions.eq("id", voldKitId));
         criteria.add(Restrictions.eq("active", true));
         VolunteerKit volunteerKit = (VolunteerKit) criteria.uniqueResult();
+        session.flush();
         session.close();
 
         return volunteerKit;

@@ -14,6 +14,7 @@ public class Login implements Serializable
     public static final String ClassName = "com.yvphk.model.form.Login";
 
     private String email;
+    private String name;
     private String password;
     private String counter;
     private String permission;
@@ -99,5 +100,15 @@ public class Login implements Serializable
     public void setAccess (Access access)
     {
         this.access = access;
+    }
+
+    public String getName ()
+    {
+        return name;
+    }
+
+    public void setName (String name)
+    {
+        this.name = name;
     }
 }

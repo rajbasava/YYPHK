@@ -79,8 +79,6 @@
     <tr>
         <td><form:label path="mobile"><spring:message code="label.mobile"/></form:label></td>
         <td><form:input path="mobile" /></td>
-        <td><form:label path="seat"><spring:message code="label.seat"/></form:label></td>
-        <td><form:input path="seat" /></td>
     </tr>
     <tr>
         <td><form:label path="eventId"><spring:message code="label.eventId"/></form:label></td>
@@ -166,16 +164,16 @@
                         <table border="1" width="100%">
                             <tr>
                                 <td width="3%"><spring:message code="label.id"/></th>
-                                <td width="9.75%"><spring:message code="label.name"/></th>
-                                <td width="11%"><spring:message code="label.email"/></th>
-                                <td width="8%"><spring:message code="label.mobile"/></th>
-                                <td width="15%"><spring:message code="label.foundation"/></th>
-                                <td width="8.5%"><spring:message code="label.event"/></th>
-                                <td width="7.5%"><spring:message code="label.level"/></th>
-                                <td width="9%"><spring:message code="label.totalAmountPaid"/></th>
-                                <td width="7.5%"><spring:message code="label.amountDue"/></th>
-                                <td width="7%"><spring:message code="label.foodCoupon"/></th>
-                                <td width="6%"><spring:message code="label.eventKit"/></th>
+                                <td width="13.5%"><spring:message code="label.name"/></th>
+                                <td width="23.25%"><spring:message code="label.email"/></th>
+                                <td width="8.5%"><spring:message code="label.mobile"/></th>
+                                <td width="11%"><spring:message code="label.foundation"/></th>
+                                <td width="6.5%">Event</th>
+                                <td width="6.5%"><spring:message code="label.level"/></th>
+                                <td width="6.1%">Amount Paid</th>
+                                <td width="6.5%"><spring:message code="label.amountDue"/></th>
+                                <td width="4.75%">Coupon</th>
+                                <td width="4.5%">Kit</th>
                                 <td><spring:message code="label.status"/></th>
                             </tr>
                         </table>
@@ -201,10 +199,10 @@
                                         <td width="15%"><c:out value="${registration.participant.foundation}"/></td>
                                         <td width="8.75%"><c:out value="${registration.event.name}"/></td>
                                         <td width="7.75%"><c:out value="${registration.levelName}"/></td>
-                                        <td width="9%">
+                                        <td width="8.7%">
                                             <c:out value="${registration.totalAmountPaid}"/>
                                         </td>
-                                        <td width="7.75%"><c:out value="${registration.amountDue}"/></td>
+                                        <td width="8.6%"><c:out value="${registration.amountDue}"/></td>
                                         <td width="7%"><c:out value="${registration.foodCoupon}"/></td>
                                         <c:if  test="${registration.eventKit}">
                                             <td width="5%" style="font-weight:bold; color:green; font-size:20px;">

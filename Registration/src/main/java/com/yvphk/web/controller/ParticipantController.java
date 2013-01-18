@@ -11,6 +11,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.yvphk.model.form.Event;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -34,23 +35,11 @@ import com.yvphk.model.form.RegistrationCriteria;
 import com.yvphk.model.form.ParticipantSeat;
 import com.yvphk.model.form.ReferenceGroup;
 import com.yvphk.model.form.RegisteredParticipant;
-import com.yvphk.model.form.RegistrationCriteria;
 import com.yvphk.model.form.RegistrationPayments;
 import com.yvphk.model.form.validator.PaymentValidator;
 import com.yvphk.model.form.validator.RegistrationValidator;
 import com.yvphk.service.EventService;
 import com.yvphk.service.ParticipantService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import javax.servlet.http.HttpServletRequest;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 @Controller
 public class ParticipantController extends CommonController
@@ -65,6 +54,10 @@ public class ParticipantController extends CommonController
     public String newParticipant (Map<String, Object> map)
     {
         RegisteredParticipant registeredParticipant = new RegisteredParticipant();
+        Event defEvent = getDefaultEvent();
+        if (defEvent != null) {
+            registeredParticipant.setEventId(getDefaultEvent().getId());
+        }
         registeredParticipant.setAction(RegisteredParticipant.ActionRegister);
         map.put("registeredParticipant", registeredParticipant);
         map.put("allParticipantLevels", ParticipantLevel.allParticipantLevels());
@@ -78,7 +71,12 @@ public class ParticipantController extends CommonController
     @RequestMapping("/search")
     public String search (Map<String, Object> map)
     {
-        map.put("registrationCriteria", new RegistrationCriteria());
+        RegistrationCriteria criteria = new RegistrationCriteria();
+        Event defEvent = getDefaultEvent();
+        if (defEvent != null) {
+            criteria.setEventId(getDefaultEvent().getId());
+        }
+        map.put("registrationCriteria", criteria);
         map.put("allParticipantLevels", ParticipantLevel.allParticipantLevels());
         map.put("allFoundations", allFoundations());
         map.put("allEvents", getAllEventMap(eventService.allEvents()));
@@ -340,7 +338,8 @@ public class ParticipantController extends CommonController
         if (!Util.nullOrEmptyOrBlank(strPaymentId)) {
             Integer paymentId = Integer.parseInt(strPaymentId);
             for(EventPayment payment: payments){
-                if (payment.getId() == paymentId) {
+                // testing
+                if (payment.getId().equals(paymentId)) {
                     registrationPayments.setCurrentPayment(payment);
                     registrationPayments.setAction(RegistrationPayments.Update);
                 }

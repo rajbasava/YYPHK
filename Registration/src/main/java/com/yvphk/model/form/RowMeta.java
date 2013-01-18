@@ -13,7 +13,7 @@ import javax.persistence.Table;
 import java.util.Date;
 
 @Entity
-@Table(name = "PHK_ROWMETA")
+@Table(name = "phk_rowmeta")
 @org.hibernate.annotations.Entity(dynamicUpdate = true)
 public class RowMeta extends BaseForm
 {

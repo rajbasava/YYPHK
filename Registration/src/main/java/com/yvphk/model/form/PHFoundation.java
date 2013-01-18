@@ -13,7 +13,7 @@ import javax.persistence.Table;
 import java.util.Date;
 
 @Entity
-@Table(name = "PHK_EVENT")
+@Table(name = "phk_foundation")
 @org.hibernate.annotations.Entity(dynamicUpdate = true)
 public class PHFoundation  extends BaseForm
 {

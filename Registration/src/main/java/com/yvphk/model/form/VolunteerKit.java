@@ -9,7 +9,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "PHK_VOLKIT")
+@Table(name = "phk_volkit")
 @org.hibernate.annotations.Entity(dynamicUpdate = true)
 public class VolunteerKit extends BaseForm {
     public static final String ClassName = "com.yvphk.model.form.VolunteerKit";

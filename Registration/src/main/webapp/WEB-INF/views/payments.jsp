@@ -50,6 +50,13 @@
                  $("#registrationPayments").get(0).setAttribute('action', 'updateRegistration.htm');
                  $("#registrationPayments").submit();
             });
+
+            $("a#showPayments").button();
+            $("a#showPayments").css("font-size", "11px");
+            $("a#showPayments").click(function() {
+                 $("#showPayments").get(0).setAttribute('action', 'showPayments.htm');
+                 $("#showPayments").submit();
+            });
         });
     </script>
 </head>
@@ -120,7 +127,10 @@
     </tr>
     <tr>
         <table class="data" border="1" cellpadding="1" cellspacing="1" width="100%">
+        <form id="showPayments" method="post" action="showPayments.htm">
+        <input type="hidden" name="registration.id" value="<c:out value="${registrationPayments.registrationId}"/>" />
         <tr>
+            <td>&nbsp;</td>
             <td>Prepared By</td>
             <td>Time Created</td>
             <td><spring:message code="label.amountPaid"/></td>
@@ -134,17 +144,10 @@
         </tr>
         <c:forEach items="${registrationPayments.payments}" var="payment">
             <tr>
+                <td><input type="radio" name="paymentId" value="<c:out value="${payment.id}"/>"></td>
                 <td><c:out value="${payment.preparedBy}"/> </td>
                 <td><c:out value="${payment.timeCreated}"/></td>
-                <td class="YLink">
-                    <form id="showPayments<c:out value="${payment.id}"/>" method="post" action="showPayments.htm">
-                        <input type="hidden" name="registration.id" value="<c:out value="${payment.registration.id}"/>" />
-                        <input type="hidden" name="paymentId" value="<c:out value="${payment.id}"/>" />
-                        <a href="#" onclick="document.getElementById('showPayments<c:out value="${payment.id}"/>').submit();">
-                            <c:out value="${payment.amountPaid}"/>
-                        </a>
-                    </form>
-                </td>
+                <td><c:out value="${payment.amountPaid}"/></td>
                 <td><c:out value="${payment.receiptInfo}"/></td>
                 <td><c:out value="${payment.receiptDate}"/></td>
                 <td><c:out value="${payment.mode}"/></td>
@@ -154,7 +157,19 @@
                 <td><c:out value="${payment.remarks}"/></td>
             </tr>
         </c:forEach>
+        </form>
         </table>
+    </tr>
+    <tr>
+    <div id="button">
+        <table width="100%" cellpadding="2" cellspacing="2">
+            <tr style="background-color:#DFDFDF;">
+                <td align="left">
+                    <a id="showPayments" href="#">Edit Payment</a>
+                </td>
+            </tr>
+        </table>
+    </div>
     </tr>
 </c:if>
 <mytags:footer/>

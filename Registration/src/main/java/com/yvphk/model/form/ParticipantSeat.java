@@ -19,7 +19,7 @@ import javax.persistence.Transient;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "PHK_SEAT")
+@Table(name = "phk_seat")
 public class ParticipantSeat extends BaseForm
 {
     public static final String ClassName = "com.yvphk.model.form.ParticipantSeat";

@@ -16,7 +16,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "PHK_PARTICIPANT")
+@Table(name = "phk_participant")
 @org.hibernate.annotations.Entity(dynamicUpdate = true)
 public class Participant extends BaseForm
 {

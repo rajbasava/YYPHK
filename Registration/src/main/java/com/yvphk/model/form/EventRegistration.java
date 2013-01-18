@@ -29,7 +29,7 @@ import java.util.Map;
 import java.util.Set;
 
 @Entity
-@Table(name = "PHK_EVENTREGSTRN")
+@Table(name = "phk_eventregstrn")
 @org.hibernate.annotations.Entity(dynamicUpdate = true)
 public class EventRegistration extends BaseForm
 {

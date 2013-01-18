@@ -17,7 +17,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-@Table(name = "PHK_VOLUNTEER")
+@Table(name = "phk_volunteer")
 @org.hibernate.annotations.Entity(dynamicUpdate = true)
 public class Volunteer extends BaseForm
 {

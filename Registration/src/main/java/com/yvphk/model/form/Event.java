@@ -19,7 +19,7 @@ import java.util.Date;
 import java.util.Set;
 
 @Entity
-@Table(name = "PHK_EVENT")
+@Table(name = "phk_event")
 @org.hibernate.annotations.Entity(dynamicUpdate = true)
 public class Event extends BaseForm
 {

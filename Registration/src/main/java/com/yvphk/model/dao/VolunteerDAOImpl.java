@@ -47,12 +47,13 @@ public class VolunteerDAOImpl extends CommonDAOImpl implements VolunteerDAO
 
     public Map<String, String> listVolunteerWithoutKits (Integer eventKitId)
     {
+        Session session = sessionFactory.openSession();
         String query =  "SELECT V.ID, V.NAME " +
                         "FROM PHK_VOLLOGIN VL, PHK_VOLUNTEER V " +
                         "WHERE VL.VOLUNTEERID = V.ID " +
                             "AND VL.ID NOT IN " +
                                 "(SELECT VOLLOGINID FROM PHK_VOLKIT WHERE KITID = "+ eventKitId +")";
-        List resultList = sessionFactory.getCurrentSession().createSQLQuery(query).list();
+        List resultList = session.createSQLQuery(query).list();
         Map<String, String> volunteerMap = new LinkedHashMap<String, String>();
         if(resultList != null && !resultList.isEmpty()) {
             for(int i=0; i < resultList.size(); i++) {
@@ -60,6 +61,8 @@ public class VolunteerDAOImpl extends CommonDAOImpl implements VolunteerDAO
                 volunteerMap.put(String.valueOf(array[0]), String.valueOf(array[1]));
             }
         }
+        session.flush();
+        session.close();
         return volunteerMap;
     }
 
@@ -103,6 +106,7 @@ public class VolunteerDAOImpl extends CommonDAOImpl implements VolunteerDAO
                 loggedInVolunteer.setLoggedout(null);
                 sessionFactory.getCurrentSession().update(loggedInVolunteer);
             }
+            login.setName(volunteer.getName());
             login.setVolunteerId(volunteer.getId());
             login.setPermission(volunteer.getPermission());
             return true;

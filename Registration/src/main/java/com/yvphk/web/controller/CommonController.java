@@ -8,6 +8,7 @@ package com.yvphk.web.controller;
 import com.yvphk.model.form.Event;
 import com.yvphk.model.form.EventRegistration;
 import com.yvphk.model.form.ReferenceGroup;
+import com.yvphk.model.form.RegistrationCriteria;
 import com.yvphk.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -64,5 +65,16 @@ public class CommonController
     public List<String> allFoundations ()
     {
         return eventService.getAllFoundations();
+    }
+
+    public Event getDefaultEvent ()
+    {
+        List<Event> events = eventService.allEvents();
+        RegistrationCriteria criteria = new RegistrationCriteria();
+        if (events!= null && !events.isEmpty()) {
+            Event event = events.get(0);
+            return event;
+        }
+        return null;
     }
 }

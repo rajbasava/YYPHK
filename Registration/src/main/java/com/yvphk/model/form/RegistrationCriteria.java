@@ -24,7 +24,7 @@ public class RegistrationCriteria implements Serializable
     private String eventKit = "";
     private Date fromRegistrationDate;
     private Date toRegistrationDate;
-    private String status;
+    private String status = EventRegistration.StatusRegistered;
 
     public String getName ()
     {

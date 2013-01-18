@@ -12,7 +12,7 @@ import javax.persistence.Table;
 import java.util.Date;
 
 @Entity
-@Table(name = "PHK_HISTORY")
+@Table(name = "phk_history")
 public class HistoryRecord extends BaseForm
 {
     public static final String ClassName = "com.yvphk.model.form.HistoryRecord";

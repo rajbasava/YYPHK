@@ -16,7 +16,7 @@ import java.util.Date;
 import java.util.Set;
 
 @Entity
-@Table(name = "PHK_REFERENCE")
+@Table(name = "phk_reference")
 @org.hibernate.annotations.Entity(dynamicUpdate = true)
 public class ReferenceGroup extends BaseForm
 {

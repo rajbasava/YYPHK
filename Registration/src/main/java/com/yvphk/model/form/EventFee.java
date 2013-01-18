@@ -16,7 +16,7 @@ import javax.persistence.Transient;
 import java.util.Date;
 
 @Entity
-@Table(name = "PHK_EVENTFEE")
+@Table(name = "phk_eventfee")
 @org.hibernate.annotations.Entity(dynamicUpdate = true)
 public class EventFee extends BaseForm
 {
