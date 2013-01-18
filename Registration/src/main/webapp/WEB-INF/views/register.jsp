@@ -52,6 +52,13 @@
                 getEventFees();
             });
 
+            $("select#eventId").focus(function()
+            {
+                getEventFees();
+            });
+
+            getEventFees();
+
             $("select#eventFeeId").change(function()
             {
                 populateEventFee();

@@ -5,7 +5,6 @@
 package com.yvphk.model.dao;
 
 import com.yvphk.common.AmountPaidCategory;
-import com.yvphk.common.ParticipantLevel;
 import com.yvphk.common.SeatingType;
 import com.yvphk.common.Util;
 import com.yvphk.model.form.*;
@@ -57,7 +56,7 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
     public EventRegistration registerParticipant (RegisteredParticipant registeredParticipant, Login login)
     {
         Participant participant = registeredParticipant.getParticipant();
-
+        List<HistoryRecord> records = registeredParticipant.getAllHistoryRecords();
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
         EventRegistration registration = registeredParticipant.getRegistration();
@@ -81,15 +80,16 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
                 registration.setRegistrationDate(new Date());
             }
             session.save(registration);
-            createAndAddHistoryRecord(
-                    messageSource.getMessage("key.registrationAdded",
-                            new Object[] {registration.getId(),
-                                    registration.getParticipant().getId(),
-                                    registration.getEvent().getName()},
-                            null),
-                    Util.getCurrentUser().getEmail(),
-                    registration,
-                    session);
+            HistoryRecord record =
+                    createHistoryRecord(
+                            messageSource.getMessage("key.registrationAdded",
+                                    new Object[]{registration.getId(),
+                                            registration.getParticipant().getId(),
+                                            registration.getEvent().getName()},
+                                    null),
+                            Util.getCurrentUser().getEmail(),
+                            registration);
+            records.add(record);
 
             ParticipantSeat participantSeat = registeredParticipant.getCurrentSeat();
             if (participantSeat !=  null) {
@@ -100,47 +100,47 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
             //  todo update changes properties of registration objects to comments
             session.update(participant);
             registration.setParticipant(participant);
-            createAndAddHistoryRecord(
-                    messageSource.getMessage("key.registrationUpdated",
-                            new Object[] {registration.getId(),
-                                    registration.getParticipant().getId(),
-                                    registration.getEvent().getName()},
-                            null),
-                    Util.getCurrentUser().getEmail(),
-                    registration,
-                    session);
+            HistoryRecord record =
+                    createHistoryRecord(
+                            messageSource.getMessage("key.registrationUpdated",
+                                    new Object[]{registration.getId(),
+                                            registration.getParticipant().getId(),
+                                            registration.getEvent().getName()},
+                                    null),
+                            Util.getCurrentUser().getEmail(),
+                            registration);
+            records.add(record);
             session.update(registration);
         }
         // local = false and eventKit = true update else event kit dont do anything
         // local = true and eventKit = false update event kit else dont do anything
-        if(login!=null && (registration.isEventKit() ^ registration.isLocalEventKitStatus())) {
+        if (login != null && (registration.isEventKit() ^ registration.isLocalEventKitStatus())) {
             VolunteerKit volunteerKit =
-                        getVolunteerKit(session, login.getEmail(), String.valueOf(registration.getEvent().getId()));
-            if(volunteerKit != null) {
-                if(registration.isEventKit()) {
-                    if(volunteerKit != null) {
-                        volunteerKit.setKitsGiven(volunteerKit.getKitsGiven()+1);
+                    getVolunteerKit(session, login.getEmail(), String.valueOf(registration.getEvent().getId()));
+            if (volunteerKit != null) {
+                if (registration.isEventKit()) {
+                    if (volunteerKit != null) {
+                        volunteerKit.setKitsGiven(volunteerKit.getKitsGiven() + 1);
                     }
-                } else {
-                    if(volunteerKit != null) {
-                        volunteerKit.setKitsGiven(volunteerKit.getKitsGiven()-1);
+                }
+                else {
+                    if (volunteerKit != null) {
+                        volunteerKit.setKitsGiven(volunteerKit.getKitsGiven() - 1);
                     }
                 }
                 session.update(volunteerKit);
-            } else {
+            }
+            else {
                 throw new NullPointerException("Contact Administrator to allocate kits");
             }
-        }
-
-        List<HistoryRecord> records = registeredParticipant.getAllHistoryRecords();
-        for (HistoryRecord record: records) {
-            addHistoryRecord(record, registration, session);
         }
 
         transaction.commit();
 
         session.flush();
         session.close();
+
+        addHistoryRecords(records, registration);
 
         List<EventPayment> payments = registeredParticipant.getAllPayments();
         for(EventPayment payment : payments) {
@@ -262,6 +262,17 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
         session.close();
     }
 
+    public void addHistoryRecords (List<HistoryRecord> records,
+                                   BaseForm object)
+    {
+        Session session = sessionFactory.openSession();
+        for (HistoryRecord record: records) {
+            addHistoryRecord(record, object, session);
+        }
+        session.flush();
+        session.close();
+    }
+
     public void addHistoryRecord (HistoryRecord historyRecord,
                                   BaseForm object,
                                   Session session)
@@ -273,15 +284,24 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
         }
     }
 
-    public void createAndAddHistoryRecord (String comment,
-                                           String preparedBy,
-                                           BaseForm object,
-                                           Session session)
+    public HistoryRecord createHistoryRecord (String comment,
+                                              String preparedBy,
+                                              BaseForm object)
     {
         HistoryRecord record = new HistoryRecord();
         record.setComment(comment);
         record.initialize(preparedBy);
         record.setObject(object);
+        return record;
+    }
+
+    public void createAndAddHistoryRecord (String comment,
+                                           String preparedBy,
+                                           BaseForm object,
+                                           Session session)
+    {
+        HistoryRecord record =
+                createHistoryRecord(comment, preparedBy, object);
         session.save(record);
     }
 
