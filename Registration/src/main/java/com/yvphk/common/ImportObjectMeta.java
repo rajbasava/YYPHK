@@ -141,7 +141,6 @@ public class ImportObjectMeta
         List<String> rowMetaFieldPaths = new ArrayList<String>();
         rowMetaFieldPaths.add("registrationId");
         rowMetaFieldPaths.add("refOrder");
-        rowMetaFieldPaths.add("registrationDate");
         return new ImportObjectSheet("RegistrationsUpdate", rowMetaFieldPaths, null, null);
     }
 
