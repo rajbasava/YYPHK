@@ -77,6 +77,7 @@ public class Report
         paymentFieldPaths.add("registration.participant.name");
         paymentFieldPaths.add("registration.level");
         paymentFieldPaths.add("event.name");
+        paymentFieldPaths.add("level");
         paymentFieldPaths.add("alpha");
         paymentFieldPaths.add("seat");
         paymentFieldPaths.add("custom");
