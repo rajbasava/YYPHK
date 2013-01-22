@@ -158,15 +158,27 @@ public class ParticipantDAOImpl extends CommonDAOImpl implements ParticipantDAO
     private VolunteerKit getVolunteerKit (Session session, String email, String eventId)
     {
         VolunteerKit volunteerKit = null;
-
+//  *** Nested query ***
+//        String queryStr = "select vk.id  " +
+//                       "from phk_volkit vk " +
+//                       "where vk.volloginid = (select vl.id  " +
+//                                              "from phk_volunteer v, phk_vollogin vl  " +
+//                                              "where vl.volunteerid = v.id and v.email = '"+email+"' ) " +
+//                       "and vk.kitid = (select k.id  " +
+//                                       "from phk_kit k  " +
+//                                       "where k.eventid = "+eventId+")";
+//  *** Query with join ***
         String queryStr = "select vk.id  " +
-                       "from phk_volkit vk " +
-                       "where vk.volloginid = (select vl.id  " +
-                                              "from phk_volunteer v, phk_vollogin vl  " +
-                                              "where vl.volunteerid = v.id and v.email = '"+email+"' ) " +
-                       "and vk.kitid = (select k.id  " +
-                                       "from phk_kit k  " +
-                                       "where k.eventid = '"+eventId+"')";
+                            "from phk_volkit vk " +
+                            "inner join phk_vollogin vl " +
+                                "on vk.volloginid = vl.id " +
+                            "inner join phk_volunteer v " +
+                                "on vl.volunteerid = v.id  " +
+                            "inner join phk_kit k " +
+                                "on vk.kitid = k.id  " +
+                            "where v.email = '"+email+"' " +
+                                "AND k.eventid = "+eventId;
+
         Query query = session.createSQLQuery(queryStr);
         List resultList = query.list();
 
