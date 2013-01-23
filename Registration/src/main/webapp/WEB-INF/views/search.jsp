@@ -163,18 +163,18 @@
                     <td>
                         <table border="1" width="100%">
                             <tr>
-                                <td width="3%"><spring:message code="label.id"/></th>
-                                <td width="13.5%"><spring:message code="label.name"/></th>
-                                <td width="23.25%"><spring:message code="label.email"/></th>
-                                <td width="8.5%"><spring:message code="label.mobile"/></th>
-                                <td width="11%"><spring:message code="label.foundation"/></th>
-                                <td width="6.5%">Event</th>
-                                <td width="6.5%"><spring:message code="label.level"/></th>
-                                <td width="6.1%">Amount Paid</th>
-                                <td width="6.5%"><spring:message code="label.amountDue"/></th>
-                                <td width="4.75%">Coupon</th>
-                                <td width="4.5%">Kit</th>
-                                <td><spring:message code="label.status"/></th>
+                                <th width="3%"><spring:message code="label.id"/></th>
+                                <th width="11%"><spring:message code="label.name"/></th>
+                                <th width="7.75%"><spring:message code="label.mobile"/></th>
+                                <th width="12.75%"><spring:message code="label.foundation"/></th>
+                                <th width="7.5%">Event</th>
+                                <th width="6.5%"><spring:message code="label.level"/></th>
+                                <th width="6.25%">Amount Paid</th>
+                                <th width="6.5%"><spring:message code="label.amountDue"/></th>
+                                <th width="6%">Coupon</th>
+                                <th width="6%">Kit</th>
+                                <th width="5%"><spring:message code="label.status"/></th>
+								<th><spring:message code="label.email"/></th>
                             </tr>
                         </table>
                     </td>
@@ -182,11 +182,11 @@
                 <tr>
                     <td>
                         <div style="width:100%; height:300px; overflow-y:scroll; overflow-x:hidden; empty-cells:show; font-size:11px">
-                            <table border="1" width="100%">
+                            <table border="1" style="width:100%; table-layout:fixed;">
                                 <c:forEach items="${registrationList}" var="registration">
                                     <tr>
                                         <td width="3%"><c:out value="${registration.id}"/></td>
-                                        <td width="10%" class="YLink">
+                                        <td width="11%" class="YLink">
                                             <form id="updatePart<c:out value="${registration.id}"/>" method="post" action="updateRegistration.htm">
                                                 <input type="hidden" name="registrationId" value="<c:out value="${registration.id}"/>" />
                                                 <a href="#" onclick="document.getElementById('updatePart<c:out value="${registration.id}"/>').submit();">
@@ -194,18 +194,18 @@
                                                 </a>
                                             </form>
                                         </td>
-                                        <td width="11%"><c:out value="${registration.participant.email}"/></td>
-                                        <td width="8.25%"><c:out value="${registration.participant.mobile}"/></td>
-                                        <td width="15%"><c:out value="${registration.participant.foundation}"/></td>
-                                        <td width="8.75%"><c:out value="${registration.event.name}"/></td>
-                                        <td width="7.75%"><c:out value="${registration.levelName}"/></td>
-                                        <td width="8.7%">
+                                        
+                                        <td width="8%"><c:out value="${registration.participant.mobile}"/></td>
+                                        <td width="13%"><c:out value="${registration.participant.foundation}"/></td>
+                                        <td width="7.5%"><c:out value="${registration.event.name}"/></td>
+                                        <td width="6.5%"><c:out value="${registration.levelName}"/></td>
+                                        <td width="6.5%">
                                             <c:out value="${registration.totalAmountPaid}"/>
                                         </td>
-                                        <td width="8.6%"><c:out value="${registration.amountDue}"/></td>
-                                        <td width="7%"><c:out value="${registration.foodCoupon}"/></td>
+                                        <td width="6.5%"><c:out value="${registration.amountDue}"/></td>
+                                        <td width="6%"><c:out value="${registration.foodCoupon}"/></td>
                                         <c:if  test="${registration.eventKit}">
-                                            <td width="5%" style="font-weight:bold; color:green; font-size:20px;">
+                                            <td width="6%" style="font-weight:bold; color:green; font-size:20px;">
                                                 <c:out value="${registration.eventKit}"/>
                                             </td>
                                         </c:if>
@@ -214,7 +214,8 @@
                                                 <c:out value="${registration.eventKit}"/>
                                             </td>
                                         </c:if>
-                                        <td><c:out value="${registration.status}"/></td>
+                                        <td width="5.1%"><c:out value="${registration.status}"/></td>
+										<td><c:out value="${registration.participant.email}"/></td>
                                     </tr>
                                 </c:forEach>
                             </table>
