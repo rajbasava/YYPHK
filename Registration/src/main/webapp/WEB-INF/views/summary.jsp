@@ -64,6 +64,7 @@
     </tr>
     </table>
     <table cellspacing="1" cellpadding="1" width="100%">
+    <c:if  test="${registeredParticipant.registration.eventKit}">
     <c:if  test="${!empty registeredParticipant.registration.seats}">
         <tr align="left">
             <td>
@@ -95,6 +96,7 @@
             </c:if>
             </td>
         </tr>
+    </c:if>
     </c:if>
     <tr><td>&nbsp;<BR></td></tr>
     <c:if  test="${!empty registeredParticipant.registration.historyRecords}">
