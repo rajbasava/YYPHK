@@ -1,54 +1,10 @@
 .error {
 	color: red;
 }
-
-.senior {
-	background-color: lightblue;
-}
-
-.junior {
-	background-color: lightgrey;
-}
-
 #footer {
 	text-align:center;
 	color: blue;
 }
-#popupBox {
-    display:none; /* Hide the DIV */
-    position:fixed;
-    _position:absolute; /* hack for internet explorer 6 */
-    height:300px;
-    width:280px;
-    overflow: auto;
-    background:#FFFFFF;
-    z-index:100; /* Layering ( on-top of others), if you have lots of layers: I just maximized, you can change it yourself */
-    margin-left: 15px;
-    /* additional features, can be omitted */
-    border:2px solid black;
-    padding:15px;
-    font-size:15px;
-    -moz-box-shadow: 0 0 5px #ff0000;
-    -webkit-box-shadow: 0 0 5px #ff0000;
-    box-shadow: 0 0 5px #ff0000;
-}
-
-#popup {
-    cursor: pointer;
-    text-decoration:none;
-}
-
-/* This is for the positioning of the Close Link */
-#popupBoxClose {
-    font-size:15px;
-    position:absolute;
-    color:#6fa5e2;
-    font-weight:500;
-    botton:5px;
-    right:140px;
-    cursor:pointer;
-}
-
 .YLink a:link {
 	color:#8F52A0;
 	text-decoration:none;
@@ -73,4 +29,25 @@
     font:18px Verdana,Arial,Helvetica,sans-serif;
     font-weight: bold;
     text-align:left;
+}
+.formdata {
+	background: #eee;
+	width: 1325px;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	border-radius: 4px;
+	box-shadow: inset 0 0 3px #bbb;
+	color: #333;
+}
+
+.formtitle {
+	padding: 10px 10px;
+	border-bottom: 1px solid #ccc;
+	font-weight: bold;
+	text-shadow: 0 1px #fff;
+}
+	
+.formbody {
+	padding: 2px 2px;
+	border-top: 1px solid #f7f7f7;
 }

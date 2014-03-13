@@ -1,9 +1,9 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 
-<link rel="stylesheet" href="<c:url value="/resources/css/style.css"/>" />
 <script type="text/javascript" src="<c:url value="/resources/script/jquery-1.7.2.min.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/resources/script/jquery-ui-1.8.23.custom.min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/resources/script/flexigrid.pack.js"/>"></script>
 <style>
 	TABLE.Table
 	{
@@ -29,7 +29,7 @@
 	{
 		Color:Black;
 		BackGround-Color:#E9DCEC;
-		font-size:12pt;
+		font:normal 9px;
 	}
 	a:link    
 	{
@@ -67,8 +67,8 @@
 <div class="Link">
     <table align="center" border="0" class="YLink" cellPadding="0" cellSpacing="0" width="100%">
         <tr>
-            <th width="10%"><img src="<c:url value="/resources/img/gmcks.png"/>"/></th>
-		   <th width="80%"><img src="<c:url value="/resources/img/New-Pranic-Logo.png"/>" height="193"/></th>
+           <th width="10%"><img src="<c:url value="/resources/img/gmcks.png"/>" height="97" width="114"/></th>
+		   <th width="80%"><img src="<c:url value="/resources/img/New-Pranic-Logo.png"/>" height="97" width="165"/></th>
 		   <th width="10%"> Welcome <c:out value="${user.name}"/></th>
         </tr>   
 		<tr height="1%"><td></td></tr>
