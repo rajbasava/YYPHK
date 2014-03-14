@@ -6,8 +6,8 @@
 <html>
 <head>
     <title>Arhatic Yoga Retreat - Export Registrations</title>
-    <script type="text/javascript" src="<c:url value="/resources/script/jquery-1.7.2.min.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/resources/script/jquery-ui-1.8.23.custom.min.js"/>"></script>
+    <mytags:style/>
+    <mytags:menu/>
     <script type="text/javascript">
         $(function() {
             $("a#exportRegistrations").button();
@@ -50,10 +50,8 @@
         });
     </script>
 </head>
-<mytags:style/>
 </head>
 <body>
-<mytags:menu/>
 <h2 align="center">Export Registrations</h2>
 
 <form:form method="post" action="genRptRegistrations.htm" commandName="registrationCriteria">

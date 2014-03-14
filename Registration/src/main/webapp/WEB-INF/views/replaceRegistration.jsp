@@ -6,8 +6,8 @@
 <html>
 <head>
     <title>Arhatic Yoga Retreat - Search Particpants</title>
-    <script type="text/javascript" src="<c:url value="/resources/script/jquery-1.7.2.min.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/resources/script/jquery-ui-1.8.23.custom.min.js"/>"></script>
+    <mytags:style/>
+    <mytags:menu/>
     <script type="text/javascript">
         $(document).ready(function(){
             $(function() {
@@ -28,10 +28,8 @@
         });
     </script>
 </head>
-<mytags:style/>
 </head>
 <body>
-<mytags:menu/>
 <table width="100%" cellpadding="1" cellspacing="1">
     <tr>
         <td align="center" style="font-size:18px">

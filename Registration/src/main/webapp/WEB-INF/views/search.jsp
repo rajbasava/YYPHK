@@ -41,7 +41,7 @@
 					height: 275,
 					width: 1325,
 					singleSelect: true
-					});
+			});
 
             $(document).ready(function() {
 

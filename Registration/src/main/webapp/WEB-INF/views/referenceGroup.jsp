@@ -6,13 +6,11 @@
 <html>
 <head>
 	<title>Reference Groups - Yoga Vidya Pranic Healing Foundation of Karnataka</title>
-	<script type="text/javascript" src="<c:url value="/resources/script/jquery-1.7.2.min.js"/>"></script>
-	<script type="text/javascript" src="<c:url value="/resources/script/jquery-ui-1.8.23.custom.min.js"/>"></script>
-</head>
 <mytags:style/>
+<mytags:menu/>
+</head>
 </head>
 <body>
-<mytags:menu/>
 <h2 align="center">Reference Groups</h2>
 
 <form:form method="post" action="addReferenceGroup.htm" commandName="referenceGroup">

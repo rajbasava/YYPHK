@@ -2,10 +2,10 @@
 <%@ taglib tagdir="/WEB-INF/tags" prefix="mytags"%>
 <html>
 <head>
-<mytags:style />
+<mytags:style/>
+<mytags:menu/>
 </head>
 <body>
-<mytags:menu />
 <c:out value="${batchResults}"/>
 <mytags:footer/>
 </body>

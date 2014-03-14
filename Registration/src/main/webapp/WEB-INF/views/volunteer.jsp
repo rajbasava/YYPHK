@@ -6,11 +6,11 @@
 <html>
 <head>
 	<title>Arhatic Yoga Retreat - Volunteer</title>
+    <mytags:style/>
+    <mytags:menu/>
 </head>
-<mytags:style/>
 </head>
 <body>
-<mytags:menu/>
 <h2 align="center">Volunteer Manager</h2>
 
 <form:form method="post" action="addVolunteer.htm" commandName="volunteer">

@@ -6,11 +6,10 @@
 <html>
 <head>
 	<title>Data entry form</title>
-</head>
-<mytags:style/>
+    <mytags:style/>
+	<mytags:menu/>
 </head>
 <body>
-    <mytags:menu />
 	<h3 align="center">Data entry screen</h3>
 	<p align="center">
 

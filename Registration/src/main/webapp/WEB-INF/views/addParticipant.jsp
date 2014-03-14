@@ -6,24 +6,21 @@
 <html>
 <head>
 	<title>Participants - Yoga Vidya Pranic Healing Foundation of Karnataka</title>
-	<script type="text/javascript" src="<c:url value="/resources/script/jquery-1.7.2.min.js"/>"></script>
-	<script type="text/javascript" src="<c:url value="/resources/script/jquery-ui-1.8.23.custom.min.js"/>"></script>
-        <script type="text/javascript">
-            $(document).ready(function(){
-                $(function() {
-                    $("a#createParticipant").button();
-                    $("a#createParticipant").css("font-size", "11px");
+	<mytags:style/>
+	<mytags:menu/>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$(function() {
+				$("a#createParticipant").button();
+				$("a#createParticipant").css("font-size", "11px");
 
-                    $("a#back").button();
-                    $("a#back").css("font-size", "11px");
-                });
-            });
-        </script>
-
+				$("a#back").button();
+				$("a#back").css("font-size", "11px");
+			});
+		});
+	</script>
 </head>
-<mytags:style/>
 <body>
-<mytags:menu/>
 <form:form method="post" action="createParticipant.htm" commandName="newParticipant">
     <table align="center" cellpadding="2" cellspacing="2">
         <tr>

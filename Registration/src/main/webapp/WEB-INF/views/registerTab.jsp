@@ -6,8 +6,8 @@
 <html>
 <head>
 	<title>Arhatic Yoga Retreat - Search</title>
-    <script type="text/javascript" src="<c:url value="/resources/script/jquery-1.7.2.min.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/resources/script/jquery-ui-1.8.23.custom.min.js"/>"></script>
+    <mytags:style/>
+    <mytags:menu/>
     <script type="text/javascript">
         $(document).ready(function(){
             $(function() {
@@ -155,9 +155,7 @@
 	}
 	</style>
 </head>
-<mytags:style/>
 <body>
-<mytags:menu/>
 <form:form method="post" action="addRegistration.htm" commandName="registeredParticipant">
 <form:errors path="*" cssClass="errorblock" element="div"/>
 

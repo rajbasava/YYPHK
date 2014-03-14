@@ -5,9 +5,9 @@
 <html>
 <head>
 <mytags:style />
+<mytags:menu />
 </head>
 <body>
-<mytags:menu />
 
 <table width="80%" align="center">
 	<form:form method="post" action="importRegistrations.htm" commandName="importFile" enctype="multipart/form-data">

@@ -6,8 +6,8 @@
 <html>
 <head>
 	<title>Events - Yoga Vidya Pranic Healing Foundation of Karnataka</title>
-	<script type="text/javascript" src="<c:url value="/resources/script/jquery-1.7.2.min.js"/>"></script>
-	<script type="text/javascript" src="<c:url value="/resources/script/jquery-ui-1.8.23.custom.min.js"/>"></script>
+	<mytags:style/>
+    <mytags:menu/>
     <script type="text/javascript">
         $(document).ready(function(){
             $("#startDate").datepicker({ showOn: 'button', dateFormat: 'dd/mm/yy', buttonImageOnly: true, buttonImage: '<c:url value="/resources/img/calendar.gif"/>' });
@@ -78,9 +78,7 @@
 	}
 </style>
 </head>
-<mytags:style/>
 <body>
-<mytags:menu/>
 <table width="100%" cellpadding="2" cellspacing="2">
     <tr>
         <td align="center" style="font-size:18px">

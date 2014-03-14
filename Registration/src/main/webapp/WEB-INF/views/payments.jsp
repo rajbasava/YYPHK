@@ -19,8 +19,8 @@
 		margin: 16px;
 	}
 	</style>
-    <script type="text/javascript" src="<c:url value="/resources/script/jquery-1.7.2.min.js"/>"></script>
-    <script type="text/javascript" src="<c:url value="/resources/script/jquery-ui-1.8.23.custom.min.js"/>"></script>
+    <mytags:style />
+    <mytags:menu />
     <script type="text/javascript">
         $(document).ready(function() {
             $("#registrationPayments input[name='currentPayment.receiptDate']").datepicker({
@@ -60,10 +60,8 @@
         });
     </script>
 </head>
-<mytags:style/>
 </head>
 <body>
-<mytags:menu/>
 <form:form method="post" action="processPayments.htm" commandName="registrationPayments">
 <form:errors path="*" cssClass="errorblock" element="div" />
 <h2 align="center">Payments: <c:out value="${registrationPayments.registration.event.name}"/> - <c:out value="${registrationPayments.registration.participant.name}"/></h2>

@@ -1,8 +1,10 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 
-<script type="text/javascript" src="<c:url value="/resources/script/jquery-1.7.2.min.js"/>"></script>
-<script type="text/javascript" src="<c:url value="/resources/script/jquery-ui-1.8.23.custom.min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/resources/script/jquery-1.9.1.min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/resources/script/jquery-ui-1.10.4.min.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/resources/script/jquery-migrate-1.1.0.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/resources/script/jquery.ui.menubar.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/resources/script/flexigrid.pack.js"/>"></script>
 <style>
 	TABLE.Table
@@ -63,6 +65,12 @@
 		border:1ps Solid Black;
 	}
 </style>
+ <script type="text/javascript">
+    $(function() {
+        $("#menu").menubar();
+		$("#menu").css("font-size", "11px");
+    });
+ </script>
 
 <div class="Link">
     <table align="center" border="0" class="YLink" cellPadding="0" cellSpacing="0" width="100%">
@@ -71,31 +79,43 @@
 		   <th width="80%"><img src="<c:url value="/resources/img/New-Pranic-Logo.png"/>" height="97" width="165"/></th>
 		   <th width="10%"> Welcome <c:out value="${user.name}"/></th>
         </tr>   
-		<tr height="1%"><td></td></tr>
+		<tr height="4px"><td></td></tr>
 		<tr>
 		 <th colspan="3">
-                <table align="center" border="0" cellPadding="0" cellSpacing="2" width="100%">
-                    <tr>
-                        <th width="80px" class="ManuPad"><a href="welcome.htm">Home</a></th>
+		     <ul id="menu" class="menubar">
+                <li><a href="welcome.htm">Home</a></li>
+                <li><a href="#">Search</a>
+                     <ul>
                         <c:if test="${user.access.admin}" >
-                           <th width="125px" class="ManuPad"  ><a href="searchParticipants.htm">Search Participants</a></th>
+                            <li><a href="searchParticipants.htm">Search Participants</a></li>
                         </c:if>
-                       <th width="125px" class="ManuPad"  ><a href="search.htm">Search Registrations</a></th>
-                        <c:if test="${user.access.spotRegVolunteer || user.access.admin}" >
-                           <th width="125px" class="ManuPad"  ><a href="register.htm">Spot Registration</a></th>
-                        </c:if>
-                        <c:if test="${user.access.admin}" >
-                           <th width="125px" class="ManuPad"><a href="volunteer.htm">Manage Volunteers</a></th>
-                           <th width="125px" class="ManuPad"><a href="event.htm">Manage Events</a></th>
-                           <th width="125px" class="ManuPad"><a href="referenceGroup.htm">Manage&nbsp;Reference&nbsp;Groups</a></th>
-                           <th width="125px" class="ManuPad"><a href="import.htm">Import</a></th>
-                           <th width="125px" class="ManuPad"><a href="rptRegistrations.htm">Export Registrations</a></th>
-                           <th width="125px" class="ManuPad"><a href="rptPayments.htm">Export Payments</a></th>
-                        </c:if>
-                       <th width="80px" class="ManuPad"  ><a href="logout.htm">Sign Out</a></th>
-                    </tr>
-                </table>
+                        <li><a href="search.htm">Search Registrations</a></li>
+                     </ul>
+                </li>
+                <c:if test="${user.access.spotRegVolunteer || user.access.admin}" >
+                   <li><a href="register.htm">Spot Registration</a></li>
+                </c:if>
+                <c:if test="${user.access.admin}" >
+                    <li><a href="#">Manage</a>
+                         <ul>
+                           <li><a href="volunteer.htm">Manage Volunteers</a></li>
+                           <li><a href="event.htm">Manage Events</a></li>
+                           <li><a href="referenceGroup.htm">Manage&nbsp;Reference&nbsp;Groups</a></li>
+                         </ul>
+                    </li>
+                </c:if>
+                <c:if test="${user.access.admin}" >
+                    <li><a href="#">Import/Export</a>
+                         <ul>
+                           <li><a href="import.htm">Import</a></li>
+                           <li><a href="rptRegistrations.htm">Export Registrations</a></li>
+                           <li><a href="rptPayments.htm">Export Payments</a></li>
+                         </ul>
+                    </li>
+                </c:if>
+                <li><a href="logout.htm">Sign Out</a></li>
+             </ul>
             </th>
-			</tr>		   
+	    </tr>
     </table>
 </div>

@@ -6,11 +6,11 @@
 <html>
 <head>
 	<title>Arhatic Yoga Retreat - Registered Participant Summary</title>
+    <mytags:style/>
+    <mytags:menu/>
 </head>
-<mytags:style/>
 </head>
 <body>
-<mytags:menu/>
 <h2 align="center">Participant Summary</h2>
 
 <table align="center" cellspacing="2" cellpadding="2" width="50%">

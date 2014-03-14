@@ -3,9 +3,9 @@
 <html>
 <head>
 <mytags:style />
+<mytags:menu />
 </head>
 <body>
-<mytags:menu />
 <c:out value="${results}"/>
 <mytags:footer/>
 </body>
