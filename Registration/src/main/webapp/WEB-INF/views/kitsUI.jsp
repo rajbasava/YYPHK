@@ -33,10 +33,7 @@
         });
     </script>
 </head>
-<mytags:style/>
-</head>
 <body>
-<mytags:menu/>
 <!--
 <h2 align="center">Kits for Event: <c:out value="${event.name}"/></h2>
 
